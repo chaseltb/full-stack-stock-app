@@ -11,11 +11,19 @@
 
 Context: Briefly describe the context or environment in which the problem exists. Who are the primary users or groups affected? What is the scope of the issue?
 
+**People who have investments on multiple exchanges and want to know how their stocks have performed over time or estimate what they might owe in taxes so they don't have to stress about it later.**
+
 Core Problem: What specific, unmet need or challenge does this project address? Explain in simple terms what is currently missing, difficult, or ineffective for users.
+
+**There are existing tools but they are often hard to use or significantly outdated. We want to have a cost-basis tracking tool that can also store a user's portfolio and account for new buy/sell orders and return of capital (lowering cost basis from dividend).**
 
 Impact on Users: Describe how this problem affects the users or stakeholders. What pain points do they experience as a result of this issue? What specific frustrations, inefficiencies, or missed opportunities arise from the current situation?
 
+**Users are frustrated from having to use multiple tools that are outdated and don't have persistent data storage, so right now they have to enter their info in each time they want a calculation with no way of saving.**
+
 Opportunity for Solution: Why is solving this problem meaningful for your intended audience? How would a solution add value to their experience or address their needs in a unique way?
+
+**This would save them time and get them a rough idea of their tax impact or portfolio size without having to reenter data on outdated tools each time.**
 
 ---
 
@@ -67,7 +75,14 @@ In this section, you will outline how each user story will be implemented in you
   - What you learned,  
   - Where it is applied in the project,  
   - Challenges faced,  
-  - Resources used.  
+  - Resources used.
+ 
+ideas:
+currency conversion (real time api)
+modern CSS framework (eg material design 3)
+graphing stocks/visualization
+real time stock api
+saving user accounts and their info
 
 Example:
 
