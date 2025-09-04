@@ -31,11 +31,43 @@ Opportunity for Solution: Why is solving this problem meaningful for your intend
 
 Overview of the Solution: Describe the high-level approach you plan to take to solve the problem outlined in your Problem Statement. What kind of application or system will you create? How will it address the core problem?
 
+**A web application that allows users to store their stock infromation, view general stock information, and their chosen stocks and currency.**
+
 Key Features and Functionalities: List and describe the main features of the application. What are the critical functionalities that users will need to perform in order to effectively interact with the system?
+
+Key Features
+* Viewing Stock Information
+* Calculating average value of stocks accrooss exchange platforms
+* Calculating dividend payments of real estate stocks for tax purposes
+* Filtering stocks
+Functionalities
+* Users will need a chosen currency
+* Users will need an account (username and passowrd)
+* Users will need to choose a stock to review
+* Users can favorite a stock
 
 User Scenarios: Explain how the technical solution will support different user needs. Provide two to three specific use cases or scenarios that illustrate how users (e.g., runners, club admins) will interact with the system and what value they will gain from each interaction.
 
+Users:
+* Create accounts
+* View their portfolio
+* Add stocks to their portfolio
+* Edit their portfolio
+* Delete stocks from their portfolio
+
+Admins:
+* Admins can delete users (in cases of inappropriate behaviour)
+* Admins can delete stocks from being displayed
+* Admins can recommend stocks to users (watchlist, maybe tailored to users)
+
 Technology Stack: Briefly mention the key technologies, frameworks, and tools you will use to build the application. Why did you choose these tools, and how will they help you achieve your solution?
+
+* Frontend: React, JavaScript, CSS, Material Design 3 (or Bootstrap), HTML
+* Backend: Spring Boot, Spring MVC, Java, JDBC
+* Database: MySQL
+* APIs: AlphaAdvantage API (still deciding), OpenAPI/Swagger, 
+* Cloud: AWS
+* Visualization: Still deciding on a tool
 
 ---
 
@@ -83,6 +115,7 @@ modern CSS framework (eg material design 3)
 graphing stocks/visualization
 real time stock api
 saving user accounts and their info
+elastic search to filter stocks
 
 Example:
 

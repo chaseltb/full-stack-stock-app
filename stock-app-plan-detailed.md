@@ -141,43 +141,93 @@ src
 ├───main
 │   └───java
 │       └───learn
-│           └───solar
-│               │   App.java                      -- app entry point
+│           └───stock-portfolio
+│               │   App.java                                         -- app entry point
 │               │
+│               ├───controller
+│               │       ErrorResponse.java                          -- matching error responses to HTTP status codes
+│               │       GlobalExceptionHandler.java                 -- exception handler
+│               │       StockController.java                        -- stock controller
+│               │       UserController.java                         -- user controller
+│               │       OrderController.java                        -- order controller
+│               │       StockExchangeController.java                -- stock exchange controller
+│               │       PortfolioController.java                    -- portfolio controller
+|               |
 │               ├───data
-│               │       DataException.java        -- data layer custom exception
-│               │       PanelFileRepository.java  -- concrete repository
-|               |       
-│               │       PanelRepository.java      -- repository interface
+│               |   └───solar
+│               |       │       StockMapper.java                    -- stock mapper
+│               |       │       UserMapper.java                     -- user mapper
+│               |       │       OrderMapper.java                    -- order mapper
+│               |       │       StockExchangeMapper.java            -- stock exchange mapper
+│               |       │       PortfolioMapper.java                -- stock exchange mapper
+│               │       DataException.java                          -- data layer custom exception
+│               │       StockJdbcTemplateRepository.java            -- concrete repository
+│               │       UserJdbcTemplateRepository.java             -- concrete repository
+│               │       OrderJdbcTemplateRepository.java            -- concrete repository
+│               │       StockExchangeJdbcTemplateRepository.java    -- concrete repository
+│               │       portfolioJdbcTemplateRepository.java        -- concrete repository
+│               │       StockRepository.java                        -- repository interface
+│               │       UserRepository.java                         -- repository interface
+│               │       OrderRepository.java                        -- repository interface
+│               │       StockExchangeRepository.java                -- repository interface
+│               │       PortfolioRepository.java                    -- repository interface
 │               │
 │               ├───domain
-│               │       PanelResult.java          -- domain result for handling success/failure
-│               │       PanelService.java         -- panel validation/rules
+│               │       Result.java                                 -- domain result for handling success/failure
+│               │       ResultType.java                             -- enum for result type
+│               │       StockService.java                           -- stock validation/rules
+│               │       UserService.java                            -- user validation/rules
+│               │       OrderService.java                           -- order validation/rules
+│               │       StockExchangeService.java                   -- stock exchange validation/rules
+│               │       PortfolioService.java                       -- portfolio validation/rules
 │               │
 │               ├───models
-│               │       Material.java             -- enum representing the 5 materials
-│               │       Panel.java                -- solar panel model
+│               │       Currency.java                               -- enum representing currencies
+│               │       Country.java                                -- enum representing countries
+│               │       Stock.java                                  -- stock model
+│               │       User.java                                   -- user model
+│               │       Order.java                                  -- order model
+│               │       StockExchange.java                          -- stock exchange model
+│               │       Portfolio.java                              -- portfolio model
 │               │
-│               └───ui
-│                       Controller.java           -- UI controller
-│                       View.java                 -- all console input/output
 │
 └───test
     └───java
         └───learn
             └───solar
                 ├───data
-                │       PanelFileRepositoryTest.java    -- PanelFileRepository tests
-                │       PanelRepositoryTestDouble.java  -- helps tests the service, implements PanelRepository
+                │       StockJdbcTemplateRepositoryTest.java        -- StockJdbcTemplateRepository tests
+                │       UserJdbcTemplateRepositoryTest.java         -- UserJdbcTemplateRepository tests
+                │       OrderJdbcTemplateRepositoryTest.java        -- OrderJdbcTemplateRepository tests
+                │       StockExchangeJdbcTemplateRepositoryTest.java -- StockExchangeJdbcTemplateRepository tests
+                │       PortfolioJdbcTemplateRepositoryTest.java    -- PortfolioJdbcTemplateRepository tests
+                │       KnownGoodState.java                         -- known good state
                 │
                 └───domain
-                        PanelServiceTest.java           -- PanelService tests
+                        StockServiceTest.java                       -- StockService tests
+                        UserServiceTest.java                        -- UserService tests
+                        OrderServiceTest.java                       -- OrderService tests
+                        StockExchangeServiceTest.java               -- StockExchangeService tests
+                        PortfolioServiceTest.java                   -- PortfolioService tests
 ```
 
 ## Class Details
 
 ### App
-- `public static void main(String[])` -- instantiate all required classes with valid arguments, dependency injection. run controller
+- `public static void main(String[])` -- app entry point
+
+### controller.ErrorResponse
+- `private final LocalDateTime timestamp` -- timestamp
+- `private String message`  -- message
+- `public ErrorResponse()` -- constructor
+- `public ErrorResponse(String message)` -- constructor with message
+- `public LocalDateTime getTimestamp()` -- getter
+- `public String getMessage()` -- getter
+- `public static <T> ResponseEntity<Object> build(Result<T> result)` -- build error response
+
+### controller.GlobalExceptionHandler
+
+
 
 ### data.DataException
 
@@ -236,32 +286,6 @@ An enum with five values: multicrystalline silicon, monocrystalline silicon, amo
 - `private boolean tracking`
 - Full getters and setters
 - override `equals` and `hashCode`
-
-### ui.Controller
-- `private View view` -- required View dependency
-- `private PanelService service` -- required service dependency
-- `public Controller(View, PanelService)` -- constructor with dependencies
-- `public void run()` -- kicks off the whole app, menu loop
-- `private void viewBySection()` -- coordinates between service and view to display panels in a section
-- `private void addPanel()` -- coordinates between service and view to add a new panel
-- `private void updatePanel()` -- coordinates between service and view to update a panel
-- `private void deletePanel()` -- coordinates between service and view to delete a panel
-
-### ui.View
-- `private Scanner console` -- a Scanner to be used across all methods
-- `public int chooseOptionFromMenu()` -- display the main menu and select an option, used to Controller.run()
-- `public void printHeader(String)` -- display text to the console with emphasis
-- `public void printResult(PanelResult)` -- display a PanelResult with either success or failure w/ messages included
-- `public void printPanels(String sectionName, List<Panel>)` -- display panels in a section with the section's name
-- `public Panel choosePanel(String sectionName, List<Panel>)` -- choose a panel from a list of options (useful for update and delete)
-- `public Panel makePanel()` -- make a panel from scratch, used in Controller.addPanel
-- `public Panel update(Panel)` -- accept and existing Panel, update it, and return it, used in Controller.updatePanel
-- `public String readSection()` -- reads a section name, used in Controller: viewBySection, updatePanel (must search first), and deletePanel
-- `private String readString(String)` -- general-purpose console method for reading a string
-- `private String readRequiredString(String)` -- general-purpose console method for reading a required string
-- `private int readInt(String)` -- general-purpose console method for reading an integer
-- `private int readInt(String, int min, int max)` -- general-purpose console method for reading an integer with a min and max
-- `private Material readMaterial()` -- domain-specific console method for choosing a Material
 
 ## Steps
 
