@@ -1,44 +1,138 @@
-# Solar Farm Plan (Detailed)
+# Stock App Plan (Detailed)
 
 ## High-level Requirements
 
-User is a solar farm administrator.
+User is a stock holder.
 
-- Add a solar panel to the farm.
-- Update a solar panel.
-- Remove a solar panel.
-- Display all solar panels in a section.
+- Creates an account (login/username + password).
+- Buy/Add a stock to portfolio.
+- Sell/Delete a stock from portfolio.
+- View all stocks in portfolio.
+- View a graph of a chosen stocks historical price.
 
-## Solar Panels
+
+Admin
+
+- Delete a user
+- Disable/delete a stock from being bought/sold.
+- Admins can recommend stocks to users (watchlist, maybe tailored to users).
+
+## User
+
+### Data
+- **Username**: name that identifies the user
+- **password_hashed**: user special password for logging in
+- **currency_type_id**: users preferred currency.
+- **first_name**: users first name
+- **last_name**: users last name
+- **permission**: admin/user (defaults to user)
+
+### Validation
+- **Username**: required, unique username
+- **password_hashed**: required, cannot be null or blank, must be atleast 8 chars
+- **currency_type_id**: required
+- **first_name**: not blank
+- **last_name**: not blank
+- **permission**: enum/boolean to signify admin or user 
+
+## Stocks
 
 ### Data
 
-- **Section**: name that identifies where the panel is installed.
-- **Row**: the row number in the section where the panel is installed.
-- **Column**: the column number in the section where the panel is installed.
-- **Year Installed**
-- **Material**: multicrystalline silicon, monocrystalline silicon, amorphous silicon, cadmium telluride, or copper indium gallium selenide.
-- **Is Tracking**: determines if the panel is installed with sun-tracking hardware.
+- **Name**: the name of the stock 
+- **Ticker**: the unique identifier/abbreviation of the stock name 
+- **Asset Type**: enum for the type of asset (stock, bond, ETF) 
+- **Industry**: the industry the company is in 
+- **Country**: the country that the company is in
 
-Material must be a Java enum.
+Asset Type must be a Java enum.
 
 ### Validation
 
-- **Section** is required and cannot be blank.
-- **Row** is a positive number less than or equal to 250.
-- **Column** is a positive number less than or equal to 250.
-- **Year Installed** must be in the past.
-- **Material** is required and can only be one of the five materials listed.
-- **Is Tracking** is required.
-- The combined values of **Section**, **Row**, and **Column** may not be duplicated.
+- **Name**: required
+- **Ticker**: required, unique
+- **Asset Type**: required
+- **Industry**: optional
+- **Country**: required
+
+
+## Orders
+
+### Data
+- **Transaction Type**: buy/sell (Enum or Boolean), 
+- **Stock**: reference to a Stock object, 
+- **Shares**: # shares, 
+- **Date**: the date the order was executed, 
+- **Price**: the price that the order was executed at, 
+- **Owner**: reference to the person that did the order
+
+### Validation
+- **Transaction Type**: required
+- **Stock**: required references stock ticker or stock id
+- **Shares**: required, greater than 0
+- **Date**: required, cannot be in the future
+- **Price**: required, greater than 0
+- **Owner**: required, references user id 
+
+## Countries
+
+### Data
+- **Country name**: the country name
+- **Country code**: short country code (~2-3 letters)
+- **country currency**: the primary currency of the country
+
+### Validation
+- **Country name**: required, not blank
+- **Country code**: unique
+- **country currency**: references currency id
+
+## Currencies
+
+### Data
+- **currency name**: the currency name
+- **currency code**: the FX currency code
+- **value/usd**: value of currency to the us dollar
+
+### Validation
+- **currency name**: required, not null
+- **currency code**: unique
+- **value/usd**: greater than 0
+
+## Stock exchange
+
+### Data
+- **Exchange name**: the exchanges name
+- **exchange code**: the shorthand code for the exchange 
+- **TimeZone**: exchange timezone
+
+### Validation
+- **Exchange name**: required, not blank
+- **exchange code**: unique
+- **TimeZone**: required, valid timezone
+
+## Portfolio
+
+### Data
+- **user id**: the portfolio users id
+- **Stocks**: the stocks in the portfolio
+- **Account type**: the account type
+
+### Validation
+- **user id**: required, references users id
+- **Stocks**: 
+- **Account type**: required,  account type enum
+
 
 ## Technical Requirements
 
 - Three layer architecture
-- Data stored in a delimited file.
+- Data stored in a SQL databse.
 - Repositories should throw a custom exception, never file-specific exceptions.
 - Repository and service classes must be fully tested with both negative and positive cases. Do not use your "production" data file to test your repository.
-- Solar panel material should be a Java enum with five values.
+- account type enum with the investment account (retirement, investing).
+- Asset Type enum with the type of stock 
+- Country enum with country names and codes
+- Currency enum with currency signs and names
 
 ## Package/Class Overview
 
@@ -53,6 +147,7 @@ src
 │               ├───data
 │               │       DataException.java        -- data layer custom exception
 │               │       PanelFileRepository.java  -- concrete repository
+|               |       
 │               │       PanelRepository.java      -- repository interface
 │               │
 │               ├───domain
