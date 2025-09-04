@@ -310,24 +310,95 @@ Custom data layer exception.
 - `public DataException(String, Throwable)` -- constructor, Throwable arg is the root cause exception
 
 ### data.StockRepository
+- `List<Stock> findAll()` -- returns a list of all stocks
+- `Stock findById(int id)` -- finds a stock by its unique ID
+- `Stock findByTicker(String ticker)` -- finds a stock by its unique ticker
+- `Stock add(Stock stock)` --adds a new stock to the system
+- `boolean update(Stock stock)` -- updates an existing stock
+- `boolean deleteById(int id)` -- deletes a stock by its ID
+- `List<Stock> getStocksByIndustry(@RequestParam String industry)` -- finds all stocks by a specific industry
 
 ### data.StockJdbcTemplateRepository
+- `JdbcTemplate jdbcTemplate` -- jdbc template
+- `public List<Stock> findAll()` -- returns a list of all stocks
+- `public Stock findById(int id)` -- finds a stock by its unique ID
+- `public Stock findByTicker(String ticker)` -- finds a stock by its unique ticker
+- `public Stock add(Stock stock)` --adds a new stock to the system
+- `public boolean update(Stock stock)` -- updates an existing stock
+- `public boolean deleteById(int id)` -- deletes a stock by its ID
+- `public List<Stock> getStocksByIndustry(@RequestParam String industry)` -- finds all stocks by a specific industry
 
 ### data.UserRepository
+- `List<User> findAll()` -- retrieves a list of all users in the system
+- `User add(User user)` -- creates a new user account
+- `User findById(int id)` -- retrieves user information by ID
+- `boolean update(User user)` -- updates user details
+- `boolean deleteById(int id)` -- deletes a user account
 
 ### data.UserJdbcTemplateRepository
+- `JdbcTemplate jdbcTemplate` -- jdbc template
+- `public List<User> findAll()` -- retrieves a list of all users in the system
+- `public User add(User user)` -- creates a new user account
+- `public User findById(int id)` -- retrieves user information by ID
+- `public boolean update(User user)` -- updates user details
+- `public boolean deleteById(int id)` -- deletes a user account
 
 ### data.OrderRepository
+- `Order add(Order order)` -- places a new order (buy/sell)
+- `Order findById(int id)` -- retrieves an order by its ID
+- `List<Order> findAll()` -- retrieves a list of all orders
+- `List<Order> findByUser(int userId)` -- finds all orders placed by a specific user
+- `List<Order> findByStock(int stockId)` -- finds all orders for a specific stock
+- `boolean update(Order order)` -- updates order details
+- `boolean deleteById(int id)` -- deletes an order
 
 ### data.OrderJdbcTemplateRepository
+- `JdbcTemplate jdbcTemplate` -- jdbc template
+- `public Order add(Order order)` -- places a new order (buy/sell)
+- `public Order findById(int id)` -- retrieves an order by its ID
+- `public List<Order> findAll()` -- retrieves a list of all orders
+- `public List<Order> findByUser(int userId)` -- finds all orders placed by a specific user
+- `public List<Order> findByStock(int stockId)` -- finds all orders for a specific stock
+- `public boolean update(Order order)` -- updates order details
+- `public boolean deleteById(int id)` -- deletes an order
 
 ### data.StockExchangeRepository
+- `List<StockExchange> findAll()` -- retrieves a list of all stock exchanges
+- `StockExchange findById(nt id)` -- retrieves a stock exchange by its ID
+- `StockExchange add(StockExchange stockExchange)` -- adds a new stock exchange
+- `boolean update(StockExchange stockExchange)` -- updates an existing stock exchange
+- `boolean deleteById(int id)` -- deletes a stock exchange by ID
 
 ### data.StockExchangeJdbcTemplateRepository
+- `JdbcTemplate jdbcTemplate` -- jdbc template
+- `public List<StockExchange> findAll()` -- retrieves a list of all stock exchanges
+- `public StockExchange findById(nt id)` -- retrieves a stock exchange by its ID
+- `public StockExchange add(StockExchange stockExchange)` -- adds a new stock exchange
+- `public boolean update(StockExchange stockExchange)` -- updates an existing stock exchange
+- `public boolean deleteById(int id)` -- deletes a stock exchange by ID
 
 ### data.PortfolioRepository
+- `Portfolio findByUserId(int userId)` -- retrieves the portfolio for a specific user
+- `Portfolio addStockToPortfolio(int userId, Stock stock)` -- adds a stock to the user's portfolio
+- `boolean deleteStockFromPortfolio(int userId, int stockId)` -- removes a stock from the user's portfolio
+- `List<Stock> findAllStocksInPortfolio(int userId) `-- retrieves all stocks in the user's portfolio
+- `boolean updateAccountType(int userId, AccountType accountType)` -- updates the account type of a user's portfolio
+- `BigDecimal getPortfolioValue(int userId, String date)` -- gets the portfolio value on a specific date
+- `boolean sellStockFromPortfolio(int userId, int stockId)` -- sells a stock from the portfolio
+- `boolean updateCostBasisOnDividend(int userId, BigDecimal dividend)` -- updates the cost basis after receiving a dividend
+- `BigDecimal calculateCapitalGainsTax(List<Order> orders)` -- gets the capital gains tax
 
 ### data.PortfolioJdbcTemplateRepository
+- `JdbcTemplate jdbcTemplate` -- jdbc template
+- `public Portfolio findByUserId(int userId)` -- retrieves the portfolio for a specific user
+- `public Portfolio addStockToPortfolio(int userId, Stock stock)` -- adds a stock to the user's portfolio
+- `public boolean deleteStockFromPortfolio(int userId, int stockId)` -- removes a stock from the user's portfolio
+- `public List<Stock> findAllStocksInPortfolio(int userId) `-- retrieves all stocks in the user's portfolio
+- `public boolean updateAccountType(int userId, AccountType accountType)` -- updates the account type of a user's portfolio
+- `public BigDecimal getPortfolioValue(int userId, String date)` -- gets the portfolio value on a specific date
+- `public boolean sellStockFromPortfolio(int userId, int stockId)` -- sells a stock from the portfolio
+- `public boolean updateCostBasisOnDividend(int userId, BigDecimal dividend)` -- updates the cost basis after receiving a dividend
+- `public BigDecimal calculateCapitalGainsTax(List<Order> orders)` -- gets the capital gains tax
 
 ### domain.ResultType
 
@@ -387,6 +458,14 @@ NOT_FOUND
 
 ### domain.PortfolioService
 - `private PortfolioRepository repository` -- portfolio repository interface
+- `public Portfolio findByUserId(int userId)` -- retrieves the portfolio for a specific user
+- `public Portfolio addStockToPortfolio(int userId, Stock stock)` -- adds a stock to the user's portfolio
+- `public boolean deleteStockFromPortfolio(int userId, int stockId)` -- removes a stock from the user's portfolio
+- `public List<Stock> findAllStocksInPortfolio(int userId) `-- retrieves all stocks in the user's portfolio
+- `public Result<Portfolio> updateAccountType(int userId, AccountType accountType)` -- updates the account type of a user's portfolio
+- `public BigDecimal getPortfolioValue(int userId, String date)` -- gets the portfolio value on a specific date
+- `public boolean sellStockFromPortfolio(int userId, int stockId)` -- sells a stock from the portfolio
+- `public Result<Portfolio> updateCostBasisOnDividend(int userId, BigDecimal dividend)` -- updates the cost basis after receiving a dividend
 - `public BigDecimal calculateCapitalGainsTax(List<Order> orders)` -- gets the capital gains tax
 
 ### models.AssetType
@@ -465,99 +544,10 @@ An enum with values for countries of the world:
 - `private AccountType accountType`
 
 ## Steps
-1. Set Up Maven Project: Initialize the project with Maven and add dependencies for JUnit 5, Spring Boot, and MySQL Database.
-2. Create Model Classes: Implement classes/enums for User, Stock, Order, Currency, Country, Portfolio, etc.
-3. Create Repository Layer: Implement repositories using JdbcTemplate to interact with the database. Ensure custom exceptions (like DataException) are used.
-4. Service Layer: Implement the business logic, ensuring proper validation and interactions between the models.
-5. Controller Layer: Implement controllers to handle HTTP requests and route them to the appropriate services (OpenAPI/Swagger).
-6. Testing: Implement tests for all repository and service classes. Create mock data and ensure that tests cover all
-
-1. Create a Maven project.
-2. Add jUnit 5, Jupiter, as a Maven dependency and refresh Maven
-3. Create packages.
-4. Create the `Panel` model.
-5. Create the `Material` enum.
-6. Create the data layer's custom `DataException`
-7. Create the `PanelFileRepository` class.
-
-    All methods should catch IOExceptions and throw `DataException`.
-
-    - add the filePath field and create a constructor to initialize the field
-    - generate tests for `PanelFileRepository`, should be located in `src/test/java/learn/solar/data/PanelFileRepositoryTest`
-    - create a `data` directory in the project root. add test, seed, and production data files
-    - implement `findAll`, `serialize`, and `deserialize`. these are all private method. may be useful to make `findAll` public temporarily and test it quick.
-    - implement `findBySection`, it uses `findAll`. test it naively (no known-good-state for now)
-    - implement `add`
-    - improve tests by establishing known-good-state with `@BeforeAll`
-    - test `add`
-    - implement `update`
-    - test `update`
-    - implement `deleteById`
-    - test `deleteById`
-
-8. Extract the `PanelRepository` interface (IntelliJ: Refactor -> Extract Interface) from `PanelFileRepository`.
-9. Create `PanelResult`.
-10. Create `PanelService`.
-
-    - add a `PanelRepository` (interface) field with a corresponding constructor
-    - generate tests for `PanelService`
-    - create `PanelRepositoryTestDouble` to support service testing, this test class implements `PanelRepository`
-    - implement `findBySection` and test, implement just enough code in `PanelRepositoryTestDouble` to enable service testing
-    - implement `add` and test, requires validation
-    - implement `update` and test, requires validation
-    - implement `deleteById` and test
-
-11. Create `View`
-
-    - add `Scanner` field
-    - create read* methods: `readString`, `readRequiredString`, `readInt`, `readInt` (with min/max)
-
-12. Create `Controller`
-
-    - add fields for service and view with corresponding constructor
-    - add a `run` method
-
-13. Create `App` and the `main` method.
-
-    - instantiate all required objects: repository, service, view, and controller
-    - run the controller
-
-14. Work back and forth between controller and view.
-
-    Run early and often. Add `System.out.println`s as breadcrumbs in controller, but don't forget to remove them when development is complete.
-
-    Determine the correct sequence for service calls and view calls. What is the order?
-
-    - implement `chooseOptionFromMenu` and `printHeader` in view
-    - use them in the controller's `run`
-    - implement `viewBySection` in controller, complete required view methods: `readSection`, `printPanels`
-    - implement `addPanel` in controller, complete required view methods: `makePanel`, `readMaterial`, `printResult`
-    - implement `updatePanel` in controller, complete required view methods: `choosePanel`, `update`
-    - implement `deletePanel` in controller, complete required view methods (`deletePanel` can re-use `choosePanel`)
-
-## Controller Perspectives
-
-### View Panels by Section
-1. collect section name from the view
-2. use the name to fetch panels from the service
-3. use the view to display panels
-
-### Add a Panel
-1. collect a complete and new panel from the view
-2. use the service to add the panel and grab its result
-3. display the result in the view
-
-### Update a Panel
-1. collect section name from the view
-2. use the name to fetch panels from the service
-3. display the panels in the view and allow the user to choose a panel (if no panel selected, abort)
-4. update panel properties (setters) in the view
-5. use the service to update/save the panel and grab its result
-6. display the result in the view
-
-### Delete a Panel
-1. collect section name from the view
-2. use the name to fetch panels from the service
-3. display the panels in the view and allow the user to choose a panel (if no panel selected, abort)
-4. use the service to delete the panel by its identifier
-5. display success or failure in the view
+1. Set Up Maven Project: Create a Maven project and add dependencies for JUnit, Spring Boot, and MYSQL.
+2. Create Model Classes: Create the User, Stock, Order, Currency, Country, Portfolio, StockExchange, AssetType, AccountType, and TransactionType models.
+3. Create Mappers: Create data mappers for Stock, User, Order, StockExchange, and Portfolio.
+3. Create Repository Layer Classes and Tests: Create the DataException class. Create the Repository interface, JdbcTemplateRepository class, and JdbcTemplateRepositoryTest test class for Stock, User, Order, StockExchange, and Portfolio.
+4. Create Service Layer: Create the Service class and ServiceTest test class for Stock, User, Order, StockExchange, and Portfolio.
+5. Create Controller Layer: Create the Controller class and HTTP requests for Stock, User, Order, StockExchange, and Portfolio. Remember to use OpenAPI/Swagger documentation.
+6. Create the App class and run the application.
