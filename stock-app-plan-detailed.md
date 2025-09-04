@@ -154,7 +154,7 @@ src
 │               │       PortfolioController.java                    -- portfolio controller
 |               |
 │               ├───data
-│               |   └───solar
+│               |   └───mappers
 │               |       │       StockMapper.java                    -- stock mapper
 │               |       │       UserMapper.java                     -- user mapper
 │               |       │       OrderMapper.java                    -- order mapper
@@ -229,8 +229,58 @@ src
 - `public static <T> ResponseEntity<Object> build(Result<T> result)` -- build error response
 
 ### controller.GlobalExceptionHandler
+- ` public ResponseEntity<ErrorResponse> handleException` -- global exception handler
+-- handlers for other exception types
 
+### controller.StockController
+`public ResponseEntity<List<Stock>> getAllStocks()` -- returns a list of all stocks
+`public ResponseEntity<Stock> getStockById(@PathVariable int id)` -- fetches a stock by its unique ID
+`public ResponseEntity<Stock> createStock(@RequestBody Stock stock)` --adds a new stock to the system
+`public ResponseEntity<Stock> updateStock(@PathVariable int id, @RequestBody Stock stock)` -- updates an existing stock
+`public ResponseEntity<Void> deleteStock(@PathVariable int id)` -- deletes a stock by its ID
+`public ResponseEntity<List<Stock>> getStocksByIndustry(@RequestParam String industry)` -- fetches all stocks by a specific industry
 
+### controller.UserController
+`public ResponseEntity<User> createUser(@RequestBody User user)` -- creates a new user account
+`public ResponseEntity<User> getUserById(@PathVariable int id)` -- retrieves user information by ID
+`public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user)` -- updates user details
+`public ResponseEntity<Void> deleteUser(@PathVariable int id)` -- deletes a user account
+`public ResponseEntity<List<User>> getAllUsers()` -- retrieves a list of all users in the system
+
+### controller.OrderController
+`public ResponseEntity<Order> placeOrder(@RequestBody Order order)` -- places a new order (buy/sell)
+`public ResponseEntity<Order> getOrderById(@PathVariable int id)` -- retrieves an order by its ID
+`public ResponseEntity<List<Order>> getOrdersByUser(@PathVariable int userId)` --fetches all orders placed by a specific user
+`public ResponseEntity<List<Order>> getOrdersByStock(@RequestParam int stockId)` -- fetches all orders for a specific stock
+
+### controller.StockExchangeController
+`public ResponseEntity<List<StockExchange>> getAllExchanges()` -- retrieves a list of all stock exchanges
+`public ResponseEntity<StockExchange> getExchangeById(@PathVariable int id)` -- retrieves a stock exchange by its ID
+`public ResponseEntity<StockExchange> createExchange(@RequestBody StockExchange stockExchange)` -- adds a new stock exchange
+`public ResponseEntity<StockExchange> updateExchange(@PathVariable int id, @RequestBody StockExchange stockExchange)` -- updates an existing stock exchange
+`public ResponseEntity<Void> deleteExchange(@PathVariable int id)` -- deletes a stock exchange by ID
+
+### controller.PortfolioController
+`public ResponseEntity<Portfolio> getPortfolioByUserId(@PathVariable int userId)` -- retrieves the portfolio for a specific user
+`public ResponseEntity<Portfolio> addStockToPortfolio(@PathVariable int userId, @RequestBody Stock stock)` -- adds a stock to the user's portfolio
+`public ResponseEntity<Portfolio> removeStockFromPortfolio(@PathVariable int userId, @PathVariable int stockId)` -- removes a stock from the user's portfolio
+`public ResponseEntity<List<Stock>> getAllStocksInPortfolio(@PathVariable int userId) `-- retrieves all stocks in the user's portfolio
+`public ResponseEntity<Portfolio> updateAccountType(@PathVariable int userId, @RequestParam AccountType accountType)` -- updates the account type of a user's portfolio
+
+### data.mapper.StockMapper
+`public Stock mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Stock object
+
+### data.mapper.UserMapper
+`public User mapRow(ResultSet rs, int rowNum)` -- maps a database record to a User object
+
+### data.mapper.OrderMapper
+`public Order mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Order object
+
+### data.mapper.StockExchangeMapper
+`public StockExchange mapRow(ResultSet rs, int rowNum)` -- maps a database record to a StockExchange object
+
+### data.mapper.PortfolioMapper
+`public Portfolio mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Portfolio object
 
 ### data.DataException
 
@@ -351,7 +401,6 @@ An enum with values for countries of the world:
 - `private AccountType accountType`
 
 ## Steps
-
 1. Create a Maven project.
 2. Add jUnit 5, Jupiter, as a Maven dependency and refresh Maven
 3. Create packages.
