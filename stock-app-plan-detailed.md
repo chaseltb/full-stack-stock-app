@@ -184,6 +184,9 @@ src
 │               ├───models
 │               │       Currency.java                               -- enum representing currencies
 │               │       Country.java                                -- enum representing countries
+|               |       TransactionType.java                        -- enum for Transacation
+|               |       AssetType.java                              -- enum for Asset
+|               |       AccountType.java                            -- enum for Account
 │               │       Stock.java                                  -- stock model
 │               │       User.java                                   -- user model
 │               │       Order.java                                  -- order model
@@ -272,20 +275,80 @@ Contract for PanelFileRepository and PanelRepositoryTestDouble.
 -  `public PanelResult deleteById(int)` -- pass-through to repository
 -  `private PanelResult validate(Panel)` -- general-purpose validation routine
 
-### models.Material
+### models.AssetType
+enum with values:
+Stock,
+Bond,
+ETF
 
-An enum with five values: multicrystalline silicon, monocrystalline silicon, amorphous silicon, cadmium telluride, copper indium gallium selenide. Can use industry abbreviations or full names.
+### models.AccountType
 
-### models.Panel
+An enum with two values:
+retirement, 
+investing 
+
+### models.TransactionType
+
+An enum with two values:
+buy,
+sell
+
+### models.Currency
+
+An enum with values:
+USD,
+EUR,
+GBP,
+CNY,
+JPY,
+MXN,
+INR,
+(and more)
+
+### models.Country
+
+An enum with values for countries of the world:
+
+
+### models.StockExchange
 - `private int id`
-- `private String section`
-- `private int row`
-- `private int column`
-- `private int installationYear`
-- `private Material material`
-- `private boolean tracking`
-- Full getters and setters
-- override `equals` and `hashCode`
+- `public String name`
+- `public String code`
+- `public BigDecimal exchangeRate`
+
+
+### models.User
+- `private int id`
+- `private String userName`
+- `private String hashedWord`
+- `public String currencyType`
+- `public String firstName`
+- `public String lastName`
+- `private boolean isAdmin`
+- `private int portfolioId`
+
+### models.Order
+- `private int id`
+- `private Transaction transactionType`
+- `private int stockId`
+- `private BigDecimal numShares`
+- `private LocalDateTime date`
+- `private BigDecimal price`
+- `private int userId`
+
+### models.Stock
+- `private int id`
+- `private String name`
+- `private String ticker`
+- `private AssetType assetType`
+- `private String industry`
+- `private Country country`
+
+### models.Portfolio
+- `private int id`
+- `private int userId`
+- `private ArrayList stocks`
+- `private AccountType accountType`
 
 ## Steps
 
