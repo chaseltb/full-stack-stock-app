@@ -138,6 +138,17 @@ Asset Type must be a Java enum.
 ![ERD Diagram shouwing relations between User, Countries, Currencies, Portfolio, UserPortfolio, Stocks, Orders, and Portfolio Orders](ERD.png)
 
 ## Wireframes
+Home
+![Stock App Homepage](wire-frames/home.png)
+
+Stock View
+![Stock View Page](<wire-frames/stock view.png>)
+
+Add Order
+![Add Order Page](wire-frames/add-order.png)
+
+Edit Order
+![Edit Order Page](wire-frames/edit-order.png)
 
 ## Package/Class Overview
 
