@@ -142,6 +142,17 @@ Asset Type must be a Java enum.
 ## Package/Class Overview
 
 ```
+http
+└───|
+    |   stock.http
+    |   user.http
+    |   order.http
+    |   stock-exchange.http
+    |   portfolio.http
+sql
+└───|
+    |   stock-portfolio-schema-prod.sql
+    |   stock-portfolio-schema-test.sql
 src
 ├───main
 │   └───java
@@ -202,7 +213,7 @@ src
 └───test
     └───java
         └───learn
-            └───solar
+            └───stock-portfolio
                 ├───data
                 │       StockJdbcTemplateRepositoryTest.java        -- StockJdbcTemplateRepository tests
                 │       UserJdbcTemplateRepositoryTest.java         -- UserJdbcTemplateRepository tests
@@ -544,10 +555,12 @@ An enum with values for countries of the world:
 - `private AccountType accountType`
 
 ## Steps
-1. Set Up Maven Project: Create a Maven project and add dependencies for JUnit, Spring Boot, and MYSQL.
-2. Create Model Classes: Create the User, Stock, Order, Currency, Country, Portfolio, StockExchange, AssetType, AccountType, and TransactionType models.
-3. Create Mappers: Create data mappers for Stock, User, Order, StockExchange, and Portfolio.
-3. Create Repository Layer Classes and Tests: Create the DataException class. Create the Repository interface, JdbcTemplateRepository class, and JdbcTemplateRepositoryTest test class for Stock, User, Order, StockExchange, and Portfolio.
-4. Create Service Layer: Create the Service class and ServiceTest test class for Stock, User, Order, StockExchange, and Portfolio.
-5. Create Controller Layer: Create the Controller class and HTTP requests for Stock, User, Order, StockExchange, and Portfolio. Remember to use OpenAPI/Swagger documentation.
-6. Create the App class and run the application.
+1. Create the Production Database: Create tables for Currency, Portfolio, User, UserPortfolio, Countries, Stocks, Orders, and PortfolioOrder. Add data if needed.
+2. Create the Test Database: Create a transaction script for testing for the tables (Currency, Portfolio, User, UserPortfolio, Countries, Stocks, Orders, and PortfolioOrder). Create the tables and add test data for each table in the transaction script.
+3. Set Up Maven Project: Create a Maven project and add dependencies for JUnit, Spring Boot, and MYSQL.
+4. Create Model Classes: Create the User, Stock, Order, Currency, Country, Portfolio, StockExchange, AssetType, AccountType, and TransactionType models.
+5. Create Mappers: Create data mappers for Stock, User, Order, StockExchange, and Portfolio.
+6. Create Repository Layer Classes and Tests: Create the DataException class. Create the Repository interface, JdbcTemplateRepository class, and JdbcTemplateRepositoryTest test class for Stock, User, Order, StockExchange, and Portfolio.
+7. Create Service Layer: Create the Service class and ServiceTest test class for Stock, User, Order, StockExchange, and Portfolio.
+8. Create Controller Layer: Create the Controller class and HTTP requests for Stock, User, Order, StockExchange, and Portfolio. Remember to use OpenAPI/Swagger documentation.
+9. Create the App class, add database configuration secrets in application.properties, and run the application.
