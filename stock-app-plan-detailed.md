@@ -134,6 +134,11 @@ Asset Type must be a Java enum.
 - Country enum with country names and codes
 - Currency enum with currency signs and names
 
+## ERD Diagram
+![ERD Diagram shouwing relations between User, Countries, Currencies, Portfolio, UserPortfolio, Stocks, Orders, and Portfolio Orders](ERD.png)
+
+## Wireframes
+
 ## Package/Class Overview
 
 ```
@@ -233,54 +238,70 @@ src
 -- handlers for other exception types
 
 ### controller.StockController
-`public ResponseEntity<List<Stock>> getAllStocks()` -- returns a list of all stocks
-`public ResponseEntity<Stock> getStockById(@PathVariable int id)` -- fetches a stock by its unique ID
-`public ResponseEntity<Stock> createStock(@RequestBody Stock stock)` --adds a new stock to the system
-`public ResponseEntity<Stock> updateStock(@PathVariable int id, @RequestBody Stock stock)` -- updates an existing stock
-`public ResponseEntity<Void> deleteStock(@PathVariable int id)` -- deletes a stock by its ID
-`public ResponseEntity<List<Stock>> getStocksByIndustry(@RequestParam String industry)` -- fetches all stocks by a specific industry
+- `private final StockService` -- stock service
+- `public StockController(StockService stockService)` -- constructor
+- `public ResponseEntity<List<Stock>> findAll()` -- returns a list of all stocks
+- `public ResponseEntity<Stock> findById(@PathVariable int id)` -- fetches a stock by its unique ID
+- `public ResponseEntity<Stock> findByTicker(@PathVariable String ticker)` -- fetches a stock by its unique ticker
+- `public ResponseEntity<Stock> add(@RequestBody Stock stock)` --adds a new stock to the system
+- `public ResponseEntity<Stock> update(@PathVariable int id, @RequestBody Stock stock)` -- updates an existing stock
+- `public ResponseEntity<Void> deleteById(@PathVariable int id)` -- deletes a stock by its ID
+- `public ResponseEntity<List<Stock>> getStocksByIndustry(@RequestParam String industry)` -- fetches all stocks by a specific industry
 
 ### controller.UserController
-`public ResponseEntity<User> createUser(@RequestBody User user)` -- creates a new user account
-`public ResponseEntity<User> getUserById(@PathVariable int id)` -- retrieves user information by ID
-`public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user)` -- updates user details
-`public ResponseEntity<Void> deleteUser(@PathVariable int id)` -- deletes a user account
-`public ResponseEntity<List<User>> getAllUsers()` -- retrieves a list of all users in the system
+- `private final UserService` -- user service
+- `public UserController(UserService UserService)` -- constructor
+- `public ResponseEntity<List<User>> findAll()` -- retrieves a list of all users in the system
+- `public ResponseEntity<User> add(@RequestBody User user)` -- creates a new user account
+- `public ResponseEntity<User> findById(@PathVariable int id)` -- retrieves user information by ID
+- `public ResponseEntity<User> update(@PathVariable int id, @RequestBody User user)` -- updates user details
+- `public ResponseEntity<Void> deleteById(@PathVariable int id)` -- deletes a user account
 
 ### controller.OrderController
-`public ResponseEntity<Order> placeOrder(@RequestBody Order order)` -- places a new order (buy/sell)
-`public ResponseEntity<Order> getOrderById(@PathVariable int id)` -- retrieves an order by its ID
-`public ResponseEntity<List<Order>> getOrdersByUser(@PathVariable int userId)` --fetches all orders placed by a specific user
-`public ResponseEntity<List<Order>> getOrdersByStock(@RequestParam int stockId)` -- fetches all orders for a specific stock
+- `private final OrderService` -- order service
+- `public OrderController(OrderService orderService)` -- constructor
+- `public ResponseEntity<Order> add(@RequestBody Order order)` -- places a new order (buy/sell)
+- `public ResponseEntity<Order> findById(@PathVariable int id)` -- retrieves an order by its ID
+- `public ResponseEntity<List<Order>> findByUser(@PathVariable int userId)` --fetches all orders placed by a specific user
+- `public ResponseEntity<List<Order>> findByStock(@RequestParam int stockId)` -- fetches all orders for a specific stock
+- `public ResponseEntity<Order> update(@PathVariable int id, @RequestBody Order order)` -- updates order details
+- `public ResponseEntity<Void> deleteById(@PathVariable int id)` -- deletes an order
 
 ### controller.StockExchangeController
-`public ResponseEntity<List<StockExchange>> getAllExchanges()` -- retrieves a list of all stock exchanges
-`public ResponseEntity<StockExchange> getExchangeById(@PathVariable int id)` -- retrieves a stock exchange by its ID
-`public ResponseEntity<StockExchange> createExchange(@RequestBody StockExchange stockExchange)` -- adds a new stock exchange
-`public ResponseEntity<StockExchange> updateExchange(@PathVariable int id, @RequestBody StockExchange stockExchange)` -- updates an existing stock exchange
-`public ResponseEntity<Void> deleteExchange(@PathVariable int id)` -- deletes a stock exchange by ID
+- `private final StockExchangeService` -- stock exchange service
+- `public StockExchangeController(StockExchangeService stockService)` -- constructor
+- `public ResponseEntity<List<StockExchange>> findAll()` -- retrieves a list of all stock exchanges
+- `public ResponseEntity<StockExchange> findById(@PathVariable int id)` -- retrieves a stock exchange by its ID
+- `public ResponseEntity<StockExchange> add(@RequestBody StockExchange stockExchange)` -- adds a new stock exchange
+- `public ResponseEntity<StockExchange> update(@PathVariable int id, @RequestBody StockExchange stockExchange)` -- updates an existing stock exchange
+- `public ResponseEntity<Void> deleteById(@PathVariable int id)` -- deletes a stock exchange by ID
 
 ### controller.PortfolioController
-`public ResponseEntity<Portfolio> getPortfolioByUserId(@PathVariable int userId)` -- retrieves the portfolio for a specific user
-`public ResponseEntity<Portfolio> addStockToPortfolio(@PathVariable int userId, @RequestBody Stock stock)` -- adds a stock to the user's portfolio
-`public ResponseEntity<Portfolio> removeStockFromPortfolio(@PathVariable int userId, @PathVariable int stockId)` -- removes a stock from the user's portfolio
-`public ResponseEntity<List<Stock>> getAllStocksInPortfolio(@PathVariable int userId) `-- retrieves all stocks in the user's portfolio
-`public ResponseEntity<Portfolio> updateAccountType(@PathVariable int userId, @RequestParam AccountType accountType)` -- updates the account type of a user's portfolio
+- `private final PortfolioService` -- portfolio service
+- `public PortfolioController(PortfolioService portfolioService)` -- constructor
+- `public ResponseEntity<Portfolio> findByUserId(@PathVariable int userId)` -- retrieves the portfolio for a specific user
+- `public ResponseEntity<Portfolio> addStockToPortfolio(@PathVariable int userId, @RequestBody Stock stock)` -- adds a stock to the user's portfolio
+- `public ResponseEntity<Portfolio> deleteStockFromPortfolio(@PathVariable int userId, @PathVariable int stockId)` -- removes a stock from the user's portfolio
+- `public ResponseEntity<List<Stock>> findAllStocksInPortfolio(@PathVariable int userId) `-- retrieves all stocks in the user's portfolio
+- `public ResponseEntity<Portfolio> updateAccountType(@PathVariable int userId, @RequestParam AccountType accountType)` -- updates the account type of a user's portfolio
+- `public ResponseEntity<BigDecimal> getPortfolioValue(@PathVariable int userId, @RequestParam String date)` -- gets the portfolio value on a specific date
+- `public ResponseEntity<Void> sellStockFromPortfolio(@PathVariable int userId, @PathVariable int stockId)` -- sells a stock from the portfolio
+- `public ResponseEntity<Void> updateCostBasisOnDividend(@PathVariable int userId, @RequestBody BigDecimal dividend)` -- updates the cost basis after receiving a dividend
 
 ### data.mapper.StockMapper
-`public Stock mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Stock object
+- `public Stock mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Stock object
 
 ### data.mapper.UserMapper
-`public User mapRow(ResultSet rs, int rowNum)` -- maps a database record to a User object
+- `public User mapRow(ResultSet rs, int rowNum)` -- maps a database record to a User object
 
 ### data.mapper.OrderMapper
-`public Order mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Order object
+- `public Order mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Order object
 
 ### data.mapper.StockExchangeMapper
-`public StockExchange mapRow(ResultSet rs, int rowNum)` -- maps a database record to a StockExchange object
+- `public StockExchange mapRow(ResultSet rs, int rowNum)` -- maps a database record to a StockExchange object
 
 ### data.mapper.PortfolioMapper
-`public Portfolio mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Portfolio object
+- `public Portfolio mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Portfolio object
 
 ### data.DataException
 
@@ -288,42 +309,85 @@ Custom data layer exception.
 
 - `public DataException(String, Throwable)` -- constructor, Throwable arg is the root cause exception
 
-### data.PanelFileRepository
-- `private String filePath`
-- `public List<Panel> findBySection(String)` -- finds all Panels in a section, uses the private `findAll` method
-- `public Panel add(Panel)` -- create a Panel
-- `public boolean update(Panel)` -- update a Panel
-- `public boolean deleteById(int)` -- delete a Panel by its id
-- `private List<Panel> findAll()` -- finds all Panels in the data source (file), does not need to be public
-- `private String serialize(Panel)` -- convert a Panel into a String (a line) in the file
-- `private Panel deserialize(String)` -- convert a String into a Panel
+### data.StockRepository
 
-### data.PanelRepository (interface)
+### data.StockJdbcTemplateRepository
 
-Contract for PanelFileRepository and PanelRepositoryTestDouble.
+### data.UserRepository
 
-- `List<Panel> findBySection(String)`
-- `Panel add(Panel)`
-- `boolean update(Panel)`
-- `boolean deleteById(int)`
+### data.UserJdbcTemplateRepository
 
-### domain.PanelResult
-- `private ArrayList<String> messages` -- error messages
-- `private Panel panel` -- an optional Panel
+### data.OrderRepository
+
+### data.OrderJdbcTemplateRepository
+
+### data.StockExchangeRepository
+
+### data.StockExchangeJdbcTemplateRepository
+
+### data.PortfolioRepository
+
+### data.PortfolioJdbcTemplateRepository
+
+### domain.ResultType
+
+An enum with three values:
+SUCCESS,
+INVALID,
+NOT_FOUND
+
+### domain.Result
+- `private final ArrayList<String> messages` -- error messages
+- `private ResultType type` -- result type enum
+- `private T payload` -- payload
+- `public ResultType getType()` -- result type getter
 - `public boolean isSuccess()` -- calculated getter, true if no error messages
-- `public List<String> getMessages()` -- messages getter, create a new list
-- `public Panel getPanel()` -- Panel getter
-- `public void setPanel(Panel)` -- Panel setter
-- `public void addMessage(String)` -- adds an error message to messages
+- `public T getPayload()` -- payload getter
+- `public void setPayload(T payload)` -- payload setter
+- `public void setType(ResultType type)` -- result type setter
+- `public List<String> getMessages()` -- messages getter
+- `public void addMessage(String message, ResultType type)` -- adds an error message to messages
+- `public void addMessage(String format, ResultType resultType, Object... args)` -- adds an error message to messages
 
-### domain.PanelService
--  `private PanelRepository repository` -- required data dependency
--  `public PanelService(PanelRepository)` -- constructor
--  `public List<Panel> findBySection(String)` -- pass-through to repository
--  `public PanelResult add(Panel)` -- validate, then add via repository
--  `public PanelResult update(Panel)` -- validate, then update via repository
--  `public PanelResult deleteById(int)` -- pass-through to repository
--  `private PanelResult validate(Panel)` -- general-purpose validation routine
+### domain.StockService
+- `private StockRepository repository` -- stock repository interface
+- `public List<Stock> findAll()` -- returns a list of all stocks
+- `public Stock findById(int id)` -- finds a stock by its unique ID
+- `public Stock findByTicker(String ticker)` -- finds a stock by its unique ticker
+- `public Stock add(Stock stock)` --adds a new stock to the system
+- `public Result<Stock> update(Stock stock)` -- updates an existing stock
+- `public boolean deleteById(int id)` -- deletes a stock by its ID
+- `public List<Stock> getStocksByIndustry(@RequestParam String industry)` -- finds all stocks by a specific industry
+
+### domain.UserService
+- `private UserRepository repository` -- user repository interface
+- `public List<User> findAll()` -- retrieves a list of all users in the system
+- `public User add(User user)` -- creates a new user account
+- `public User findById(int id)` -- retrieves user information by ID
+- `public Result<User> update(User user)` -- updates user details
+- `public boolean deleteById(int id)` -- deletes a user account
+
+### domain.OrderService
+- `private OrderRepository repository` -- order repository interface
+- `public Order add(Order order)` -- places a new order (buy/sell)
+- `public Order findById(int id)` -- retrieves an order by its ID
+- `public List<Order> findAll()` -- retrieves a list of all orders
+- `public List<Order> findByUser(int userId)` -- finds all orders placed by a specific user
+- `public List<Order> findByStock(int stockId)` -- finds all orders for a specific stock
+- `public Result<Order> update(Order order)` -- updates order details
+- `public boolean deleteById(int id)` -- deletes an order
+
+### domain.StockExchangeService
+- `private StockExchangeRepository repository` -- stock exchange repository interface
+- `public List<StockExchange> findAll()` -- retrieves a list of all stock exchanges
+- `public StockExchange findById(nt id)` -- retrieves a stock exchange by its ID
+- `public StockExchange add(StockExchange stockExchange)` -- adds a new stock exchange
+- `public Result<StockExchange> update(StockExchange stockExchange)` -- updates an existing stock exchange
+- `public boolean deleteById(int id)` -- deletes a stock exchange by ID
+
+### domain.PortfolioService
+- `private PortfolioRepository repository` -- portfolio repository interface
+- `public BigDecimal calculateCapitalGainsTax(List<Order> orders)` -- gets the capital gains tax
 
 ### models.AssetType
 enum with values:
@@ -397,10 +461,17 @@ An enum with values for countries of the world:
 ### models.Portfolio
 - `private int id`
 - `private int userId`
-- `private ArrayList stocks`
+- `private List<Stocks> stocks`
 - `private AccountType accountType`
 
 ## Steps
+1. Set Up Maven Project: Initialize the project with Maven and add dependencies for JUnit 5, Spring Boot, and MySQL Database.
+2. Create Model Classes: Implement classes/enums for User, Stock, Order, Currency, Country, Portfolio, etc.
+3. Create Repository Layer: Implement repositories using JdbcTemplate to interact with the database. Ensure custom exceptions (like DataException) are used.
+4. Service Layer: Implement the business logic, ensuring proper validation and interactions between the models.
+5. Controller Layer: Implement controllers to handle HTTP requests and route them to the appropriate services (OpenAPI/Swagger).
+6. Testing: Implement tests for all repository and service classes. Create mock data and ensure that tests cover all
+
 1. Create a Maven project.
 2. Add jUnit 5, Jupiter, as a Maven dependency and refresh Maven
 3. Create packages.
