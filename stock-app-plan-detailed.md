@@ -139,15 +139,19 @@ Asset Type must be a Java enum.
 
 ## Wireframes
 Home
+
 ![Stock App Homepage](wire-frames/home.png)
 
 Stock View
+
 ![Stock View Page](<wire-frames/stock view.png>)
 
 Add Order
+
 ![Add Order Page](wire-frames/add-order.png)
 
 Edit Order
+
 ![Edit Order Page](wire-frames/edit-order.png)
 
 ## Package/Class Overview
@@ -155,21 +159,21 @@ Edit Order
 ```
 http
 └───|
-    |   stock.http
-    |   user.http
-    |   order.http
-    |   stock-exchange.http
-    |   portfolio.http
+    |   stock.http                                                  -- stock HTTP requests
+    |   user.http                                                   -- user HTTP requests
+    |   order.http                                                  -- order HTTP requests
+    |   stock-exchange.http                                         -- stock exchange HTTP requests
+    |   portfolio.http                                              -- portfolio HTTP requests
 sql
 └───|
-    |   stock-portfolio-schema-prod.sql
-    |   stock-portfolio-schema-test.sql
+    |   stock-portfolio-schema-prod.sql                             -- production schema
+    |   stock-portfolio-schema-test.sql                             -- test schema
 src
 ├───main
 │   └───java
 │       └───learn
 │           └───stock-portfolio
-│               │   App.java                                         -- app entry point
+│               │   App.java                                        -- app entry point
 │               │
 │               ├───controller
 │               │       ErrorResponse.java                          -- matching error responses to HTTP status codes
