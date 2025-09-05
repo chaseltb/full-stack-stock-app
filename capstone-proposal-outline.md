@@ -117,6 +117,13 @@ real time stock api
 saving user accounts and their info
 elastic search to filter stocks
 
+**Learning Goal: We want to gather and store realtime stock info**
+
+Application: We will use Alpha Vantage API to gather realltime stock data
+Reseach and Resources: We'll start with the base documentation and the example jsons that they provide.
+Challenges: We anticipate the API returning information that may not be initially compatible with our API, we may have to adjust our API in order to accomodate.
+Success Criteria: If we are able to gather stock data in a timely manner, then we will consider this a success.
+
 Example:
 
 Learning Goal: I want to learn how to integrate Google Maps into a web application.
