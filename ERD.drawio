@@ -43,10 +43,13 @@
         <mxCell id="fhvyuvNnrtl3i7gsskAm-12" value="- country_id (pk)&lt;div&gt;- currency_id (fk)&lt;/div&gt;&lt;div&gt;- name&lt;/div&gt;&lt;div&gt;- code&lt;/div&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" parent="fhvyuvNnrtl3i7gsskAm-11" vertex="1">
           <mxGeometry y="50" width="160" height="70" as="geometry" />
         </mxCell>
+        <mxCell id="g3IjI8iGnS3hcuvzQA1k-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="fhvyuvNnrtl3i7gsskAm-13" target="fhvyuvNnrtl3i7gsskAm-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="fhvyuvNnrtl3i7gsskAm-13" value="Portfolio" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="40" y="490" width="160" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="fhvyuvNnrtl3i7gsskAm-14" value="- portfolio_id (pk)&lt;div&gt;- account_type&lt;/div&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" parent="fhvyuvNnrtl3i7gsskAm-13" vertex="1">
+        <mxCell id="fhvyuvNnrtl3i7gsskAm-14" value="- portfolio_id (pk)&lt;div&gt;- user_id(fk)&lt;/div&gt;&lt;div&gt;- account_type&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" parent="fhvyuvNnrtl3i7gsskAm-13" vertex="1">
           <mxGeometry y="50" width="160" height="70" as="geometry" />
         </mxCell>
         <mxCell id="fhvyuvNnrtl3i7gsskAm-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="fhvyuvNnrtl3i7gsskAm-15" target="fhvyuvNnrtl3i7gsskAm-9" edge="1">
@@ -62,18 +65,6 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="fhvyuvNnrtl3i7gsskAm-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.45;entryY=1.029;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="fhvyuvNnrtl3i7gsskAm-15" target="fhvyuvNnrtl3i7gsskAm-14" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="fhvyuvNnrtl3i7gsskAm-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" parent="1" source="fhvyuvNnrtl3i7gsskAm-29" target="fhvyuvNnrtl3i7gsskAm-2" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="fhvyuvNnrtl3i7gsskAm-29" value="UserPortfolios" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="40" y="250" width="160" height="120" as="geometry" />
-        </mxCell>
-        <mxCell id="fhvyuvNnrtl3i7gsskAm-30" value="&lt;div&gt;- user_id (fk)&lt;/div&gt;- portfolio_id (fk)" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" parent="fhvyuvNnrtl3i7gsskAm-29" vertex="1">
-          <mxGeometry y="50" width="160" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="fhvyuvNnrtl3i7gsskAm-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="fhvyuvNnrtl3i7gsskAm-30" target="fhvyuvNnrtl3i7gsskAm-13" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="g3IjI8iGnS3hcuvzQA1k-1" value="Stock Exhange" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" vertex="1" parent="1">
