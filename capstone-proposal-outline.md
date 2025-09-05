@@ -160,7 +160,7 @@ Technology Stack:
 - Swagger will be used to document the backend API, providing clear docuemntation for all available endpoints.
 - The Swagger UI will allow for exploring available API routes, parameters, and expected responses.
 
-5. Clound Hosting on AWS
+5. Cloud Hosting on AWS
 - The entire application will be hosted on AWS.
 - The backend API will be hosted on Amazon EC2 and the database will be stored with Amazon RDS. 
 
