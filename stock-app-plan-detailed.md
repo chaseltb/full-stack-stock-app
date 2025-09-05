@@ -131,8 +131,6 @@ Asset Type must be a Java enum.
 - Repository and service classes must be fully tested with both negative and positive cases. Do not use your "production" data file to test your repository.
 - account type enum with the investment account (retirement, investing).
 - Asset Type enum with the type of stock 
-- Country enum with country names and codes
-- Currency enum with currency signs and names
 
 ## ERD Diagram
 ![ERD Diagram shouwing relations between User, Countries, Currencies, Portfolio, UserPortfolio, Stocks, Orders, and Portfolio Orders](ERD.png)
@@ -219,6 +217,8 @@ src
 │               |       │       OrderMapper.java                    -- order mapper
 │               |       │       StockExchangeMapper.java            -- stock exchange mapper
 │               |       │       PortfolioMapper.java                -- stock exchange mapper
+|               |       |       CurrencyMapper.java                 -- currency mapper
+|               |       |       CountryMapper.java                  -- country mapper
 │               │       DataException.java                          -- data layer custom exception
 │               │       StockJdbcTemplateRepository.java            -- concrete repository
 │               │       UserJdbcTemplateRepository.java             -- concrete repository
@@ -241,8 +241,8 @@ src
 │               │       PortfolioService.java                       -- portfolio validation/rules
 │               │
 │               ├───models
-│               │       Currency.java                               -- enum representing currencies
-│               │       Country.java                                -- enum representing countries
+│               │       Currency.java                               -- currency model
+│               │       Country.java                                -- country model
 |               |       TransactionType.java                        -- enum for Transacation
 |               |       AssetType.java                              -- enum for Asset
 |               |       AccountType.java                            -- enum for Account
