@@ -124,6 +124,13 @@ Reseach and Resources: We'll start with the base documentation and the example j
 Challenges: We anticipate the API returning information that may not be initially compatible with our API, we may have to adjust our API in order to accomodate.
 Success Criteria: If we are able to gather stock data in a timely manner, then we will consider this a success.
 
+**Learning Goal: We want to display the stock data in a digestible way**
+
+Application: We will use the Chart.js library to easily display graphs according to the information gathered by Alpha Vantage API.
+Research and Resources: We'll likely start with thier base documentation then look for examples online on how others used this library, either through stack overflow or youtube.
+Challenges: We anticipate having some difficulties making the graph designs consistent with the rest of the front end, to address this we will practice desiging the graphs first in order to build the site around what we are able to do with it.
+Success Criteria:  If we are able to display stock data in a graph, that both displays the information accurately and in a pleasant manner, we will consider it a success.  
+
 Example:
 
 Learning Goal: I want to learn how to integrate Google Maps into a web application.
