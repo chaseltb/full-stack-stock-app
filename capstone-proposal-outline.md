@@ -15,7 +15,7 @@ Context: Briefly describe the context or environment in which the problem exists
 
 Core Problem: What specific, unmet need or challenge does this project address? Explain in simple terms what is currently missing, difficult, or ineffective for users.
 
-**There are existing tools but they are often hard to use or significantly outdated. We want to have a cost-basis tracking tool that can also store a user's portfolio and account for new buy/sell orders and return of capital (lowering cost basis from dividend).**
+**There are existing tools, but they are often hard to use or significantly outdated. We want to have a cost-basis tracking tool that can also store a user's portfolio and account for new buy/sell orders and return of capital (lowering cost basis from dividend).**
 
 Impact on Users: Describe how this problem affects the users or stakeholders. What pain points do they experience as a result of this issue? What specific frustrations, inefficiencies, or missed opportunities arise from the current situation?
 
@@ -31,20 +31,20 @@ Opportunity for Solution: Why is solving this problem meaningful for your intend
 
 Overview of the Solution: Describe the high-level approach you plan to take to solve the problem outlined in your Problem Statement. What kind of application or system will you create? How will it address the core problem?
 
-**A web application that allows users to store their stock infromation, view general stock information, and their chosen stocks and currency.**
+**A web application that allows users to store their stock information, view general stock information, and their chosen stocks and currency.**
 
 Key Features and Functionalities: List and describe the main features of the application. What are the critical functionalities that users will need to perform in order to effectively interact with the system?
 
 Key Features
 * Viewing Stock Information
-* Calculating average value of stocks accrooss exchange platforms
+* Calculating average value of stocks across exchange platforms
 * Support for users to track unrealized gains, cost basis, and dividends for a rough tax estimate
 * Tracking portfolio performance (without full tax calculation, only unrealized gain estimates)
 * Filtering stocks by different criteria
 
 Functionalities
 * Users will need a chosen currency
-* Users will need an account (username and passowrd)
+* Users will need an account (username and password)
 * Users will need to choose a stock to review
 * Users can favorite a stock
 
@@ -56,7 +56,7 @@ Users:
 * Add stocks to their portfolio
 * Edit their portfolio
 * Delete stocks from their portfolio
-* Calculate average value of stocks accrooss exchange platforms
+* Calculate average value of stocks across exchange platforms
 * Estimate dividend adjustments to cost basis and calculate unrealized gains
 
 Admins:
@@ -84,7 +84,7 @@ Technology Stack:
 
 &emsp;&emsp;&emsp;Example: If a user bought 100 shares of a stock for $10 each, the cost basis would be $100.
 
-2. **Capital Gains**: The profit made from the sale of an asset, such as stocks, bonds, or real estate. It is calculates by subtracting the cost basis from the sale price of the asset.
+2. **Capital Gains**: The profit made from the sale of an asset, such as stocks, bonds, or real estate. It is calculated by subtracting the cost basis from the sale price of the asset.
 
 &emsp;&emsp;&emsp;Example: If a user sold a stock for $1,500 that they purchased for $1,000, their capital gain is $500.
 
@@ -142,14 +142,14 @@ Technology Stack:
   - StockExchanges: Data related to stock exchanges (e.g., NYSE, NASDAQ).
 - Data Integrity and Relationships:
   - Tables should maintain foreign key relationships where necessary
-  - Validations should be applied accross all entities
-  - Bridge tables should implemented where necessary
+  - Validations should be applied across all entities
+  - Bridge tables should be implemented where necessary
 
 2. Spring Boot Backend
-- Spring Boot will be used to configute the development and deployment of the application.
-- Spring MVC will handle the infrastructure for handling HTTP requess, managing views, and interacting with the business logic.
+- Spring Boot will be used to configure the development and deployment of the application.
+- Spring MVC will handle the infrastructure for handling HTTP request, managing views, and interacting with the business logic.
 - Security: JWT authentication will be used to secure endpoints for users and admins. Role-based access control will ensure that users cannot access admin-only features.
-- Backend Testing: Unit and integration tests will be wrtitten for services and repositories with JUnit and Mockito.
+- Backend Testing: Unit and integration tests will be written for services and repositories with JUnit and Mockito.
 - Error Handling: Global exception handlers will be used for standardized error responses.
 
 3. Frontend with React
@@ -159,7 +159,7 @@ Technology Stack:
 - State management will be handled with React's built-in hooks.
 
 4. API Documentation with Swagger/OpenAPI
-- Swagger will be used to document the backend API, providing clear docuemntation for all available endpoints.
+- Swagger will be used to document the backend API, providing clear documentation for all available endpoints.
 - The Swagger UI will allow for exploring available API routes, parameters, and expected responses.
 
 5. Cloud Hosting on AWS
@@ -170,8 +170,8 @@ Technology Stack:
 - The OpenExchangeRates API will be used to get the latest exchange rates which will be stores in the Currency table.
 
 7. Real-Time Data and Tax Calculations
-- AlphaVantageAPI will be used to get stock data (real-time getched more frequently than historical).
-- Historial stock data will be integrated for visualization.
+- AlphaVantageAPI will be used to get stock data (real-time fetched more frequently than historical).
+- Historical stock data will be integrated for visualization.
 - Implement logic for calculating cost basis using FIFO.
 - If the stock pays a dividend and the user has reinvested it, the dividend will adjust the cost basis.
 - Each stock transaction (buy/sell) will be logged in an Orders table.
@@ -192,7 +192,7 @@ Technology Stack:
 - As a user, I want to remove stock when I no longer want to track them or have sold them
 - As a user, I want to see detailed information about a stock, including its historical performance, so that I can make informed decisions about my investments <!-- Charts, Recent prices -->
 - As a user, I want to choose my preferred currency so that the stock values in my portfolio can be shown in my selected currency
-- As a user, I want to calculate the average values of my stocks accross different exchange platforms do that I can get a clear idea of their total worth, even if I have purchsed them from different exchanges
+- As a user, I want to calculate the average values of my stocks across different exchange platforms do that I can get a clear idea of their total worth, even if I have purchased them from different exchanges
 - As a user, I want to calculate the estimate payments for my real estate stocks so that I can estimate the tax impact of those dividends
 - As a user, I want to filter stocks in my portfolio based on different criteria so that I can easily find and compare specific stocks in my portfolio
 
@@ -206,7 +206,7 @@ Technology Stack:
 
 ## Learning Goals <!--(Mandatory: 3 minimum)-->
 
-<!-- - Each team must select **at least three learning goals** outside of the technologies covered in class.  
+<!-- - Each team must select **at least three learning goals** outside the technologies covered in class.  
 - Each learning goal must directly improve the project.  
 - Document for each goal:  
   - What you learned,  
@@ -224,10 +224,10 @@ elastic search to filter stocks -->
 
 **Learning Goal: We want to gather and store realtime and historical stock info**
 
-- Application: We will use Alpha Vantage API to gather realltime stock data
-- Reseach and Resources: We will start by familiarizing ourselves with the Alpha Vantage documentation to understand how to request real-time data and handle the different formats and limits of API responses. We will also use example JSON responses provided by Alpha Vantage to understand how the data is structured and how to integrate it into our backend system.
+- Application: We will use Alpha Vantage API to gather realtime stock data
+- Research and Resources: We will start by familiarizing ourselves with the Alpha Vantage documentation to understand how to request real-time data and handle the different formats and limits of API responses. We will also use example JSON responses provided by Alpha Vantage to understand how the data is structured and how to integrate it into our backend system.
 - Challenges: 
-  - We anticipate having some difficulties making the graph designs consistent with the rest of the front end, to address this we will practice desiging the graphs first in order to build the site around what we are able to do with it.
+  - We anticipate having some difficulties making the graph designs consistent with the rest of the front end, to address this we will practice designing the graphs first in order to build the site around what we are able to do with it.
   - Alpha Vantage has strict rate limits, especially on the free tier (5 calls per minute, 500 calls per day). As such, we must ensure that our application doesn't exceed these limits, especially with frequent real-time price updates. We will need to implement rate-limiting and caching strategies to manage API calls effectively.
   - Real-time data needs to be integrated with historical data for effective analysis. We must figure out how to store both real-time price updates and historical data in a consistent manner. Real-time data will be updated frequently (e.g., every minute), while historical data will be queried less often and could be stored at intervals (e.g., daily).
 - Success Criteria: If we are able to gather stock data in a timely manner and manage API call rates efficiently, ensuring that we stay within the API's usage limits without hitting errors, then we will consider this a success.
@@ -235,8 +235,8 @@ elastic search to filter stocks -->
 **Learning Goal: We want to display the stock data in a digestible way**
 
 - Application: We will use the Chart.js library to easily display graphs according to the information gathered by Alpha Vantage API.
-- Research and Resources: We'll likely start with thier base documentation then look for examples online on how others used this library, either through stack overflow or youtube.
-- Challenges: We anticipate having some difficulties making the graph designs consistent with the rest of the front end, to address this we will practice desiging the graphs first in order to build the site around what we are able to do with it.
+- Research and Resources: We'll likely start with their base documentation then look for examples online on how others used this library, either through stack overflow or YouTube.
+- Challenges: We anticipate having some difficulties making the graph designs consistent with the rest of the front end, to address this we will practice designing the graphs first in order to build the site around what we are able to do with it.
 - Success Criteria:  If we are able to display stock data in a graph, that both displays the information accurately and in a pleasant manner, we will consider it a success.  
 
 **Learning Goal: We want to make our site look modern**
@@ -244,14 +244,14 @@ elastic search to filter stocks -->
 - Application: We will use Material Design 3 in, instead of Bootstrap, in order to handle the styling of our site
 - Research and Resources: We will start by reading the documentation then referencing other industrial sites for inspiration on how to create a modern look.
 - Challenges: We anticipate having some difficulties with the syntax of this specific library, so we will have to carefully reference documentation and examples.
-- Success Criteria: We will consider this a success if this tool makes it easier for us to create a well designed and good looking user interface.
+- Success Criteria: We will consider this a success if this tool makes it easier for us to create a well-designed and good-looking user interface.
 
 <!-- Example:
 
 Learning Goal: I want to learn how to integrate Google Maps into a web application.
 
 Application: I will use Google Maps API to display the location of each run on an interactive map within the app.  
-Research and Resources: I’ll start with the official Google Maps API documentation and a Udemy course on map APIs in JavaScript.  
+Research and Resources: I’ll start with the official Google Maps API documentation and an Udemy course on map APIs in JavaScript.  
 Challenges: I anticipate needing to figure out how to dynamically load map locations and handle API key security. To address this, I’ll practice with dummy data first and research security best practices for frontend applications.  
 Success Criteria: If users can see a Google Maps widget in the app that dynamically updates with each run location, then I’ll consider this learning goal achieved. -->
 
@@ -273,7 +273,39 @@ List all the classes in your application. For each class, provide a brief descri
 
 ## Task List with Estimated Completion Times 
 
-Break down all tasks required to complete the project.  
+<!-- Break down all tasks required to complete the project.  
 - No task should exceed 4 hours (break down if longer).  
 - Organize tasks logically (database setup, backend services, UI, testing, documentation).  
-- Include estimates for each task to ensure proper workload management.  
+- Include estimates for each task to ensure proper workload management.   -->
+
+| **Task**                               | **Description**                                                                                               | **Time Estimate** |
+|----------------------------------------|---------------------------------------------------------------------------------------------------------------|-------------------|
+| **1.1. Database Design**               | Design the schema for the database and identify required tables and relationships (User, Stock, Order, etc.). | 2 hours           |
+| **1.2. Database Setup**                | Set up the production and test databases, including connection configurations.                                | 3 hours           |
+| **2.1. Maven Project Setup**           | Initialize the Maven project and configure basic `pom.xml` dependencies.                                      | 2 hours           |
+| **2.2. Application Properties**        | Configure application properties (DB connection, logging, etc.).                                              | 2 hours           |
+| **3.1. User Model Class**              | Implement the `User` model class with fields like username, password, and name.                               | 2 hours           |
+| **3.2. Stock Model Class**             | Implement the `Stock` model class with fields like name, ticker, asset type.                                  | 2 hours           |
+| **3.3. Order & Other Models**          | Implement the `Order`, `Currency`, `Country`, and `Portfolio` model classes.                                  | 3 hours           |
+| **4.1. UserMapper**                    | Implement the `UserMapper` class to map database records to the `User` object.                                | 2 hours           |
+| **4.2. StockMapper**                   | Implement the `StockMapper` class to map database records to the `Stock` object.                              | 2 hours           |
+| **4.3. OrderMapper & Others**          | Implement `OrderMapper`, `CurrencyMapper`, `CountryMapper`, and `PortfolioMapper` classes.                    | 3 hours           |
+| **5.1. Stock Repository**              | Implement the `StockRepository` interface and methods for CRUD operations.                                    | 2 hours           |
+| **5.2. User Repository**               | Implement the `UserRepository` interface and methods for CRUD operations.                                     | 2 hours           |
+| **5.3. Order Repository**              | Implement the `OrderRepository` interface and methods for CRUD operations.                                    | 3 hours           |
+| **5.4. Portfolio Repository**          | Implement the `PortfolioRepository` interface and methods for CRUD operations.                                | 3 hours           |
+| **6.1. Stock Service**                 | Implement the `StockService` class with business logic for stock-related actions.                             | 3 hours           |
+| **6.2. User Service**                  | Implement the `UserService` class with business logic for user-related actions.                               | 3 hours           |
+| **6.3. Order & Portfolio Services**    | Implement `OrderService` and `PortfolioService` classes with their respective business logic.                 | 3 hours           |
+| **7.1. Stock Controller**              | Implement the `StockController` with routes to interact with stock data.                                      | 3 hours           |
+| **7.2. User Controller**               | Implement the `UserController` with routes for user management.                                               | 3 hours           |
+| **7.3. Order & Portfolio Controllers** | Implement `OrderController` and `PortfolioController` with routes to interact with orders and portfolios.     | 3 hours           |
+| **8.1. Main App Class**                | Set up the main app class with the entry point and basic configuration.                                       | 1 hour            |
+| **8.2. Configuration Setup**           | Set up additional application configurations (e.g., security, logging, etc.).                                 | 1 hour            |
+| **9.1. Repository Testing**            | Write unit tests for repository classes (testing CRUD operations).                                            | 3 hours           |
+| **9.2. Service Layer Testing**         | Write unit tests for service classes (business logic testing).                                                | 3 hours           |
+| **9.3. Controller Layer Testing**      | Write unit tests for controller classes (API interaction testing).                                            | 3 hours           |
+| **10.1. User Documentation**           | Write documentation for end-users, including features and usage instructions.                                 | 2 hours           |
+| **10.2. Developer Documentation**      | Write documentation for developers, including the API structure and setup.                                    | 3 hours           |
+| **11.1. Dockerization**                | Dockerize the application and create a Dockerfile.                                                            | 3 hours           |
+| **11.2. Deployment Configuration**     | Set up cloud infrastructure and deployment configurations (e.g., AWS, GCP).                                   | 3 hours           |
