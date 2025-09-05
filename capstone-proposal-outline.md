@@ -131,6 +131,12 @@ Research and Resources: We'll likely start with thier base documentation then lo
 Challenges: We anticipate having some difficulties making the graph designs consistent with the rest of the front end, to address this we will practice desiging the graphs first in order to build the site around what we are able to do with it.
 Success Criteria:  If we are able to display stock data in a graph, that both displays the information accurately and in a pleasant manner, we will consider it a success.  
 
+**Learning Goal: We want to make our site look modern**
+Application: We will use Material Design 3 in, instead of Bootstrap, in order to handle the styling of our site
+Research and Resources: We'll start by reading the documentation then referencing other industrial sites for inspiration on how to create a modern look.
+Challenges: We anticipate having some difficulties with the syntax of this specific library, so we will have to carefully reference documentation and examples.
+Success Criteria: We will consider this a success if this tool makes it easier for us to create a well designed and good looking user interface.
+
 Example:
 
 Learning Goal: I want to learn how to integrate Google Maps into a web application.
