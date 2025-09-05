@@ -54,32 +54,65 @@ Users:
 * Add stocks to their portfolio
 * Edit their portfolio
 * Delete stocks from their portfolio
+* Calculate average value of stocks accrooss exchange platforms
+* Calculate dividend payments of real estate stocks for tax purposes
 
 Admins:
 * Admins can delete users (in cases of inappropriate behaviour)
 * Admins can delete stocks from being displayed
 * Admins can recommend stocks to users (watchlist, maybe tailored to users)
 
-Technology Stack: Briefly mention the key technologies, frameworks, and tools you will use to build the application. Why did you choose these tools, and how will they help you achieve your solution?
+Technology Stack:
+<!-- Briefly mention the key technologies, frameworks, and tools you will use to build the application. Why did you choose these tools, and how will they help you achieve your solution? -->
 
-* Frontend: React, JavaScript, CSS, Material Design 3 (or Bootstrap), HTML
+* Frontend: React, JavaScript, CSS, Material Design 3, HTML
 * Backend: Spring Boot, Spring MVC, Java, JDBC
 * Database: MySQL
-* APIs: AlphaAdvantage API (still deciding), OpenAPI/Swagger, 
+* APIs: AlphaAdvantage API, OpenAPI/Swagger, OpenExchangeRates
 * Cloud: AWS
-* Visualization: Still deciding on a tool
+* Visualization: Chart.js
 
 ---
 
 ## Glossary
 
-In this section, you'll define key terms used within your application. Providing clear and consistent definitions for each term ensures that everyone on your team has a common understanding of the concepts. This is essential not only for your project's success but also for communicating effectively with stakeholders.
+<!-- In this section, you'll define key terms used within your application. Providing clear and consistent definitions for each term ensures that everyone on your team has a common understanding of the concepts. This is essential not only for your project's success but also for communicating effectively with stakeholders. -->
+
+1. **Cost Basis**: The original value of an asset (e.g., stock or bond) for tax purposes. It is used to calculate capital gains or losses. 
+
+&emsp;&emsp;&emsp;Example: If a user bought 100 shares of a stock for $10 each, the cost basis would be $100.
+
+2. **Capital Gains**: The profit made from the sale of an asset, such as stocks, bonds, or real estate. It is calculates by subtracting the cost basis from the sale price of the asset.
+
+&emsp;&emsp;&emsp;Example: If a user sold a stock for $1,500 that they purchased for $1,000, their capital gain is $500.
+
+3. **Capital Loss**: A loss incurred when an asset is sold for less than its cost basis. This can offset capital gains for tax purposes.
+
+&emsp;&emsp;&emsp;Example: If a user bought a stock for $1,000 and sold it for $800, their capital loss is $200.
+
+4. **Dividend**: A portion of a company's earnings that is distributed to shareholders, typically in cash or additional stock. Dividends are often paid quarterly.
+
+&emsp;&emsp;&emsp;Example: A company paying a $2 dividend per share on 100 shares would distribute $200 to a shareholder with 100 shares.
+
+5. **Stock Ticker**: A unique identifier assigned to each publicly traded stock, typically consisting of a 3-4 letter abbreviation.
+
+6. **Asset Type**: A category that classifies an investment, such as stocks, bonds, ETFs, or real estate. A stock would be categorized under the "Stock" asset type.
+
+7. **Portfolio**: A collection of investments, such as stocks, bonds, ETFs, or mutual funds, held by an individual or institution.
+
+&emsp;&emsp;&emsp;Example: A user’s portfolio might contain 100 shares of Apple, 200 shares of Tesla, and a bond investment.
+
+8. **Exchange Rate**: The rate at which one currency can be exchanged for another, used when displaying stock prices in different currencies.
+
+&emsp;&emsp;&emsp;Example: If the exchange rate between USD and EUR is 1 USD = 0.85 EUR, then a stock priced at $100 USD would be displayed as €85 EUR.
+
+9. **Portfolio Diversification**: The practice of spreading investments across different asset types or sectors to reduce risk.An investor might hold a mix of stocks, bonds, and real estate to diversify their portfolio.
 
 ---
 
 ## High Level Requirements
 
-- Manage **6–10 database tables (entities)** that are independent concepts. A simple bridge table doesn't count.  
+<!-- - Manage **6–10 database tables (entities)** that are independent concepts. A simple bridge table doesn't count.  
 - **MySQL** for data management.  
 - **Spring Boot, MVC, JDBC, Testing, React**.  
 - An HTML and CSS UI that's built with React.  
@@ -87,21 +120,80 @@ In this section, you'll define key terms used within your application. Providing
 - A full backend test suite that covers the domain and data layers (unit + integration).  
 - Must have at least **2 roles** (example: User and Admin).  
 - Must provide an **OpenAPI/Swagger specification** documenting all endpoints.  
-- Must be **hosted on a cloud provider** (AWS, Azure, or GCP).  
+- Must be **hosted on a cloud provider** (AWS, Azure, or GCP).   -->
+1. Database Design and Management (6 - 10 Entities)
+- The database tables include: 
+  - Users: To store user information such as name, username, password, etc.
+  - Stocks: Contains details like stock name, ticker, asset type, and country.
+  - Orders: Tracks the buy/sell transactions including share quantity, price, date, and transaction type.
+  - Currencies: Stores currency details like name, code, and exchange rate against USD.
+  - Countries: Holds information about different countries for stock and user association.
+  - Portfolios: User-specific portfolios to track owned stocks.
+  - StockExchanges: Data related to stock exchanges (e.g., NYSE, NASDAQ).
+- Data Integrity and Relationships:
+  - Tables should maintain foreign key relationships where necessary
+  - Validations should be applied accross all entities
+  - Bridge tables should implemented where necessary
 
-In this section, you will outline how you plan to meet the high-level requirements of your project. For each requirement, explain the specific steps you will take, the tools or technologies you will use, and how you'll implement them to meet the project’s objectives.
+2. Spring Boot Backend
+- Spring Boot will be used to configute the development and deployment of the application.
+- Spring MVC will handle the infrastructure for handling HTTP requess, managing views, and interacting with the business logic.
+- Security: JWT authentication will be used to secure endpoints for users and admins. Role-based access control will ensure that users cannot access admin-only features.
+- Backend Testing: Unit and integration tests will be wrtitten for services and repositories with JUnit and Mockito.
+- Error Handling: Global exception handlers will be used for standardized error responses.
+
+3. Frontend with React
+- The React frontend will communicate with the backend API through the endpoints.
+- Material Design 3 will be used to style the application for a more modern, clean, and responsive design.
+- Chart.js will be used to display stock data visually, showing historical performance and other key metrics.
+- State management will be handled with React's built-in hooks.
+
+4. API Documentation with Swagger/OpenAPI
+- Swagger will be used to document the backend API, providing clear docuemntation for all available endpoints.
+- The Swagger UI will allow for exploring available API routes, parameters, and expected responses.
+
+5. Clound Hosting on AWS
+- The entire application will be hosted on AWS.
+- The backend API will be hosted on Amazon EC2 and the database will be stored with Amazon RDS. 
+
+6. Multi-Currency Support
+- The OpenExchangeRates API will be used to get the latest exchange rates which will be stores in the Currenct table.
+
+7. Real-Time Data and Tax Calculations
+- AlphaVantageAPI will be used to get real-time stock data
+- Historial stock data will be integrated for visualization
+- Tax impact estimation will be done with FIFO
+
+<!-- In this section, you will outline how you plan to meet the high-level requirements of your project. For each requirement, explain the specific steps you will take, the tools or technologies you will use, and how you'll implement them to meet the project’s objectives. -->
 
 ---
 
 ## User Stories
 
-In this section, you will outline how each user story will be implemented in your application. For each user story, explain the user’s goals, the actions they will take, the preconditions required for each action, and the postconditions that follow. This will help clarify how you plan to meet the functional needs of the project.
+<!-- In this section, you will outline how each user story will be implemented in your application. For each user story, explain the user’s goals, the actions they will take, the preconditions required for each action, and the postconditions that follow. This will help clarify how you plan to meet the functional needs of the project. -->
+
+### User Role
+- As a user, I want to create an account so that I can log in and start managing my stock portfolio
+- As a user, I want to add stocks to my portfolio so that I can track my investments
+- As a user, I want to view all the stocks in my portfolio so that I can track their performance, average value, and investment status
+- As a user, I want to remove stock when I no longer want to track them or have sold them
+- As a user, I want to see detailed information about a stock, includeing its hostorical performance, so that I can make informed decisions about my investments <!-- Charts, Recent prices -->
+- As a user, I want to choose my preferred currency so that the stock values in my portfolio can be shown in my selected currency
+- As a user, I want to calculate the average values of my stocks accreoss different exchange platforms do that I can get a clear idea of their total worth, even if I've purchsed them from different exchanges
+- As a user, I want to calculate the dividend payments for my real estate stocks so that I can estimate the tax impact of those dividends
+- As a user, I want to filter stocks in my portfolio based on different criteria so that I can easily find and compare specific stocks in my portfolio
+
+
+### Admin Role
+- As an admin, I want to delete users from the system if necessary (e.g., for inappropriate behaviour), so that the user base remains safe and appropriate
+- As an admin, I want to disable or delete stocks from being available for users to buy/sell in case of market changes or other concerns
+- As an admins, I want to recommend stocks to users based on their portfolios or investment preferences, so users can discover new investment opportunities <!-- e.g., a stock of the week or auto stock of the day -->
 
 ---
 
 ## Learning Goals (Mandatory: 3 minimum)
 
-- Each team must select **at least three learning goals** outside of the technologies covered in class.  
+<!-- - Each team must select **at least three learning goals** outside of the technologies covered in class.  
 - Each learning goal must directly improve the project.  
 - Document for each goal:  
   - What you learned,  
@@ -115,36 +207,37 @@ modern CSS framework (eg material design 3)
 graphing stocks/visualization
 real time stock api
 saving user accounts and their info
-elastic search to filter stocks
+elastic search to filter stocks -->
 
 **Learning Goal: We want to gather and store realtime stock info**
 
-Application: We will use Alpha Vantage API to gather realltime stock data
-Reseach and Resources: We'll start with the base documentation and the example jsons that they provide.
-Challenges: We anticipate the API returning information that may not be initially compatible with our API, we may have to adjust our API in order to accomodate.
-Success Criteria: If we are able to gather stock data in a timely manner, then we will consider this a success.
+- Application: We will use Alpha Vantage API to gather realltime stock data
+- Reseach and Resources: We'll start with the base documentation and the example jsons that they provide.
+- Challenges: We anticipate the API returning information that may not be initially compatible with our API, we may have to adjust our API in order to accomodate.
+- Success Criteria: If we are able to gather stock data in a timely manner, then we will consider this a success.
 
 **Learning Goal: We want to display the stock data in a digestible way**
 
-Application: We will use the Chart.js library to easily display graphs according to the information gathered by Alpha Vantage API.
-Research and Resources: We'll likely start with thier base documentation then look for examples online on how others used this library, either through stack overflow or youtube.
-Challenges: We anticipate having some difficulties making the graph designs consistent with the rest of the front end, to address this we will practice desiging the graphs first in order to build the site around what we are able to do with it.
-Success Criteria:  If we are able to display stock data in a graph, that both displays the information accurately and in a pleasant manner, we will consider it a success.  
+- Application: We will use the Chart.js library to easily display graphs according to the information gathered by Alpha Vantage API.
+- Research and Resources: We'll likely start with thier base documentation then look for examples online on how others used this library, either through stack overflow or youtube.
+- Challenges: We anticipate having some difficulties making the graph designs consistent with the rest of the front end, to address this we will practice desiging the graphs first in order to build the site around what we are able to do with it.
+- Success Criteria:  If we are able to display stock data in a graph, that both displays the information accurately and in a pleasant manner, we will consider it a success.  
 
 **Learning Goal: We want to make our site look modern**
-Application: We will use Material Design 3 in, instead of Bootstrap, in order to handle the styling of our site
-Research and Resources: We'll start by reading the documentation then referencing other industrial sites for inspiration on how to create a modern look.
-Challenges: We anticipate having some difficulties with the syntax of this specific library, so we will have to carefully reference documentation and examples.
-Success Criteria: We will consider this a success if this tool makes it easier for us to create a well designed and good looking user interface.
 
-Example:
+- Application: We will use Material Design 3 in, instead of Bootstrap, in order to handle the styling of our site
+- Research and Resources: We'll start by reading the documentation then referencing other industrial sites for inspiration on how to create a modern look.
+- Challenges: We anticipate having some difficulties with the syntax of this specific library, so we will have to carefully reference documentation and examples.
+- Success Criteria: We will consider this a success if this tool makes it easier for us to create a well designed and good looking user interface.
+
+<!-- Example:
 
 Learning Goal: I want to learn how to integrate Google Maps into a web application.
 
 Application: I will use Google Maps API to display the location of each run on an interactive map within the app.  
 Research and Resources: I’ll start with the official Google Maps API documentation and a Udemy course on map APIs in JavaScript.  
 Challenges: I anticipate needing to figure out how to dynamically load map locations and handle API key security. To address this, I’ll practice with dummy data first and research security best practices for frontend applications.  
-Success Criteria: If users can see a Google Maps widget in the app that dynamically updates with each run location, then I’ll consider this learning goal achieved.
+Success Criteria: If users can see a Google Maps widget in the app that dynamically updates with each run location, then I’ll consider this learning goal achieved. -->
 
 ---
 
@@ -156,7 +249,9 @@ Provide a visual representation of the relationships between the main classes in
 
 ## Class List 
 
-List all the classes in your application. For each class, provide a brief description of its role, its methods, and its fields.  
+List all the classes in your application. For each class, provide a brief description of its role, its methods, and its fields.
+
+**Included in the stock-app-plan-detailed.md file.**
 
 ---
 
