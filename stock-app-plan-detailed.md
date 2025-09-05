@@ -154,6 +154,34 @@ Edit Order
 
 ![Edit Order Page](wire-frames/edit-order.png)
 
+Admin - Manage Stocks
+
+![Admin Manage Stocks Page](wire-frames/admin-manage-stocks.png)
+
+Admin - Manage Users
+
+![Admin Manage Users Page](wire-frames/admin-manage-users.png)
+
+Login
+
+![Login Page](wire-frames/login.png)
+
+Portfolios
+
+![Portfolios](wire-frames/portfolios.png)
+
+Register
+
+![Register](wire-frames/register.png)
+
+User- Register
+
+![User Register Page](wire-frames/user-register.png)
+
+User - Settings
+
+![User Settings Page](wire-frames/user-settings.png)
+
 ## Package/Class Overview
 
 ```
