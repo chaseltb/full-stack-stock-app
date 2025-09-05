@@ -32,10 +32,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="fhvyuvNnrtl3i7gsskAm-9" value="Orders" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="410" y="740" width="160" height="140" as="geometry" />
+          <mxGeometry x="410" y="740" width="160" height="150" as="geometry" />
         </mxCell>
-        <mxCell id="fhvyuvNnrtl3i7gsskAm-10" value="- order_id (pk)&lt;div&gt;- stock_id (fk)&lt;/div&gt;&lt;div&gt;- transaction_type&lt;/div&gt;&lt;div&gt;- shares&lt;/div&gt;&lt;div&gt;- date&lt;/div&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" parent="fhvyuvNnrtl3i7gsskAm-9" vertex="1">
-          <mxGeometry y="50" width="160" height="90" as="geometry" />
+        <mxCell id="fhvyuvNnrtl3i7gsskAm-10" value="- order_id (pk)&lt;div&gt;- stock_id (fk)&lt;/div&gt;&lt;div&gt;- transaction_type&lt;/div&gt;&lt;div&gt;- shares&lt;/div&gt;&lt;div&gt;- price&lt;/div&gt;&lt;div&gt;- date&lt;/div&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" parent="fhvyuvNnrtl3i7gsskAm-9" vertex="1">
+          <mxGeometry y="50" width="160" height="100" as="geometry" />
         </mxCell>
         <mxCell id="fhvyuvNnrtl3i7gsskAm-11" value="Countries" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="590" y="250" width="160" height="120" as="geometry" />
