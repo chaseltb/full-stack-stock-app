@@ -108,6 +108,14 @@ Technology Stack:
 
 9. **Portfolio Diversification**: The practice of spreading investments across different asset types or sectors to reduce risk.An investor might hold a mix of stocks, bonds, and real estate to diversify their portfolio.
 
+10. **FIFO (First In, First Out)**: FIFO is a method of calculating the cost basis of stocks where the first shares purchased are considered the first ones sold. This is commonly used in tax calculations to determine capital gains.
+
+&emsp;&emsp;&emsp;Example: If a user bought 100 shares of stock at $10 each, and later bought another 100 at $15, selling 100 shares would mean the cost basis is calculated using the first 100 shares purchased at $10, regardless of the current market price.
+
+11. **Dividend Adjustments**: Dividend adjustments refer to modifications in the cost basis of stocks based on dividend payments that affect the stock's value. For example, if a stock pays dividends, the cost basis may be adjusted to account for return of capital, which effectively reduces the taxable gain when the stock is sold.
+
+&emsp;&emsp;&emsp;Example: If a company pays a dividend and a user reinvest it in more shares of the stock, the cost basis of the user's investment in that stock will be adjusted upwards to reflect the additional shares bought with the dividend income.
+
 ---
 
 ## High Level Requirements
@@ -160,9 +168,12 @@ Technology Stack:
 - The OpenExchangeRates API will be used to get the latest exchange rates which will be stores in the Currenct table.
 
 7. Real-Time Data and Tax Calculations
-- AlphaVantageAPI will be used to get real-time stock data
+- AlphaVantageAPI will be used to get stock data (real-time getched more frequently than historical)
 - Historial stock data will be integrated for visualization
-- Tax impact estimation will be done with FIFO
+- Implement logic for calculating cost basis using FIFO
+- If the stock pays a dividend and the user has reinvested it, the dividend will adjust the cost basis.
+- Each stock transaction (buy/sell) will be logged in an Orders table
+- Implement methods to calculate capital gains by comparing the sale price with the initial purchase price using the selected tax calculation method.
 
 <!-- In this section, you will outline how you plan to meet the high-level requirements of your project. For each requirement, explain the specific steps you will take, the tools or technologies you will use, and how you'll implement them to meet the project’s objectives. -->
 
@@ -191,7 +202,7 @@ Technology Stack:
 
 ---
 
-## Learning Goals (Mandatory: 3 minimum)
+## Learning Goals <!--(Mandatory: 3 minimum)-->
 
 <!-- - Each team must select **at least three learning goals** outside of the technologies covered in class.  
 - Each learning goal must directly improve the project.  
@@ -209,12 +220,15 @@ real time stock api
 saving user accounts and their info
 elastic search to filter stocks -->
 
-**Learning Goal: We want to gather and store realtime stock info**
+**Learning Goal: We want to gather and store realtime and historical stock info**
 
 - Application: We will use Alpha Vantage API to gather realltime stock data
-- Reseach and Resources: We'll start with the base documentation and the example jsons that they provide.
-- Challenges: We anticipate the API returning information that may not be initially compatible with our API, we may have to adjust our API in order to accomodate.
-- Success Criteria: If we are able to gather stock data in a timely manner, then we will consider this a success.
+- Reseach and Resources: We will start by familiarizing ourselves with the Alpha Vantage documentation to understand how to request real-time data and handle the different formats and limits of API responses. We will also use example JSON responses provided by Alpha Vantage to understand how the data is structured and how to integrate it into our backend system.
+- Challenges: 
+  - We anticipate having some difficulties making the graph designs consistent with the rest of the front end, to address this we will practice desiging the graphs first in order to build the site around what we are able to do with it.
+  - Alpha Vantage has strict rate limits, especially on the free tier (5 calls per minute, 500 calls per day). As such, we must ensure that our application doesn't exceed these limits, especially with frequent real-time price updates. We will need to implement rate-limiting and caching strategies to manage API calls effectively.
+  - Real-time data needs to be integrated with historical data for effective analysis. We must figure out how to store both real-time price updates and historical data in a consistent manner. Real-time data will be updated frequently (e.g., every minute), while historical data will be queried less often and could be stored at intervals (e.g., daily).
+- Success Criteria: If we are able to gather stock data in a timely manner and manage API call rates efficiently, ensuring that we stay within the API's usage limits without hitting errors, then we will consider this a success.
 
 **Learning Goal: We want to display the stock data in a digestible way**
 
@@ -226,7 +240,7 @@ elastic search to filter stocks -->
 **Learning Goal: We want to make our site look modern**
 
 - Application: We will use Material Design 3 in, instead of Bootstrap, in order to handle the styling of our site
-- Research and Resources: We'll start by reading the documentation then referencing other industrial sites for inspiration on how to create a modern look.
+- Research and Resources: We will start by reading the documentation then referencing other industrial sites for inspiration on how to create a modern look.
 - Challenges: We anticipate having some difficulties with the syntax of this specific library, so we will have to carefully reference documentation and examples.
 - Success Criteria: We will consider this a success if this tool makes it easier for us to create a well designed and good looking user interface.
 
