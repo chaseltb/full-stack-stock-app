@@ -38,8 +38,10 @@ Key Features and Functionalities: List and describe the main features of the app
 Key Features
 * Viewing Stock Information
 * Calculating average value of stocks accrooss exchange platforms
-* Calculating dividend payments of real estate stocks for tax purposes
-* Filtering stocks
+* Support for users to track unrealized gains, cost basis, and dividends for a rough tax estimate
+* Tracking portfolio performance (without full tax calculation, only unrealized gain estimates)
+* Filtering stocks by different criteria
+
 Functionalities
 * Users will need a chosen currency
 * Users will need an account (username and passowrd)
@@ -55,12 +57,12 @@ Users:
 * Edit their portfolio
 * Delete stocks from their portfolio
 * Calculate average value of stocks accrooss exchange platforms
-* Calculate dividend payments of real estate stocks for tax purposes
+* Estimate dividend adjustments to cost basis and calculate unrealized gains
 
 Admins:
-* Admins can delete users (in cases of inappropriate behaviour)
-* Admins can delete stocks from being displayed
-* Admins can recommend stocks to users (watchlist, maybe tailored to users)
+* Delete users (in cases of inappropriate behaviour)
+* Delete stocks from being displayed
+* Recommend stocks to users (watchlist, maybe tailored to users)
 
 Technology Stack:
 <!-- Briefly mention the key technologies, frameworks, and tools you will use to build the application. Why did you choose these tools, and how will they help you achieve your solution? -->
@@ -114,7 +116,7 @@ Technology Stack:
 
 11. **Dividend Adjustments**: Dividend adjustments refer to modifications in the cost basis of stocks based on dividend payments that affect the stock's value. For example, if a stock pays dividends, the cost basis may be adjusted to account for return of capital, which effectively reduces the taxable gain when the stock is sold.
 
-&emsp;&emsp;&emsp;Example: If a company pays a dividend and a user reinvest it in more shares of the stock, the cost basis of the user's investment in that stock will be adjusted upwards to reflect the additional shares bought with the dividend income.
+&emsp;&emsp;&emsp;Example: If a company pays a dividend and a user reinvests it in more shares of the stock, the cost basis of the user's investment in that stock will be adjusted upwards to reflect the additional shares bought with the dividend income.
 
 ---
 
@@ -165,15 +167,15 @@ Technology Stack:
 - The backend API will be hosted on Amazon EC2 and the database will be stored with Amazon RDS. 
 
 6. Multi-Currency Support
-- The OpenExchangeRates API will be used to get the latest exchange rates which will be stores in the Currenct table.
+- The OpenExchangeRates API will be used to get the latest exchange rates which will be stores in the Currency table.
 
 7. Real-Time Data and Tax Calculations
-- AlphaVantageAPI will be used to get stock data (real-time getched more frequently than historical)
-- Historial stock data will be integrated for visualization
-- Implement logic for calculating cost basis using FIFO
+- AlphaVantageAPI will be used to get stock data (real-time getched more frequently than historical).
+- Historial stock data will be integrated for visualization.
+- Implement logic for calculating cost basis using FIFO.
 - If the stock pays a dividend and the user has reinvested it, the dividend will adjust the cost basis.
-- Each stock transaction (buy/sell) will be logged in an Orders table
-- Implement methods to calculate capital gains by comparing the sale price with the initial purchase price using the selected tax calculation method.
+- Each stock transaction (buy/sell) will be logged in an Orders table.
+- Estimate capital gains and unrealized gains, but no full tax calculations.
 
 <!-- In this section, you will outline how you plan to meet the high-level requirements of your project. For each requirement, explain the specific steps you will take, the tools or technologies you will use, and how you'll implement them to meet the project’s objectives. -->
 
@@ -188,17 +190,17 @@ Technology Stack:
 - As a user, I want to add stocks to my portfolio so that I can track my investments
 - As a user, I want to view all the stocks in my portfolio so that I can track their performance, average value, and investment status
 - As a user, I want to remove stock when I no longer want to track them or have sold them
-- As a user, I want to see detailed information about a stock, includeing its hostorical performance, so that I can make informed decisions about my investments <!-- Charts, Recent prices -->
+- As a user, I want to see detailed information about a stock, including its historical performance, so that I can make informed decisions about my investments <!-- Charts, Recent prices -->
 - As a user, I want to choose my preferred currency so that the stock values in my portfolio can be shown in my selected currency
-- As a user, I want to calculate the average values of my stocks accreoss different exchange platforms do that I can get a clear idea of their total worth, even if I've purchsed them from different exchanges
-- As a user, I want to calculate the dividend payments for my real estate stocks so that I can estimate the tax impact of those dividends
+- As a user, I want to calculate the average values of my stocks accross different exchange platforms do that I can get a clear idea of their total worth, even if I have purchsed them from different exchanges
+- As a user, I want to calculate the estimate payments for my real estate stocks so that I can estimate the tax impact of those dividends
 - As a user, I want to filter stocks in my portfolio based on different criteria so that I can easily find and compare specific stocks in my portfolio
 
 
 ### Admin Role
 - As an admin, I want to delete users from the system if necessary (e.g., for inappropriate behaviour), so that the user base remains safe and appropriate
 - As an admin, I want to disable or delete stocks from being available for users to buy/sell in case of market changes or other concerns
-- As an admins, I want to recommend stocks to users based on their portfolios or investment preferences, so users can discover new investment opportunities <!-- e.g., a stock of the week or auto stock of the day -->
+- As an admin, I want to recommend stocks to users based on their portfolios or investment preferences, so users can discover new investment opportunities <!-- e.g., a stock of the week or auto stock of the day -->
 
 ---
 
