@@ -303,6 +303,7 @@ List all the classes in your application. For each class, provide a brief descri
 | **7.1. Stock Controller**              | Implement the `StockController` with routes to interact with stock data.                                      | 3 hours           |
 | **7.2. User Controller**               | Implement the `UserController` with routes for user management.                                               | 3 hours           |
 | **7.3. Order & Portfolio Controllers** | Implement `OrderController` and `PortfolioController` with routes to interact with orders and portfolios.     | 3 hours           |
+| **7.4. Country & Currency Controllers**| Implement `CurrencyController` and `CountryController` with routes to interact with both                      | 3 hours           |
 | **8.1. Main App Class**                | Set up the main app class with the entry point and basic configuration.                                       | 1 hour            |
 | **8.2. Configuration Setup**           | Set up additional application configurations (e.g., security, logging, etc.).                                 | 1 hour            |
 | **9.1. Repository Testing**            | Write unit tests for repository classes (testing CRUD operations).                                            | 3 hours           |

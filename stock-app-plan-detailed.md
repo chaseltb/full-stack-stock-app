@@ -209,6 +209,8 @@ src
 │               │       OrderController.java                        -- order controller
 │               │       StockExchangeController.java                -- stock exchange controller
 │               │       PortfolioController.java                    -- portfolio controller
+|               |       CountryController.java                      -- country controller
+|               |       CurrencyController.java                     -- currency controller
 |               |
 │               ├───data
 │               |   └───mappers
@@ -257,7 +259,7 @@ src
 │               │       Order.java                                  -- order model
 │               │       StockExchange.java                          -- stock exchange model
 │               │       Portfolio.java                              -- portfolio model
-│               │
+│             
 │
 └───test
     └───java
@@ -351,6 +353,25 @@ src
 - `public ResponseEntity<BigDecimal> getPortfolioValue(@PathVariable int userId, @RequestParam String date)` -- gets the portfolio value on a specific date
 - `public ResponseEntity<Void> sellStockFromPortfolio(@PathVariable int userId, @PathVariable int stockId)` -- sells a stock from the portfolio
 - `public ResponseEntity<Void> updateCostBasisOnDividend(@PathVariable int userId, @RequestBody BigDecimal dividend)` -- updates the cost basis after receiving a dividend
+
+### controller.CountryController
+- `private final CountryService` -- country service
+- `public CountryController(CountryService countryService)` -- constructor
+- `public ResponseEntity<Country> findAll()` -- retrieves a list of all countries
+- `public ResponseEntity<Country> findById(@PathVariable int countryId)` -- retrieves the specified country
+- `public ResponseEntiry<Country> add(@RequestBody Country country)` -- adds a new country
+- `public ResponseEntity<Country> update(@PathVariable int id, @RequestBody Country country)` -- updates an existing country
+- `public ReponseEntity<Country> deleteById(@PathVariable int id)` -- deletes a country by ID
+
+### controller.CurrencyController
+- `private final CurrencyService` -- currencyservice
+- `public CurrencyController(CurrencyService currencyService)` -- constructor
+- `public ResponseEntity<Currency> findAll()` -- retrieves a list of all currecies
+- `public ResponseEntity<Currency> findById(@PathVariable int currencyId)` -- retrieves the specified currency
+- `public ResponseEntiry<Currency> add(@RequestBody Currency currency)` -- adds a new currency
+- `public ResponseEntity<Currency> update(@PathVariable int id, @RequestBody Currency currency)` -- updates an existing currency
+- `public ReponseEntity<Currecny> deleteById(@PathVariable int id)` -- deletes a currency by ID
+
 
 ### data.mapper.StockMapper
 - `public Stock mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Stock object
