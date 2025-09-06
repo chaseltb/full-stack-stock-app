@@ -294,6 +294,8 @@ List all the classes in your application. For each class, provide a brief descri
 | **5.2. User Repository**               | Implement the `UserRepository` interface and methods for CRUD operations.                                     | 2 hours           |
 | **5.3. Order Repository**              | Implement the `OrderRepository` interface and methods for CRUD operations.                                    | 3 hours           |
 | **5.4. Portfolio Repository**          | Implement the `PortfolioRepository` interface and methods for CRUD operations.                                | 3 hours           |
+| **5.5. Currency Repository**           | Implement the `CurrencyRepository` interface and methods for CRUD operations.                                 | 3 hours           |
+| **5.6. Country Repository**            | Implement the `CountryRepisitory` interface and methods for CRUD operations.                                  | 3 hours           | 
 | **6.1. Stock Service**                 | Implement the `StockService` class with business logic for stock-related actions.                             | 3 hours           |
 | **6.2. User Service**                  | Implement the `UserService` class with business logic for user-related actions.                               | 3 hours           |
 | **6.3. Order & Portfolio Services**    | Implement `OrderService` and `PortfolioService` classes with their respective business logic.                 | 3 hours           |

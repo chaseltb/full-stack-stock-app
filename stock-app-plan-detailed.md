@@ -225,6 +225,10 @@ src
 │               │       OrderJdbcTemplateRepository.java            -- concrete repository
 │               │       StockExchangeJdbcTemplateRepository.java    -- concrete repository
 │               │       portfolioJdbcTemplateRepository.java        -- concrete repository
+|               |       countryJdbcTemplateRepository.java          -- concrete repository
+|               |       currencyJdcbTemplateRepository.java         -- concrete repository
+|               |       CurrencyRepository.java                     -- concrete repository
+|               |       CountryRepository.java                      -- concrete repository
 │               │       StockRepository.java                        -- repository interface
 │               │       UserRepository.java                         -- repository interface
 │               │       OrderRepository.java                        -- repository interface
@@ -357,6 +361,12 @@ src
 ### data.mapper.PortfolioMapper
 - `public Portfolio mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Portfolio object
 
+### data.mapper.CurrencyMapper
+- `public Currency mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Currency object
+
+### data.mapper.CountryMapper
+- `public Country mapRow(ResultSet rs, int rowNum)` -- maps a database record to a Country object
+
 ### data.DataException
 
 Custom data layer exception.
@@ -454,6 +464,36 @@ Custom data layer exception.
 - `public boolean updateCostBasisOnDividend(int userId, BigDecimal dividend)` -- updates the cost basis after receiving a dividend
 - `public BigDecimal calculateCapitalGainsTax(List<Order> orders)` -- gets the capital gains tax
 
+### data.CurrencyRepository
+- `List<Currency> findAll()` -- retrieves all existing currencies in db
+- `Currency findByCurrencyId(int currencyId)` -- retrieves a specific currency
+- `Currency addCurrency(Currency currency)` -- adds a specific currency to the db
+- `boolean updateCurrency(Currency currency)` -- updates an existing currency
+- `boolean deleteCurrency(int currencyId)` -- deletes an existing currency
+
+### data.CurrencyJdbcTemplateRepository
+- `JdbcTemplate jdbcTemplate` -- jdbc template
+- `public List<Currency> findAll()` -- retrieves all existing currencies in db
+- `public Currency findByCurrencyId(int currencyId)` -- retrieves a specific currency
+- `public Currency addCurrency(Currency currency)` -- adds a specific currency to the db
+- `public boolean updateCurrency(Currency currency)` -- updates an existing currency
+- `public boolean deleteCurrency(int currencyId)` -- deletes an existing currency
+
+### data.CountryRepository
+- `List<Country> findAll()` -- retrives all countries in db
+- `Country findById(int countryId)` -- retrieves a specific country
+- `Country addCountry(Country Country)` -- adds a specific country to the db
+- `boolean updateCountry(Country country)` -- updates an existing country
+- `boolean deleteCountry(int countryId)` -- deletes an existing country
+
+### data.CountryJdbcRepository
+- `JdbcTemplate jdbcTemplate` -- jdbc template
+- `public List<Country> findAll()` -- retrives all countries in db
+- `public Country findById(int countryId)` -- retrieves a specific country
+- `public Country addCountry(Country Country)` -- adds a specific country to the db
+- `public boolean updateCountry(Country country)` -- updates an existing country
+- `public boolean deleteCountry(int countryId)` -- deletes an existing country
+
 ### domain.ResultType
 
 An enum with three values:
@@ -541,20 +581,16 @@ buy,
 sell
 
 ### models.Currency
-
-An enum with values:
-USD,
-EUR,
-GBP,
-CNY,
-JPY,
-MXN,
-INR,
-(and more)
+- `private int id`
+- `private String name`
+- `private String code`
+- `private BigDecimal valueToUsd`
 
 ### models.Country
-
-An enum with values for countries of the world:
+- `private int id`
+- `private Currency currency`
+- `private String name`
+- `private String code`
 
 
 ### models.StockExchange
