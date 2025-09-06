@@ -144,6 +144,9 @@ Stock View
 
 ![Stock View Page](<wire-frames/stock view.png>)
 
+Stock History
+![Stock History Page](<wire-frames/stock history.png->)
+
 Add Order
 
 ![Add Order Page](wire-frames/add-order.png)
