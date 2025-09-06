@@ -243,6 +243,8 @@ src
 │               │       OrderService.java                           -- order validation/rules
 │               │       StockExchangeService.java                   -- stock exchange validation/rules
 │               │       PortfolioService.java                       -- portfolio validation/rules
+|               |       CurrencyService.java                        -- currency validation/rules
+|               |       CountryService.java                         -- country validation/rules
 │               │
 │               ├───models
 │               │       Currency.java                               -- currency model
@@ -277,6 +279,8 @@ src
                         OrderServiceTest.java                       -- OrderService tests
                         StockExchangeServiceTest.java               -- StockExchangeService tests
                         PortfolioServiceTest.java                   -- PortfolioService tests
+                        CountryServiceTest.java                     -- CountryService tests
+                        CurrencyServiceTest.java                    -- CurrencyService tests
 ```
 
 ## Class Details
@@ -547,7 +551,7 @@ NOT_FOUND
 ### domain.StockExchangeService
 - `private StockExchangeRepository repository` -- stock exchange repository interface
 - `public List<StockExchange> findAll()` -- retrieves a list of all stock exchanges
-- `public StockExchange findById(nt id)` -- retrieves a stock exchange by its ID
+- `public StockExchange findById(int id)` -- retrieves a stock exchange by its ID
 - `public StockExchange add(StockExchange stockExchange)` -- adds a new stock exchange
 - `public Result<StockExchange> update(StockExchange stockExchange)` -- updates an existing stock exchange
 - `public boolean deleteById(int id)` -- deletes a stock exchange by ID
@@ -563,6 +567,22 @@ NOT_FOUND
 - `public boolean sellStockFromPortfolio(int userId, int stockId)` -- sells a stock from the portfolio
 - `public Result<Portfolio> updateCostBasisOnDividend(int userId, BigDecimal dividend)` -- updates the cost basis after receiving a dividend
 - `public BigDecimal calculateCapitalGainsTax(List<Order> orders)` -- gets the capital gains tax
+
+### domain.CountryService
+- `private CountryRepository repository` -- country repository interface
+- `public List<Country> findAll()` -- retrieves all listed countries
+- `public Country findById(int countryId)` --  retrieves specific country by id
+- `public Country add(Country country)` -- adds a specific country
+- `public Result<Country> update(Country country)` -- updates an existing country
+- `public boolean deleteById(int countryId)` -- deletes a country by ID
+
+### domain.CurrencyService
+- `private CurrencyRepository repository` -- currency repository interface
+- `public List<Curency> findAll()` -- retrieves all listed currencies
+- `public Currency findById(int currencyId)` -- retrieves a specific currency
+- `public Currency add(Currency currency)` -- adds a specific currency
+- `public Result<Currency> update(Currency currency)` -- updates an existing currency
+- `public boolean deleteById(int currencyId)` -- deletes a currency by ID
 
 ### models.AssetType
 enum with values:

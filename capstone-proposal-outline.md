@@ -299,6 +299,7 @@ List all the classes in your application. For each class, provide a brief descri
 | **6.1. Stock Service**                 | Implement the `StockService` class with business logic for stock-related actions.                             | 3 hours           |
 | **6.2. User Service**                  | Implement the `UserService` class with business logic for user-related actions.                               | 3 hours           |
 | **6.3. Order & Portfolio Services**    | Implement `OrderService` and `PortfolioService` classes with their respective business logic.                 | 3 hours           |
+| **6.4. Country and Currency Services** | Implement `CountryService` and `CurrencyService` classes with ther respective logic                           | 3 hours           |
 | **7.1. Stock Controller**              | Implement the `StockController` with routes to interact with stock data.                                      | 3 hours           |
 | **7.2. User Controller**               | Implement the `UserController` with routes for user management.                                               | 3 hours           |
 | **7.3. Order & Portfolio Controllers** | Implement `OrderController` and `PortfolioController` with routes to interact with orders and portfolios.     | 3 hours           |
