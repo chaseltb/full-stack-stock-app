@@ -267,6 +267,8 @@ src
                 │       OrderJdbcTemplateRepositoryTest.java        -- OrderJdbcTemplateRepository tests
                 │       StockExchangeJdbcTemplateRepositoryTest.java -- StockExchangeJdbcTemplateRepository tests
                 │       PortfolioJdbcTemplateRepositoryTest.java    -- PortfolioJdbcTemplateRepository tests
+                |       CurrencyJdbcTemplateRepositoryTest.java     -- CurrencyJdbcTemplateRepository tests
+                |       CountryJdbcTemplateRepositoryTest.java      -- CountryJdbcTemplateRepository tests
                 │       KnownGoodState.java                         -- known good state
                 │
                 └───domain
