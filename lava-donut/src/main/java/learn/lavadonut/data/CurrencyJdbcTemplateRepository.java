@@ -3,8 +3,12 @@ package learn.lavadonut.data;
 import learn.lavadonut.data.mappers.CurrencyMapper;
 import learn.lavadonut.models.Currency;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
@@ -30,7 +34,24 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
     }
 
     public Currency add(Currency currency){
-        return null;
+       final String sql = "insert into currencies (`name`, `code`, value_to_usd) "
+               + "values (?, ?, ?);";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rowsAffected = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1, currency.getName());
+            ps.setString(2, currency.getCode());
+            ps.setBigDecimal(3, currency.getValueToUsd());
+            return ps;
+        }, keyHolder);
+
+        if (rowsAffected <= 0) {
+            return null;
+        }
+
+        currency.setId(keyHolder.getKey().intValue());
+        return currency;
     }
 
     public boolean update(Currency currency){
