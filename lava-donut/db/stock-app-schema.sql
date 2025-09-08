@@ -53,7 +53,7 @@ create table stocks (
 create table orders (
 	order_id int primary key auto_increment,
     transaction_type varchar(4) not null, 
-    shares int not null,
+    shares decimal(10,4) not null,
     price decimal(10,4) not null,
     `date` date not null,
     stock_id int not null,
