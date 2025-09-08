@@ -99,3 +99,27 @@ create table portfolio_orders (
 );
 
 -- TEST DATA
+delimiter //
+create procedure set_known_good_state()
+begin
+	
+    delete from portfolio_orders;
+    alter table portfolio_order auto_increment = 1;
+    delete from portfolio;
+    alter table portfolio auto_increment = 1;
+    delete from `user`;
+    alter table `user` auto_increment = 1;
+    delete from orders;
+    alter table orders auto_increment = 1;
+    delete from stocks;
+    alter table stocks auto_increment = 1;
+    delete from countries;
+    alter table countries auto_increment = 1;
+    delete from stock_exchange;
+    alter table stock_exchange auto_increment = 1;
+    delete from currencies;
+    alter table currencies auto_increment = 1;
+    
+    
+end //
+delimiter ;
