@@ -13,6 +13,7 @@ import java.time.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class OrderServiceTest {
@@ -64,6 +65,105 @@ class OrderServiceTest {
 
         actual = service.findByStock(999);
         assertNull((actual));
+    }
+
+    // add
+    @Test
+    void shouldAdd() {
+        Order expected = makeOrder();
+        Order arg = makeOrder();
+        arg.setId(0);
+
+        when(repository.add(arg)).thenReturn(expected);
+        Result<Order> result = service.add(arg);
+        assertEquals(ResultType.SUCCESS, result.getType());
+
+        assertEquals(expected, result.getPayload());
+    }
+
+    @Test
+    void shouldNotAddNullOrder() {
+        Order order = makeOrder();
+        Result<Order> result = service.add(null);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotAddOrderWithNullTransactionType() {
+        Order order = makeOrder();
+        order.setTransactionType(null);
+        Result<Order> result = service.add(order);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotAddOrderWithInvalidStockId() {
+        Order order = makeOrder();
+        order.setStockId(-1);
+        Result<Order> result = service.add(order);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotAddOrderWithInvalidShares() {
+        Order order = makeOrder();
+        order.setNumberOfShares(-1.0);
+        Result<Order> result = service.add(order);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotAddOrderWithNullDate() {
+        Order order = makeOrder();
+        order.setDateTime(null);
+        Result<Order> result = service.add(order);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotAddOrderWithFutureDate() {
+        Order order = makeOrder();
+        order.setDateTime(ZonedDateTime.now().plusDays(1));
+        Result<Order> result = service.add(order);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotAddOrderWithNullPrice() {
+        Order order = makeOrder();
+        order.setPrice(null);
+        Result<Order> result = service.add(order);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotAddOrderWithInvalidPrice() {
+        Order order = makeOrder();
+        order.setPrice(BigDecimal.valueOf(-10.0));
+        Result<Order> result = service.add(order);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    // update
+    @Test
+    void shouldUpdate() {
+        Order order = makeOrder();
+        when(repository.update(order)).thenReturn(true);
+        Result<Order> result = service.update(order);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+        assertNotNull(result.getPayload());
+        assertEquals(order, result.getPayload());
+    }
+
+    @Test
+    void shouldNotUpdateMissingOrder() {
+        Order order = makeOrder();
+        when(repository.update(order)).thenReturn(false);
+        Result<Order> result = service.update(order);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+        assertNull(result.getPayload());
     }
 
     @Test
