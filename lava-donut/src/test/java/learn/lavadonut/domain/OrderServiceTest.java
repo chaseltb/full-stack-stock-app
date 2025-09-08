@@ -2,6 +2,7 @@ package learn.lavadonut.domain;
 
 import learn.lavadonut.data.OrderRepository;
 import learn.lavadonut.models.Order;
+import learn.lavadonut.models.TransactionType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

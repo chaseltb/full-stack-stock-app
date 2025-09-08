@@ -29,7 +29,7 @@ public class CountryMapper implements RowMapper<Country> {
 
         select c.country_id, c.name, c.code, c.currency_id, cu.currency_code, cu.currency_name, cu.value_to_usd
         from countries c
-        inner join currencies cu ON c.currency_id = cu.currency_id
+        inner join currencies cu on c.currency_id = cu.currency_id;
 
          */
         return country;
