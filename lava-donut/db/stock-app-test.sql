@@ -164,6 +164,12 @@ begin
         (5, 'buy', 22, 3.75, '2015-10-01', 7),
         (6, 'sell', 5, 8.05, '2023-07-05', 9);
         
+	insert into `users`
+		(user_id, username, password_hashed, first_name, last_name, permission, currency_id)
+	values
+		(1, 'americanUser', 'toBeHashed', 'TEST FIRST NAME', 'TEST LAST NAME', 'USER', 1),
+        (2, 'germanUser', 'toBeHashed', 'TEST FIRST NAME', 'TEST LAST NAME', 'ADMIN', 2),
+        (3, 'chineseUser', 'toBeHashed', 'TEST FIRST NAME', 'TEST LAST NAME', 'USER', 3);
 	
 end //
 delimiter ;
