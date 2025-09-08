@@ -1,5 +1,6 @@
 package learn.lavadonut.models;
 
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class StockExchange {
@@ -34,6 +35,18 @@ public class StockExchange {
 
     public String getTimeZone() {
         return timeZone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof StockExchange)) return false;
+        StockExchange that = (StockExchange) o;
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(code, that.code) && Objects.equals(timeZone, that.timeZone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, code, timeZone);
     }
 
     public void setTimeZone(String timeZone) {
