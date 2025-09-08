@@ -62,3 +62,16 @@ create table orders (
 	CHECK (price > 0 AND shares > 0)
 );
 
+create table `user` (
+	user_id int primary key auto_increment,
+    username varchar(25) not null,
+    password_hashed varchar(150) not null,
+    first_name varchar(150) not null,
+    last_name varchar(150) not null,
+    permission varchar(15) not null,
+    currency_id int not null,
+    CONSTRAINT fk_user_currency_id
+		foreign key (currency_id)
+        references currencies(currency_id),
+	UNIQUE (username)
+);
