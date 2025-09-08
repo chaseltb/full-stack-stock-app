@@ -8,6 +8,15 @@ public class Stock {
     private AssetType assetType;
     private String industry;
     private Country country;
+    private StockExchange stockExchange;
+
+    public StockExchange getStockExchange() {
+        return stockExchange;
+    }
+
+    public void setStockExchange(StockExchange stockExchange) {
+        this.stockExchange = stockExchange;
+    }
 
     public int getId() {
         return id;
