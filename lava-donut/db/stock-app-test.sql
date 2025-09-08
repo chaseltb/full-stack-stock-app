@@ -1,6 +1,6 @@
-drop database if exists stock_app;
-create database stock_app;
-use stock_app;
+drop database if exists stock_app_test;
+create database stock_app_test;
+use stock_app_test;
 
 -- SCHEMA
 -- create tables and table relationships in accordance to ERD.png in root file
@@ -97,3 +97,5 @@ create table portfolio_orders (
 		foreign key (order_id)
         references orders(order_id)
 );
+
+-- TEST DATA
