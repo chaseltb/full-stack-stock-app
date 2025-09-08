@@ -55,7 +55,15 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
     }
 
     public boolean update(Currency currency){
-        return true;
+        final String sql = "update currencies set "
+                + "`name` = ?, `code` = ?, value_to_usd = ? "
+                + "where currency_id = `?;";
+
+        return jdbcTemplate.update(sql,
+                currency.getName(),
+                currency.getCode(),
+                currency.getValueToUsd(),
+                currency.getId()) > 0;
     }
 
     public boolean delete(int currencyId){
