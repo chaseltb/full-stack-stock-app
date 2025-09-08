@@ -44,6 +44,34 @@ class OrderServiceTest {
         assertNull((actual));
     }
 
+//    @Test
+//    void shouldFindByUser() {
+//        List<Order> orders = List.of(makeOrder());
+//
+//        List<Order> actual = service.findByUser(1);
+//        assertEquals(orders, actual);
+//
+//        actual = service.findByUser(999);
+//        assertNull((actual));
+//    }
+
+    @Test
+    void shouldFindByStock() {
+        List<Order> orders = List.of(makeOrder());
+
+        List<Order> actual = service.findByStock(1);
+        assertEquals(orders, actual);
+
+        actual = service.findByStock(999);
+        assertNull((actual));
+    }
+
+    @Test
+    void shouldDelete() {
+        assertTrue(service.delete(1));
+        assertFalse(service.delete(1));
+    }
+
     Order makeOrder() {
         return new Order(
                 1,

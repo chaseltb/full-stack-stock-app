@@ -17,8 +17,14 @@ public class OrderService {
         this.repository = repository;
     }
 
-    public Order add(Order order) {
-
+    public Result<Order> add(Order order) {
+        Result<Order> result = validate(order);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        order = repository.add(order);
+        result.setPayload(order);
+        return result;
     }
 
     public Order findById(int id) {
@@ -30,19 +36,34 @@ public class OrderService {
     }
 
 //    public List<Order> findByUser(int userId) {
-//
+//      return repository.findByUser(userId);
 //    }
 
     public List<Order> findByStock(int stockId) {
-
+        return repository.findByStock(stockId);
     }
 
     public Result<Order> update(Order order) {
+        Result<Order> result = validate(order);
+        if (!result.isSuccess()) {
+            return result;
+        }
 
+        if (order.getId() <= 0) {
+            result.addMessage("order id must be set to update an order", ResultType.INVALID);
+            return result;
+        }
+
+        if (!repository.update(order)) {
+            String msg = String.format("order id: %s, not found", order.getId());
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+
+        return result;
     }
 
     public boolean delete(int id) {
-
+        return repository.delete(id);
     }
 
     private Result<Order> validate(Order order) {
