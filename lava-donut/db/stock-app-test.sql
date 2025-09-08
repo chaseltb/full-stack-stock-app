@@ -8,7 +8,7 @@ create table currencies (
 	currency_id int primary key auto_increment,
     `name` varchar(50) not null, -- EX: Euros
     `code` varchar(12) not null,  -- EX: EUR 
-    value_to_usd decimal not null, -- EX: 1.17
+    value_to_usd decimal(10,4) not null, -- EX: 1.17
     UNIQUE (`code`),
     CHECK (value_to_usd > 0)
 );
@@ -54,7 +54,7 @@ create table orders (
 	order_id int primary key auto_increment,
     transaction_type varchar(4) not null, 
     shares int not null,
-    price decimal not null,
+    price decimal(10,4) not null,
     `date` date not null,
     stock_id int not null,
     CONSTRAINT fk_orders_stock_id
@@ -154,5 +154,9 @@ begin
         (8, 'CHINESE TEST STOCK 2', 'TEST-TICKER8', 'equity', 'agriculture', 3, 3),
         (9, 'CHINESE TEST STOCK 3', 'TEST-TICKER9', 'bond', 'technology', 3, 3);
         
+	insert into orders
+		(order_id, transaction_type, shares, price, `date`, stock_id)
+	values
+		(1, 'buy', 20, 12.915, 
 end //
 delimiter ;
