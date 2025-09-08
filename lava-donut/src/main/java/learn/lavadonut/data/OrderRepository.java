@@ -11,7 +11,7 @@ public interface OrderRepository {
 
     List<Order> findAll();
 
-    List<Order> findByUser(int userId);
+//    List<Order> findByUser(int userId);
 
     List<Order> findByStock(int stockId);
 
