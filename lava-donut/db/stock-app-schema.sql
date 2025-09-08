@@ -7,14 +7,17 @@ create table currencies (
 	currency_id int primary key auto_increment,
     `name` varchar(50) not null, -- EX: Euros
     `code` varchar(12) not null,  -- EX: ISO 4217  
-    value_to_usd decimal not null -- EX: 1.17
+    value_to_usd decimal not null, -- EX: 1.17
+    UNIQUE (`code`),
+    CHECK (value_to_usd > 0)
 );
 
 create table stock_exchange (
 	stock_exchange_id int primary key auto_increment,
     `name` varchar(125) not null, -- EX: New York Stock Exchange
     `code` varchar(12) not null, -- EX: NYSE
-	timezone varchar(12) not null -- EX: -5
+	timezone varchar(12) not null, -- EX: -5
+    UNIQUE (`code`)
 ); 
 
 -- https://www.isin.net/country-codes/
@@ -23,7 +26,26 @@ create table countries (
     `name` varchar(125) not null, -- EX: United States of America
     `code` varchar(4) not null, -- EX: US
     currency_id int not null,
-    constraint fk_countries_currency_id
+    CONSTRAINT fk_countries_currency_id
 		foreign key (currency_id)
-        references currencies(currency_id)
+        references currencies(currency_id),
+	UNIQUE (`code`)
 );
+
+create table stocks (
+	stock_id int primary key auto_increment,
+    `name` varchar(50) not null,
+    `ticker` varchar(25) not null,
+    asset_type varchar(50) not null,
+    industry varchar(50) null,
+    stock_exhange_id int not null,
+    country_id int not null,
+    CONSTRAINT fk_stock_stock_exhange_id
+		foreign key (stock_exhange_id)
+        references stock_exchange(stock_exchange_id),
+	CONSTRAINT fk_stock_country_id
+		foreign key (country_id)
+        references countries(country_id),
+	UNIQUE (`ticker`)
+);
+
