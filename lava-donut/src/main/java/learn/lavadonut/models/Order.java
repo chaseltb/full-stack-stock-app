@@ -2,30 +2,31 @@ package learn.lavadonut.models;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class Order {
     // fields
     private int id;
     private TransactionType transactionType;
-    private Stock stock;
+    private int stockId;
     private double numberOfShares; // since it can be a decimal
-    private LocalDateTime dateTime;
+    private ZonedDateTime dateTime;
     private BigDecimal price;
-    private User user;
+    private int userId;
 
     // constructors
     public Order(){
     }
 
-    public Order(int id, TransactionType transactionType, Stock stock, double numberOfShares, LocalDateTime dateTime, BigDecimal price, User user) {
+    public Order(int id, TransactionType transactionType, int stockId, double numberOfShares, ZonedDateTime dateTime, BigDecimal price, int userId) {
         this.id = id;
         this.transactionType = transactionType;
-        this.stock = stock;
+        this.stockId = stockId;
         this.numberOfShares = numberOfShares;
         this.dateTime = dateTime;
         this.price = price;
-        this.user = user;
+        this.userId = userId;
     }
 
     // getters and setters
@@ -45,12 +46,12 @@ public class Order {
         this.transactionType = transactionType;
     }
 
-    public Stock getStock() {
-        return stock;
+    public int getStockId() {
+        return stockId;
     }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public void setStockId(int stockId) {
+        this.stockId = stockId;
     }
 
     public double getNumberOfShares() {
@@ -61,11 +62,11 @@ public class Order {
         this.numberOfShares = numberOfShares;
     }
 
-    public LocalDateTime getDateTime() {
+    public ZonedDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(ZonedDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -77,12 +78,12 @@ public class Order {
         this.price = price;
     }
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     // overrides
@@ -91,11 +92,11 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", transactionType=" + transactionType +
-                ", stock=" + stock +
+                ", stockId=" + stockId +
                 ", numberOfShares=" + numberOfShares +
                 ", dateTime=" + dateTime +
                 ", price=" + price +
-                ", user=" + user +
+                ", userId=" + userId +
                 '}';
     }
 
@@ -103,11 +104,11 @@ public class Order {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id && Double.compare(numberOfShares, order.numberOfShares) == 0 && transactionType == order.transactionType && Objects.equals(stock, order.stock) && Objects.equals(dateTime, order.dateTime) && Objects.equals(price, order.price) && Objects.equals(user, order.user);
+        return id == order.id && stockId == order.stockId && Double.compare(numberOfShares, order.numberOfShares) == 0 && userId == order.userId && transactionType == order.transactionType && Objects.equals(dateTime, order.dateTime) && Objects.equals(price, order.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, transactionType, stock, numberOfShares, dateTime, price, user);
+        return Objects.hash(id, transactionType, stockId, numberOfShares, dateTime, price, userId);
     }
 }
