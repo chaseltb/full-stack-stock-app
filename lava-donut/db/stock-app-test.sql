@@ -171,5 +171,16 @@ begin
         (2, 'germanUser', 'toBeHashed', 'TEST FIRST NAME', 'TEST LAST NAME', 'ADMIN', 2),
         (3, 'chineseUser', 'toBeHashed', 'TEST FIRST NAME', 'TEST LAST NAME', 'USER', 3);
 	
+    insert into portfolio
+		(portfolio_id, account_type, user_id)
+	values
+		(1, 'Retirement', 1),
+        (2, 'Investment', 1),
+        (3, 'Roth IRA', 2),
+        (4, 'Retirement', 3),
+        (5, 'Investment', 3);
+        
+        
+        
 end //
 delimiter ;
