@@ -120,6 +120,20 @@ begin
     delete from currencies;
     alter table currencies auto_increment = 1;
     
+    insert into currencies 
+		(currency_id, `name`, `code`, value_to_usd) 
+	values
+		(1, 'United States dollar', 'USD', 1.0),
+        (2, 'Euro', 'EUR', 1.17),
+        (3, 'Chinese Yuan', 'CNY', 0.14);
+        
+	insert into stock_exchange
+		(stock_exchange_id, `name`, `code`, timezone)
+	values
+		(1, 'New York Stock Exchange', 'NYSE', -5),
+        (2, 'Frankfurt Stock Exchange', 'XETR', 1),
+        (3, 'Shanghai Stock Exchange', 'SSE', 8);
+        
     
 end //
 delimiter ;
