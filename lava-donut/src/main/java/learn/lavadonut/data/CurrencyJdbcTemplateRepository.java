@@ -1,5 +1,6 @@
 package learn.lavadonut.data;
 
+import learn.lavadonut.data.mappers.CurrencyMapper;
 import learn.lavadonut.models.Currency;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,9 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
     public CurrencyJdbcTemplateRepository(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     public List<Currency> findAll(){
-        return null;
+        final String sql = "select currency_id, `name`, `code`, value_to_usd "
+                + "from currency";
+        return jdbcTemplate.query(sql, new CurrencyMapper());
     }
 
     public Currency findById(int currencyId){
