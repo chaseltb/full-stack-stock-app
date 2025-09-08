@@ -23,7 +23,10 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
         final String sql = "select currency_id, `name`, `code`, value_to_usd "
                 + "from currency "
                 + "where currency_id = ?;";
-        
+
+        return jdbcTemplate.query(sql, new CurrencyMapper(), currencyId)
+                .stream()
+                .findFirst().orElse(null);
     }
 
     public Currency add(Currency currency){
