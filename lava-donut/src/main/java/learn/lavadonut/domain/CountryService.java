@@ -59,8 +59,12 @@ public class CountryService {
     private Result<Country> validate(Country country) {
         Result<Country> result = new Result<>();
         if (country == null) {
-            result.addMessage("country cannot be null", ResultType.INVALID);
+            result.addMessage("country is required", ResultType.INVALID);
             return result;
+        }
+
+        if (country.getCurrency() == null) {
+            result.addMessage("currency is required", ResultType.INVALID);
         }
 
         if (isNullOrBlank(country.getName())) {

@@ -83,7 +83,6 @@ class OrderServiceTest {
 
     @Test
     void shouldNotAddNullOrder() {
-        Order order = makeOrder();
         Result<Order> result = service.add(null);
         assertEquals(ResultType.INVALID, result.getType());
     }
@@ -158,7 +157,15 @@ class OrderServiceTest {
 
     @Test
     void shouldNotUpdateMissingOrder() {
-        Order order = makeOrder();
+        Order order = new Order(
+                999,
+                TransactionType.BUY,
+                1,
+                12.0,
+                ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2022, 12, 12), LocalTime.MIDNIGHT), ZoneId.of("UTC")),
+                BigDecimal.TEN,
+                1
+        );
         when(repository.update(order)).thenReturn(false);
         Result<Order> result = service.update(order);
 
