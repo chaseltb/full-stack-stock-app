@@ -180,7 +180,15 @@ begin
         (4, 'Retirement', 3),
         (5, 'Investment', 3);
         
-        
+    insert into portfolio_orders
+		(port_order_id, portfolio_id, order_id)
+	values
+		(1, 1, 1),
+        (2, 1, 2),
+        (3, 2, 3),
+        (4, 3, 4),
+        (5, 4, 5),
+        (6, 4, 6);
         
 end //
 delimiter ;
