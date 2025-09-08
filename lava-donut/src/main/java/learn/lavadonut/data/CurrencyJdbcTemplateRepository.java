@@ -67,7 +67,9 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
     }
 
     public boolean delete(int currencyId){
-        return true;
+        return jdbcTemplate.update(
+                "delete from currencies where currency_id = ?;",
+                currencyId) > 0;
     }
 
 }
