@@ -157,6 +157,13 @@ begin
 	insert into orders
 		(order_id, transaction_type, shares, price, `date`, stock_id)
 	values
-		(1, 'buy', 20, 12.915, 
+		(1, 'buy', 20, 12.915, '2025-05-17', 1),
+        (2, 'sell', 5, 1.1, '2024-03-08', 3),
+        (3, 'buy', 1, 5.075, '2022-08-09', 5),
+        (4, 'sell', 100, 2, '2002-12-16', 6),
+        (5, 'buy', 22, 3.75, '2015-10-01', 7),
+        (6, 'sell', 5, 8.05, '2023-07-05', 9);
+        
+	
 end //
 delimiter ;
