@@ -7,6 +7,16 @@ public class Country {
     private String name;
     private String code;
 
+    public Country() {
+    }
+
+    public Country(int id, Currency currency, String name, String code) {
+        this.id = id;
+        this.currency = currency;
+        this.name = name;
+        this.code = code;
+    }
+
     public int getId() {
         return id;
     }
