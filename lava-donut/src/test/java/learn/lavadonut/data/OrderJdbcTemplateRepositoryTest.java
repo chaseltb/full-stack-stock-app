@@ -1,7 +1,6 @@
 package learn.lavadonut.data;
 
 import learn.lavadonut.models.Order;
-import learn.lavadonut.models.TransactionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

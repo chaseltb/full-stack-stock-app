@@ -1,16 +1,13 @@
 package learn.lavadonut.data.mappers;
 
 import learn.lavadonut.models.Order;
-import learn.lavadonut.models.TransactionType;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 
 public class OrderMapper implements RowMapper<Order> {
     @Override
