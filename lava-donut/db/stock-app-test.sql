@@ -141,6 +141,18 @@ begin
         (2, 'Federal Republic of Germany', 'DE', 2),
         (3, `People's Rupublic of China`, 'CN', 3);
         
-	
+	insert into stocks
+		(stock_id, `name`, ticker, asset_type, industry, stock_exchange_id, country_id)
+	values
+		(1, 'AMERICAN AIRLINES GROUP INC', 'TEST-TICKER1', 'common stock', 'airline and aviation', 1, 1), -- price: 12.915
+        (2, 'AMERICAN TEST STOCK 1', 'TEST-TICKER2', 'equity', 'agriculture', 1, 1),
+        (3, 'AMERICAN TEST STOCK 2', 'TEST-TICKER3', 'bond', 'technology', 1,1),
+        (4, 'GERMAN TEST STOCK 1', 'TEST-TICKER4', 'common stock', 'airline and aviation', 2, 2),
+        (5, 'GERMAN TEST STOCK 2', 'TEST-TICKER5', 'equity', 'agriculture', 2, 2),
+        (6, 'GERMAN TEST STOCK 3', 'TEST-TICKER6', 'bond', 'technology', 2, 2),
+        (7, 'CHINESE TEST STOCK 1', 'TEST-TICKER7', 'common stock', 'airline and aviation', 3, 3),
+        (8, 'CHINESE TEST STOCK 2', 'TEST-TICKER8', 'equity', 'agriculture', 3, 3),
+        (9, 'CHINESE TEST STOCK 3', 'TEST-TICKER9', 'bond', 'technology', 3, 3);
+        
 end //
 delimiter ;
