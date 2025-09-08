@@ -133,7 +133,14 @@ begin
 		(1, 'New York Stock Exchange', 'NYSE', -5),
         (2, 'Frankfurt Stock Exchange', 'XETR', 1),
         (3, 'Shanghai Stock Exchange', 'SSE', 8);
+	
+    insert into countries
+		(country_id, `name`, `code`, currency_id)
+	values
+		(1, 'United States of America', 'US', 1),
+        (2, 'Federal Republic of Germany', 'DE', 2),
+        (3, `People's Rupublic of China`, 'CN', 3);
         
-    
+	
 end //
 delimiter ;
