@@ -2,6 +2,7 @@ drop database if exists stock_schema;
 create database stock_schema;
 use stock_schema;
 
+-- SCHEMA
 -- create tables and table relationships in accordance to ERD.png in root file
 create table currencies (
 	currency_id int primary key auto_increment,
@@ -74,4 +75,25 @@ create table `user` (
 		foreign key (currency_id)
         references currencies(currency_id),
 	UNIQUE (username)
+);
+
+create table portfolio (
+	portfolio_id int primary key auto_increment,
+    account_type varchar(50) not null,
+    user_id int not null,
+    CONSTRAINT fk_portfolio_user_id
+		foreign key (user_id)
+        references `user`(user_id)
+);
+
+create table portfolio_orders (
+	port_order_id int primary key auto_increment,
+    portfolio_id int not null,
+    order_id int not null,
+    CONSTRAINT fk_portfolio_orders_portfolio_id
+		foreign key (portfolio_id)
+        references portfolio(portfolio_id),
+	CONSTRAINT fk_portfolio_orders_order_id
+		foreign key (order_id)
+        references orders(order_id)
 );
