@@ -15,12 +15,15 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
 
     public List<Currency> findAll(){
         final String sql = "select currency_id, `name`, `code`, value_to_usd "
-                + "from currency";
+                + "from currency;";
         return jdbcTemplate.query(sql, new CurrencyMapper());
     }
 
     public Currency findById(int currencyId){
-        return null;
+        final String sql = "select currency_id, `name`, `code`, value_to_usd "
+                + "from currency "
+                + "where currency_id = ?;";
+        
     }
 
     public Currency add(Currency currency){
