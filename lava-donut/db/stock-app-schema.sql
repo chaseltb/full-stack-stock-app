@@ -49,3 +49,16 @@ create table stocks (
 	UNIQUE (`ticker`)
 );
 
+create table orders (
+	order_id int primary key auto_increment,
+    transaction_type varchar(4) not null, 
+    shares int not null,
+    price decimal not null,
+    `date` date not null,
+    stock_id int not null,
+    CONSTRAINT fk_orders_stock_id
+		foreign key (stock_id)
+        references stocks(stock_id),
+	CHECK (price > 0 AND shares > 0)
+);
+
