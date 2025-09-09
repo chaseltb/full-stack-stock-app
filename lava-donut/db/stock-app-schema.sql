@@ -39,28 +39,30 @@ create table stocks (
     `ticker` varchar(25) not null,
     asset_type varchar(50) not null,
     industry varchar(50) null,
-    stock_exhange_id int not null,
+    stock_exchange_id int not null,
     country_id int not null,
-    CONSTRAINT fk_stock_stock_exhange_id
-		foreign key (stock_exhange_id)
+    CONSTRAINT fk_stock_stock_exchange_id
+		foreign key (stock_exchange_id)
         references stock_exchange(stock_exchange_id),
 	CONSTRAINT fk_stock_country_id
 		foreign key (country_id)
         references countries(country_id),
-	UNIQUE (`ticker`)
+	UNIQUE (`ticker`),
+    CHECK (asset_type IN ('STOCK', 'BOND', 'ETF'))
 );
 
 create table orders (
 	order_id int primary key auto_increment,
-    transaction_type varchar(4) not null, 
-    shares decimal(10,4) not null,
+    transaction_type varchar(4) not null,
+    shares int not null,
     price decimal(10,4) not null,
     `date` date not null,
     stock_id int not null,
     CONSTRAINT fk_orders_stock_id
 		foreign key (stock_id)
         references stocks(stock_id),
-	CHECK (price > 0 AND shares > 0)
+	CHECK (price > 0 AND shares > 0),
+    CHECK (transaction_type IN ('BUY', 'SELL'))
 );
 
 create table `user` (

@@ -39,28 +39,30 @@ create table stocks (
     `ticker` varchar(25) not null,
     asset_type varchar(50) not null,
     industry varchar(50) null,
-    stock_exhange_id int not null,
+    stock_exchange_id int not null,
     country_id int not null,
     CONSTRAINT fk_stock_stock_exhange_id
-		foreign key (stock_exhange_id)
+		foreign key (stock_exchange_id)
         references stock_exchange(stock_exchange_id),
 	CONSTRAINT fk_stock_country_id
 		foreign key (country_id)
         references countries(country_id),
-	UNIQUE (`ticker`)
+	UNIQUE (`ticker`),
+    CHECK (asset_type IN ('STOCK', 'BOND', 'ETF'))
 );
 
 create table orders (
 	order_id int primary key auto_increment,
-    transaction_type varchar(4) not null, 
-    shares decimal(10,4) not null,
+    transaction_type varchar(10) not null,
+    shares int not null,
     price decimal(10,4) not null,
     `date` date not null,
     stock_id int not null,
     CONSTRAINT fk_orders_stock_id
 		foreign key (stock_id)
         references stocks(stock_id),
-	CHECK (price > 0 AND shares > 0)
+	CHECK (price > 0 AND shares > 0),
+    CHECK (transaction_type IN ('BUY', 'SELL'))
 );
 
 create table `user` (
@@ -102,9 +104,9 @@ create table portfolio_orders (
 delimiter //
 create procedure set_known_good_state()
 begin
-	
+
     delete from portfolio_orders;
-    alter table portfolio_order auto_increment = 1;
+    alter table portfolio_orders auto_increment = 1;
     delete from portfolio;
     alter table portfolio auto_increment = 1;
     delete from `user`;
@@ -119,52 +121,52 @@ begin
     alter table stock_exchange auto_increment = 1;
     delete from currencies;
     alter table currencies auto_increment = 1;
-    
-    insert into currencies 
-		(currency_id, `name`, `code`, value_to_usd) 
+
+    insert into currencies
+		(currency_id, `name`, `code`, value_to_usd)
 	values
 		(1, 'United States dollar', 'USD', 1.0),
         (2, 'Euro', 'EUR', 1.17),
         (3, 'Chinese Yuan', 'CNY', 0.14);
-        
+
 	insert into stock_exchange
 		(stock_exchange_id, `name`, `code`, timezone)
 	values
 		(1, 'New York Stock Exchange', 'NYSE', -5),
         (2, 'Frankfurt Stock Exchange', 'XETR', 1),
         (3, 'Shanghai Stock Exchange', 'SSE', 8);
-	
+
     insert into countries
 		(country_id, `name`, `code`, currency_id)
 	values
 		(1, 'United States of America', 'US', 1),
         (2, 'Federal Republic of Germany', 'DE', 2),
-        (3, `People's Rupublic of China`, 'CN', 3);
-        
+        (3, 'People''s Republic of China', 'CN', 3);
+
 	insert into stocks
 		(stock_id, `name`, ticker, asset_type, industry, stock_exchange_id, country_id)
 	values
-		(1, 'AMERICAN AIRLINES GROUP INC', 'TEST-TICKER1', 'common stock', 'airline and aviation', 1, 1), -- price: 12.915
-        (2, 'AMERICAN TEST STOCK 1', 'TEST-TICKER2', 'equity', 'agriculture', 1, 1),
-        (3, 'AMERICAN TEST STOCK 2', 'TEST-TICKER3', 'bond', 'technology', 1,1),
-        (4, 'GERMAN TEST STOCK 1', 'TEST-TICKER4', 'common stock', 'airline and aviation', 2, 2),
-        (5, 'GERMAN TEST STOCK 2', 'TEST-TICKER5', 'equity', 'agriculture', 2, 2),
-        (6, 'GERMAN TEST STOCK 3', 'TEST-TICKER6', 'bond', 'technology', 2, 2),
-        (7, 'CHINESE TEST STOCK 1', 'TEST-TICKER7', 'common stock', 'airline and aviation', 3, 3),
-        (8, 'CHINESE TEST STOCK 2', 'TEST-TICKER8', 'equity', 'agriculture', 3, 3),
-        (9, 'CHINESE TEST STOCK 3', 'TEST-TICKER9', 'bond', 'technology', 3, 3);
-        
+		(1, 'AMERICAN AIRLINES GROUP INC', 'TEST-TICKER1', 'STOCK', 'airline and aviation', 1, 1), -- price: 12.915
+        (2, 'AMERICAN TEST STOCK 1', 'TEST-TICKER2', 'ETF', 'agriculture', 1, 1),
+        (3, 'AMERICAN TEST STOCK 2', 'TEST-TICKER3', 'BOND', 'technology', 1,1),
+        (4, 'GERMAN TEST STOCK 1', 'TEST-TICKER4', 'STOCK', 'airline and aviation', 2, 2),
+        (5, 'GERMAN TEST STOCK 2', 'TEST-TICKER5', 'ETF', 'agriculture', 2, 2),
+        (6, 'GERMAN TEST STOCK 3', 'TEST-TICKER6', 'STOCK', 'technology', 2, 2),
+        (7, 'CHINESE TEST STOCK 1', 'TEST-TICKER7', 'STOCK', 'airline and aviation', 3, 3),
+        (8, 'CHINESE TEST STOCK 2', 'TEST-TICKER8', 'ETF', 'agriculture', 3, 3),
+        (9, 'CHINESE TEST STOCK 3', 'TEST-TICKER9', 'BOND', 'technology', 3, 3);
+
 	insert into orders
 		(order_id, transaction_type, shares, price, `date`, stock_id)
 	values
-		(1, 'buy', 20, 12.915, '2025-05-17', 1),
-        (2, 'sell', 5, 1.1, '2024-03-08', 3),
-        (3, 'buy', 1, 5.075, '2022-08-09', 5),
-        (4, 'sell', 100, 2, '2002-12-16', 6),
-        (5, 'buy', 22, 3.75, '2015-10-01', 7),
-        (6, 'sell', 5, 8.05, '2023-07-05', 9);
-        
-	insert into `users`
+		(1, 'BUY', 20, 12.915, '2025-05-17', 1),
+        (2, 'SELL', 5, 1.1, '2024-03-08', 3),
+        (3, 'BUY', 1, 5.075, '2022-08-09', 5),
+        (4, 'SELL', 100, 2, '2002-12-16', 6),
+        (5, 'BUY', 22, 3.75, '2015-10-01', 7),
+        (6, 'SELL', 5, 8.05, '2023-07-05', 9);
+
+	insert into `user`
 		(user_id, username, password_hashed, first_name, last_name, permission, currency_id)
 	values
 		(1, 'americanUser', 'toBeHashed', 'TEST FIRST NAME', 'TEST LAST NAME', 'USER', 1),

@@ -21,22 +21,22 @@ public class CurrencyController {
     //TODO: findById, add, update, deleteById
     @GetMapping("/{id}")
     public ResponseEntity<Object> findById(@PathVariable int currencyId) {
-
+        return null;
     }
 
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody Currency currency) {
-
+        return null;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable int currencyId, @RequestBody Currency currency) {
-
+        return null;
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable int currencyId) {
-
+        return null;
     }
 
 }

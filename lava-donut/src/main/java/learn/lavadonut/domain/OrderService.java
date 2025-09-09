@@ -5,7 +5,6 @@ import learn.lavadonut.models.Order;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -57,9 +56,10 @@ public class OrderService {
         if (!repository.update(order)) {
             String msg = String.format("order id: %s, not found", order.getId());
             result.addMessage(msg, ResultType.NOT_FOUND);
+        } else {
+            result.setPayload(order);
         }
 
-        result.setPayload(order);
         return result;
     }
 
@@ -84,19 +84,19 @@ public class OrderService {
             result.addMessage("stock id is required", ResultType.INVALID);
         }
 
+        // shares are required
+        if (order.getNumberOfShares() == null) {
+            result.addMessage("shares are required", ResultType.INVALID);
+        }
+
         // shares must be greater than 0
-        if (order.getNumberOfShares().compareTo(BigDecimal.ZERO) <= 0) {
+        else if (order.getNumberOfShares().compareTo(BigDecimal.ZERO) <= 0) {
             result.addMessage("shares must be greater than 0", ResultType.INVALID);
         }
 
         // date is required
-        if (order.getDateTime() == null) {
+        if (order.getDate() == null) {
             result.addMessage("date is required", ResultType.INVALID);
-        }
-
-        // date cannot be in the future
-        if (order.getDateTime().isAfter(ZonedDateTime.now())) {
-            result.addMessage("date cannot be in the future", ResultType.INVALID);
         }
 
         // price is required
@@ -105,7 +105,7 @@ public class OrderService {
         }
 
         // price must be greater than 0
-        if (order.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+        else if (order.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             result.addMessage("price must be greater than 0", ResultType.INVALID);
         }
 
