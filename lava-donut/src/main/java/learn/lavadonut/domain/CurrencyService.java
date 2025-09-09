@@ -35,7 +35,23 @@ public class CurrencyService {
     }
 
     public Result<Currency> update(Currency currency){
+        Result<Currency> result = validate(currency);
+        if(!result.isSuccess()) {
+            return result;
+        }
 
+        if (currency.getId() <= 0) {
+            result.addMessage("currency cannot be set for 'update' operation!", ResultType.INVALID);
+            return result;
+        }
+
+        if (!repository.update(currency)){
+            String error = String.format("currency: %s, could not be found!",
+                    currency.getId());
+            result.addMessage(error, ResultType.NOT_FOUND);
+        }
+        
+        return result;
     }
 
     public Result<Currency> delete(int currencyId){
@@ -66,7 +82,7 @@ public class CurrencyService {
 
         if((!allCurrency.isEmpty()) && result.isSuccess()){
             for(Currency c : allCurrency){
-                if(currency.equals(c) && currency.getId() != c.getId()){
+                if(currency.equals(c)){
                     result.addMessage("Duplicate currencies are not allowed", ResultType.INVALID);
                 }
             }
