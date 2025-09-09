@@ -139,6 +139,14 @@ class CurrencyServiceTest {
     }
 
 
+    @Test
+    void shouldNotAddWhenIdIsGreaterThanZero(){
+        Currency arg = makeCurrency();
+
+        Result<Currency> result = service.add(arg);
+
+        assertEquals(ResultType.INVALID, result.getType());
+    }
     private List<Currency> makeCurrencyList(){
         // 1: ('United States dollar', 'USD', 1.0)
         // 2: (2, 'Euro', 'EUR', 1.17)
