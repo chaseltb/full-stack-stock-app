@@ -21,7 +21,10 @@ public class StockJdbcTemplateRepository implements StockRepository{
 
     @Override
     public List<Stock> getStocksByIndustry(String industry) {
-        return List.of();
+        final String sql = "select stock_id, `name`, `ticker`, asset_type, industry, stock_exchange_id, country_id "
+                + "from stocks "
+                + "where industry = ? limit 1000;";
+        return jdbcTemplate.query(sql, new StockMapper());
     }
 
     @Override
