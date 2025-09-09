@@ -29,8 +29,10 @@ public class StockExchangeJdbcTemplateRepository implements StockExchangeReposit
 
     @Override
     public StockExchange findById(int id) {
+
         final String sql = "select stock_exchange_id, `name` as exchange_name, " +
                 " `code` as exchange_code, time_zone " +
+
                 "from stock_exchange where stock_exchange_id = ?;";
         return jdbcTemplate.query(sql, new StockExchangeMapper(), id)
                 .stream()

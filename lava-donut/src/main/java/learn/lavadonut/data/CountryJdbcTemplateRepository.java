@@ -19,8 +19,10 @@ public class CountryJdbcTemplateRepository implements CountryRepository{
 
     @Override
     public List<Country> findAll() {
+
         final String sql = "select c.country_id, c.name as country_name, " +
                 " c.code as country_code, c.currency_id, cu.currency_code, cu.currency_name, cu.value_to_usd " +
+
                 "from countries c " +
                 "inner join currencies cu on c.currency_id = cu.currency_id;";
 
@@ -29,6 +31,7 @@ public class CountryJdbcTemplateRepository implements CountryRepository{
 
     @Override
     public Country findById(int id) {
+
         final String sql = "select c.country_id, c.name as country_name, " +
                 " c.code as country_code, c.currency_id, cu.currency_code, cu.currency_name, cu.value_to_usd " +
                 "from countries c " +

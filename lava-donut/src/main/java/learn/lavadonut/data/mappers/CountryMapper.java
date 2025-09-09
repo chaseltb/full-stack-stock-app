@@ -18,7 +18,6 @@ public class CountryMapper implements RowMapper<Country> {
         CurrencyMapper currencyMapper = new CurrencyMapper();
         country.setCurrency(currencyMapper.mapRow(resultSet, i));
 
-
         return country;
     }
 }
