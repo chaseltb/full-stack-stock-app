@@ -75,6 +75,10 @@ class CurrencyJdbcTemplateRepositoryTest {
         assertNull(actual);
     }
 
+    /**
+     add Tests!
+     **/
+
     @Test
     void shouldAdd(){ // HAPPY PATH
         Currency currency = new Currency();
@@ -95,6 +99,10 @@ class CurrencyJdbcTemplateRepositoryTest {
 
         assertNull(actual);
     }
+
+    /**
+     update Tests!
+     **/
 
     @Test
     void shouldUpdate(){ // HAPPY PATH
@@ -117,6 +125,10 @@ class CurrencyJdbcTemplateRepositoryTest {
 
         assertFalse(repository.update(currency));
     }
+
+    /**
+     delete Tests!
+     **/
 
     @Test
     void shouldDelete(){ // HAPPY PATH

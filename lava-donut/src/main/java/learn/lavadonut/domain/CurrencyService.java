@@ -17,7 +17,6 @@ public class CurrencyService {
 
     public Currency findById(int currencyId){ return repository.findById(currencyId); }
 
-    //TODO: add, update, delete, validate
     public Result<Currency> add(Currency currency){
         Result<Currency> result = validate(currency);
         if (!result.isSuccess() ){
