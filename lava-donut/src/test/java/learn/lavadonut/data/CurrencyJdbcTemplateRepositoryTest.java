@@ -65,4 +65,15 @@ class CurrencyJdbcTemplateRepositoryTest {
         assertEquals("CNY", actual.getCode());
         assertEquals(BigDecimal.valueOf(0.14), actual.getValueToUsd());
     }
+
+    @Test
+    void shouldNotFindNonExistentId(){ // UNHAPPY PATH
+        int nonExistentId = 999;
+
+        Currency actual = repository.findById(nonExistentId);
+
+        assertNull(actual);
+    }
+
+    
 }
