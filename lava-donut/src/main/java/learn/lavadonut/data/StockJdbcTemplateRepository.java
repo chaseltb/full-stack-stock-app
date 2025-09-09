@@ -3,7 +3,11 @@ package learn.lavadonut.data;
 import learn.lavadonut.data.mappers.StockMapper;
 import learn.lavadonut.models.Stock;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 public class StockJdbcTemplateRepository implements StockRepository{
@@ -77,7 +81,30 @@ public class StockJdbcTemplateRepository implements StockRepository{
 
     @Override
     public Stock add(Stock stock) {
-        return null;
+        final String sql = "insert into stocks (`name`, `ticker`, asset_type, industry, stock_exchange_id, country_id) "
+                + "values (?, ?, ?, ?, ?, ?);";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        int rowsAffected = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, stock.getName());
+            ps.setString(2, stock.getTicker());
+            ps.setString(3, stock.getAssetType().name());
+            ps.setString(4, stock.getIndustry());
+            ps.setInt(5, stock.getStockExchange().getId());
+            ps.setInt(6, stock.getCountry().getId());
+
+            return ps;
+        }, keyHolder);
+
+        if (rowsAffected <= 0) {
+            return null;
+        }
+
+        stock.setId(keyHolder.getKey().intValue());
+
+        return stock;
     }
 
     @Override
