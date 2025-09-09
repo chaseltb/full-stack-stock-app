@@ -31,6 +31,16 @@ class CurrencyServiceTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void shouldFindById(){
+        Currency expected = makeCurrency();
+
+        when(repository.findById(4)).thenReturn(expected);
+        Currency actual = service.findById(4);
+
+        assertEquals(expected, actual);
+    }
+
     private List<Currency> makeCurrencyList(){
         // 1: ('United States dollar', 'USD', 1.0)
         // 2: (2, 'Euro', 'EUR', 1.17)
@@ -65,6 +75,7 @@ class CurrencyServiceTest {
         currency.setName("Yen");
         currency.setCode("JPY");
         currency.setValueToUsd(BigDecimal.valueOf(0.0068));
+        currency.setId(4);
 
         return currency;
     }
