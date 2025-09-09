@@ -29,12 +29,24 @@ public class StockJdbcTemplateRepository implements StockRepository{
 
     @Override
     public Stock findById(int stockId) {
-        return null;
+        final String sql = "select stock_id, `name`, `ticker`, asset_type, industry, stock_exchange_id, country_id "
+                + "from stocks "
+                + "where stock_id = ?;";
+
+        return jdbcTemplate.query(sql, new StockMapper(), stockId)
+                .stream()
+                .findFirst().orElse(null);
     }
 
     @Override
     public Stock findByTicker(String ticker) {
-        return null;
+        final String sql = "select stock_id, `name`, `ticker`, asset_type, industry, stock_exchange_id, country_id "
+                + "from stocks "
+                + "where `ticker` = ?;";
+
+        return jdbcTemplate.query(sql, new StockMapper(), ticker)
+                .stream()
+                .findFirst().orElse(null);
     }
 
     @Override
