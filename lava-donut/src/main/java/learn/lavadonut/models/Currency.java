@@ -40,4 +40,11 @@ public class Currency {
     public void setValueToUsd(BigDecimal valueToUsd) {
         this.valueToUsd = valueToUsd;
     }
+
+    //DOES NOT COMPARE IDS
+    public boolean equals(Currency other){
+        return (this.name.equalsIgnoreCase(other.name)
+                && this.code.equalsIgnoreCase(other.code)
+                && this.getValueToUsd().compareTo(other.valueToUsd) == 0);
+    }
 }
