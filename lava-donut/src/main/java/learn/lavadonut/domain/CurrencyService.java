@@ -50,12 +50,21 @@ public class CurrencyService {
                     currency.getId());
             result.addMessage(error, ResultType.NOT_FOUND);
         }
-        
+
         return result;
     }
 
+    //TODO: may need to check if being used by other objects, come back to later
     public Result<Currency> delete(int currencyId){
+        Result<Currency> result = new Result<>();
 
+        if (!repository.delete(currencyId)){
+            String error = String.format("currency: %s, could not be found!",
+                    currencyId);
+            result.addMessage(error, ResultType.NOT_FOUND);
+        }
+
+        return result;
     }
 
     private Result<Currency> validate(Currency currency){
