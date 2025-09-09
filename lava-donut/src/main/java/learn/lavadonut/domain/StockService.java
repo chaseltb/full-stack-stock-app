@@ -1,11 +1,8 @@
 package learn.lavadonut.domain;
 
 import learn.lavadonut.data.StockRepository;
-import learn.lavadonut.models.AssetType;
 import learn.lavadonut.models.Stock;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -45,6 +42,40 @@ public class StockService {
 
         stock = repository.add(stock);
         result.setPayload(stock);
+        return result;
+    }
+
+    public Result<Stock> update(Stock stock){
+        Result<Stock> result = validate(stock);
+
+        if(!result.isSuccess()){
+            return result;
+        }
+
+        if(stock.getId() <= 0 ){
+            result.addMessage("stock cannot be set for 'update' operation!", ResultType.INVALID);
+            return result;
+        }
+
+        if(!repository.update(stock)){
+            String error = String.format("stock: %s, could not be found!",
+                    stock.getId());
+            result.addMessage(error, ResultType.NOT_FOUND);
+        }
+
+        return result;
+    }
+
+    //TODO: may need to check if being used by other objects, come back to later
+    public Result<Stock> delete(int stockId){
+        Result<Stock> result = new Result<>();
+
+        if (!repository.deleteById(stockId)){
+            String error = String.format("stock: %s, could not be found!",
+                    stockId);
+            result.addMessage(error, ResultType.NOT_FOUND);
+        }
+
         return result;
     }
 
