@@ -117,4 +117,18 @@ class CurrencyJdbcTemplateRepositoryTest {
 
         assertFalse(repository.update(currency));
     }
+
+    @Test
+    void shouldDelete(){ // HAPPY PATH
+        int validId = 1;
+
+        assertTrue(repository.delete(validId));
+    }
+
+    @Test
+    void shouldNotDeleteWithInvalidId(){ // UNHAPPY PATH
+        int invalidId = 999;
+
+        assertFalse(repository.delete(invalidId));
+    }
 }
