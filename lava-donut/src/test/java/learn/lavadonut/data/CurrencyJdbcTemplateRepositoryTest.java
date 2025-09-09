@@ -106,4 +106,15 @@ class CurrencyJdbcTemplateRepositoryTest {
 
         assertTrue(repository.update(currency));
     }
+
+    @Test
+    void shouldNotUpdateWithInvalidId(){ //UNHAPPY PATH
+        Currency currency = new Currency();
+        currency.setName("Yen");
+        currency.setCode("JPY");
+        currency.setValueToUsd(BigDecimal.valueOf(0.0068));
+        currency.setId(NEXT_ID + 1);
+
+        assertFalse(repository.update(currency));
+    }
 }
