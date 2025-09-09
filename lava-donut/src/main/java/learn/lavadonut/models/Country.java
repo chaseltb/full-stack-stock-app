@@ -1,5 +1,7 @@
 package learn.lavadonut.models;
 
+import java.util.Objects;
+
 public class Country {
 
     private int id;
@@ -47,5 +49,27 @@ public class Country {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "Country{" +
+                "id=" + id +
+                ", currency=" + currency +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Country country = (Country) o;
+        return id == country.id && Objects.equals(currency, country.currency) && Objects.equals(name, country.name) && Objects.equals(code, country.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, currency, name, code);
     }
 }

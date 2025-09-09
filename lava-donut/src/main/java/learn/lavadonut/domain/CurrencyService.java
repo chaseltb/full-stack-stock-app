@@ -19,15 +19,15 @@ public class CurrencyService {
 
     //TODO: add, update, delete, validate
     public Result<Currency> add(Currency currency){
-
+        return null;
     }
 
     public Result<Currency> update(Currency currency){
-
+        return null;
     }
 
     public Result<Currency> delete(int currencyId){
-
+        return null;
     }
 
     private Result<Currency> validate(Currency currency){

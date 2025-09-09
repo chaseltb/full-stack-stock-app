@@ -34,9 +34,18 @@ class CountryJdbcTemplateRepositoryTest {
     @Test
     void shouldFindById() {
         Country country = makeCountry();
+        country.setCode("US");
 
         Country actual = repository.findById(1);
-        assertEquals(country, actual);
+
+        assertEquals(country.getId(), actual.getId());
+        assertEquals(country.getName(), actual.getName());
+        assertEquals(country.getCode(), actual.getCode());
+
+        assertEquals(country.getCurrency().getId(), actual.getCurrency().getId());
+        assertEquals(country.getCurrency().getName(), actual.getCurrency().getName());
+        assertEquals(country.getCurrency().getCode(), actual.getCurrency().getCode());
+        assertEquals(country.getCurrency().getValueToUsd(), actual.getCurrency().getValueToUsd());
 
         actual = repository.findById(999);
         assertNull(actual);
@@ -51,26 +60,33 @@ class CountryJdbcTemplateRepositoryTest {
 
     @Test
     void shouldUpdate() {
-        Country country = makeCountry();
+        Currency currency = new Currency();
+        currency.setId(2);
+        currency.setCode("EUR");
+        currency.setName("Euro");
+        currency.setValueToUsd(new BigDecimal("1.17"));
+        Country country = new Country(1, currency, "Federal Republic of Germany", "DE");
+
         country.setCode("IT");
         assertTrue(repository.update(country));
 
-        assertFalse(repository.update(new Country()));
+        country.setId(999);
+        assertFalse(repository.update(country));
     }
 
     @Test
     void shouldDelete() {
-        assertTrue(repository.delete(1));
-        assertFalse(repository.delete(1));
+        assertTrue(repository.delete(3));
+        assertFalse(repository.delete(3));
     }
 
     Country makeCountry() {
         Currency currency = new Currency();
         currency.setId(1);
-        currency.setName("Euro");
-        currency.setCode("ISO 4217");
-        currency.setValueToUsd(new BigDecimal("1.17"));
+        currency.setName("United States dollar");
+        currency.setCode("USD");
+        currency.setValueToUsd(new BigDecimal("1.0"));
 
-        return new Country(1, currency, "Italy", "ITA");
+        return new Country(1, currency, "United States of America", "USA");
     }
 }

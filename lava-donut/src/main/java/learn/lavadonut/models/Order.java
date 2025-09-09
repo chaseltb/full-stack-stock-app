@@ -1,31 +1,40 @@
 package learn.lavadonut.models;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class Order {
     // fields
     private int id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_type")
     private TransactionType transactionType;
+
     private int stockId;
     private BigDecimal numberOfShares; // since it can be a decimal
-    private ZonedDateTime dateTime;
+    private Date date;
     private BigDecimal price;
-    private int userId;
+//    private int userId;
 
     // constructors
     public Order(){
     }
 
-    public Order(int id, TransactionType transactionType, int stockId, BigDecimal numberOfShares, ZonedDateTime dateTime, BigDecimal price, int userId) {
+    public Order(int id, TransactionType transactionType, int stockId, BigDecimal numberOfShares, Date date, BigDecimal price) {
         this.id = id;
         this.transactionType = transactionType;
         this.stockId = stockId;
         this.numberOfShares = numberOfShares;
-        this.dateTime = dateTime;
+        this.date = date;
         this.price = price;
-        this.userId = userId;
     }
 
     // getters and setters
@@ -61,12 +70,12 @@ public class Order {
         this.numberOfShares = numberOfShares;
     }
 
-    public ZonedDateTime getDateTime() {
-        return dateTime;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDateTime(ZonedDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public BigDecimal getPrice() {
@@ -77,13 +86,13 @@ public class Order {
         this.price = price;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+//    public int getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
 
     // overrides
     @Override
@@ -93,9 +102,8 @@ public class Order {
                 ", transactionType=" + transactionType +
                 ", stockId=" + stockId +
                 ", numberOfShares=" + numberOfShares +
-                ", dateTime=" + dateTime +
+                ", date=" + date +
                 ", price=" + price +
-                ", userId=" + userId +
                 '}';
     }
 
@@ -103,11 +111,11 @@ public class Order {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id && stockId == order.stockId && userId == order.userId && transactionType == order.transactionType && Objects.equals(numberOfShares, order.numberOfShares) && Objects.equals(dateTime, order.dateTime) && Objects.equals(price, order.price);
+        return id == order.id && stockId == order.stockId && transactionType == order.transactionType && Objects.equals(numberOfShares.stripTrailingZeros(), order.numberOfShares.stripTrailingZeros()) && Objects.equals(date, order.date) && Objects.equals(price.stripTrailingZeros(), order.price.stripTrailingZeros());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, transactionType, stockId, numberOfShares, dateTime, price, userId);
+        return Objects.hash(id, transactionType, stockId, numberOfShares, date, price);
     }
 }

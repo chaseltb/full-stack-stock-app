@@ -2,9 +2,11 @@ package learn.lavadonut.domain;
 
 import learn.lavadonut.data.UserRepository;
 import learn.lavadonut.models.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserService {
 
     private final UserRepository repo;
