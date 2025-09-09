@@ -34,20 +34,32 @@ public class CurrencyService {
         Result<Currency> result = new Result<>();
 
         if(currency == null){
-
+            result.addMessage("currency cannot be null!", ResultType.INVALID);
+            return result;
         }
 
         if(Validations.isNullOrBlank(currency.getName())){
-
+            result.addMessage("name is required!", ResultType.INVALID);
         }
 
         if(Validations.isNullOrBlank(currency.getCode())){
-
+            result.addMessage("currency code is required! EX: 'USD'", ResultType.INVALID);
         }
 
         if(currency.getValueToUsd().compareTo(BigDecimal.ZERO) != 1){
-
+            result.addMessage("value to USD is required!", ResultType.INVALID);
         }
+
+        List<Currency> allCurrency = repository.findAll();
+
+        if((!allCurrency.isEmpty()) && result.isSuccess()){
+            for(Currency c : allCurrency){
+                if(currency.equals(c) && currency.getId() != c.getId()){
+                    result.addMessage("Duplicate currencies are not allowed", ResultType.INVALID);
+                }
+            }
+        }
+
         return result;
     }
 }
