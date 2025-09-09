@@ -53,12 +53,12 @@ class PortfolioServiceTest {
         stock.setIndustry("Software");
         stock.setTicker("TEST");
 
-//        Portfolio result = service.addWatchStockToPortfolio(1, stock);
+        Portfolio result = service.addWatchStockToPortfolio(1, stock);
     }
 
     @Test
     public void shouldDeleteWatchStockFromPortfolio() {
-//        service.deleteWatchStockFromPortfolio(1,1);
+        service.deleteWatchStockFromPortfolio(1,1);
     }
 
     @Test
