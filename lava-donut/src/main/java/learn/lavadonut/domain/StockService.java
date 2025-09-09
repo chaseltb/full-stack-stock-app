@@ -31,6 +31,23 @@ public class StockService {
 
     public Stock findById(int stockId){ return repository.findById(stockId); }
 
+    public Result<Stock> add(Stock stock){
+        Result<Stock> result = validate(stock);
+
+        if(!result.isSuccess()){
+            return result;
+        }
+
+        if(stock.getId() != 0){
+            result.addMessage("stock cannot be set for 'add' operation!", ResultType.INVALID);
+            return result;
+        }
+
+        stock = repository.add(stock);
+        result.setPayload(stock);
+        return result;
+    }
+
     private Result<Stock> validate(Stock stock){
         Result<Stock> result = new Result<>();
 
