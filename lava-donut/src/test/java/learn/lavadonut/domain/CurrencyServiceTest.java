@@ -22,6 +22,10 @@ class CurrencyServiceTest {
     @MockBean
     CurrencyRepository repository;
 
+    /**
+     findAll Test!
+     **/
+
     @Test
     void shouldFindAll(){
         List<Currency> expected = makeCurrencyList();
@@ -31,6 +35,10 @@ class CurrencyServiceTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     findById Test!
+     **/
+
     @Test
     void shouldFindById(){
         Currency expected = makeCurrency();
@@ -39,6 +47,24 @@ class CurrencyServiceTest {
         Currency actual = service.findById(4);
 
         assertEquals(expected, actual);
+    }
+
+    /**
+     add Tests!
+     **/
+
+    @Test
+    void shouldAddWhenValid(){ // HAPPY PATH
+        Currency expected = makeCurrency();
+        Currency arg = makeCurrency();
+        arg.setId(0);
+
+        when(repository.add(arg)).thenReturn(expected);
+        Result<Currency> result = service.add(arg);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+        assertTrue(expected.equals(result.getPayload())
+                        && expected.getId() == result.getPayload().getId());
     }
 
     private List<Currency> makeCurrencyList(){
