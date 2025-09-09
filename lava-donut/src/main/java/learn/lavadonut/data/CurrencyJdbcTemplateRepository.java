@@ -68,6 +68,7 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
                 currency.getId()) > 0;
     }
 
+    //TODO: Potentially need to check if stock is being used by countries or users before delete
     public boolean delete(int currencyId){
         return jdbcTemplate.update(
                 "delete from currencies where currency_id = ?;",

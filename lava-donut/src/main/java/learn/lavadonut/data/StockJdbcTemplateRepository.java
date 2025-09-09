@@ -124,6 +124,8 @@ public class StockJdbcTemplateRepository implements StockRepository{
     //TODO: Potentially need to check if stock is being used by orders before delete
     @Override
     public boolean deleteById(int stockId) {
-        return false;
+        return jdbcTemplate.update(
+                "delete from stocks where stock_id = ?;",
+                stockId) > 0;
     }
 }
