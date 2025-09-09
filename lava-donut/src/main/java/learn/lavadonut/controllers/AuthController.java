@@ -1,5 +1,7 @@
 package learn.lavadonut.controllers;
 
+import learn.lavadonut.security.AuthRequest;
+import learn.lavadonut.security.AuthResponse;
 import learn.lavadonut.security.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
