@@ -95,4 +95,15 @@ class CurrencyJdbcTemplateRepositoryTest {
 
         assertNull(actual);
     }
+
+    @Test
+    void shouldUpdate(){ // HAPPY PATH
+        Currency currency = new Currency();
+        currency.setName("Yen");
+        currency.setCode("JPY");
+        currency.setValueToUsd(BigDecimal.valueOf(0.0068));
+        currency.setId(2);
+
+        assertTrue(repository.update(currency));
+    }
 }
