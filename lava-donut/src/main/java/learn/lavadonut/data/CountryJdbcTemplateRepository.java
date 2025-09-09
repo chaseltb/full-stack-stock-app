@@ -96,8 +96,9 @@ public class CountryJdbcTemplateRepository implements CountryRepository{
 
         // check for count of orders dependent on stocks
         sql = "select count(*) from orders where stock_id in (?);";
-        Integer orderCount = jdbcTemplate.queryForObject(sql, Integer.class, stockIds);
+        Integer orderCount = jdbcTemplate.queryForObject(sql, Integer.class, commaSeparatedStockIds);
 
+        System.out.println(orderCount);
         if (orderCount != null && orderCount > 0) {
             return false; // cannot delete if there are dependent orders
         }
