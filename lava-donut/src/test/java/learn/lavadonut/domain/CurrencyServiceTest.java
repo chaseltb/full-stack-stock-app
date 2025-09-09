@@ -249,6 +249,29 @@ class CurrencyServiceTest {
         assertEquals(ResultType.NOT_FOUND, result.getType());
     }
 
+    /**
+     delete Tests!
+     **/
+
+
+    @Test
+    void shouldDeleteWhenValid(){ //HAPPY PATH
+        when(repository.delete(1)).thenReturn(true);
+
+        Result<Currency> result = service.delete(1);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotDeleteWhenNotFound(){ //UNHAPPY PATH
+        when(repository.delete(999)).thenReturn(false);
+
+        Result<Currency> result = service.delete(999);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+    }
+
     private List<Currency> makeCurrencyList(){
         // 1: ('United States dollar', 'USD', 1.0)
         // 2: (2, 'Euro', 'EUR', 1.17)
