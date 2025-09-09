@@ -67,6 +67,78 @@ class CurrencyServiceTest {
                         && expected.getId() == result.getPayload().getId());
     }
 
+    @Test
+    void shouldNotAddWhenCurrencyIsNull(){ // UNHAPPY PATH
+        Result<Currency> result = service.add(null);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotAddWhenCurrencyNameIsNull(){
+        Currency arg = makeCurrency();
+        arg.setId(0);
+        arg.setName(null);
+
+        Result<Currency> result = service.add(arg);
+
+        assertEquals(ResultType.INVALID, result.getType());
+
+        arg.setName("");
+
+        Result<Currency> blankResult = service.add(arg);
+
+        assertEquals(ResultType.INVALID, blankResult.getType());
+
+    }
+
+    @Test
+    void shouldNotAddWhenCurrencyCodeIsNull(){
+        Currency arg = makeCurrency();
+        arg.setId(0);
+        arg.setCode(null);
+
+        Result<Currency> result = service.add(arg);
+
+        assertEquals(ResultType.INVALID, result.getType());
+
+        arg.setCode("");
+
+        Result<Currency> blankResult = service.add(arg);
+
+        assertEquals(ResultType.INVALID, blankResult.getType());
+    }
+
+    @Test
+    void shouldNotAddWhenCurrencyValueIsNotGreaterThanZero(){
+        Currency arg = makeCurrency();
+        arg.setId(0);
+        arg.setValueToUsd(BigDecimal.ZERO);
+
+        Result<Currency> result = service.add(arg);
+
+        assertEquals(ResultType.INVALID, result.getType());
+
+        arg.setValueToUsd(BigDecimal.valueOf(-1));
+
+        Result<Currency> negativeResult = service.add(arg);
+
+        assertEquals(ResultType.INVALID, negativeResult.getType());
+    }
+
+    @Test
+    void shouldNotAddDuplicate(){
+        Currency currency = makeCurrency();
+        currency.setId(0);
+        List<Currency> yen = List.of(makeCurrency());
+
+        when(repository.findAll()).thenReturn(yen);
+
+        Result<Currency> result = service.add(currency);
+
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+
     private List<Currency> makeCurrencyList(){
         // 1: ('United States dollar', 'USD', 1.0)
         // 2: (2, 'Euro', 'EUR', 1.17)
