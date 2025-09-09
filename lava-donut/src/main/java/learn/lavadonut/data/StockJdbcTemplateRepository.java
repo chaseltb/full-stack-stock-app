@@ -109,9 +109,19 @@ public class StockJdbcTemplateRepository implements StockRepository{
 
     @Override
     public boolean update(Stock stock) {
-        return false;
+        final String sql = "update stocks set "
+                + "`name` = ?, 'ticker' = ?, asset_type = ?, industry = ?, stock_exchange_id = ?, country_id = ?";
+
+        return jdbcTemplate.update(sql,
+                stock.getName(),
+                stock.getTicker(),
+                stock.getAssetType(),
+                stock.getIndustry(),
+                stock.getStockExchange().getId(),
+                stock.getCountry().getId()) > 0;
     }
 
+    //TODO: Potentially need to check if stock is being used by orders before delete
     @Override
     public boolean deleteById(int stockId) {
         return false;
