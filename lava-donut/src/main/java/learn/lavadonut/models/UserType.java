@@ -1,8 +1,8 @@
 package learn.lavadonut.models;
 
 public enum UserType {
-    ADMIN("admin"),
-    USER("user");
+    ADMIN("ROLE_ADMIN"),
+    USER("ROLE_USER");
 
     private final String value;
 
