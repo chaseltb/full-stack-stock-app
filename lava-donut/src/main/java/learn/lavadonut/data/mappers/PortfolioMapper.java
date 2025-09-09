@@ -12,7 +12,7 @@ public class PortfolioMapper implements RowMapper<Portfolio> {
     public Portfolio mapRow(ResultSet resultSet, int i) throws SQLException {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(resultSet.getInt("portfolio_id"));
-        portfolio.setAccountType(AccountType.valueOf(resultSet.getString("accout_type")));
+        portfolio.setAccountType(AccountType.valueOf(resultSet.getString("account_type")));
         portfolio.setUserId(resultSet.getInt("user_id"));
 
         return portfolio;

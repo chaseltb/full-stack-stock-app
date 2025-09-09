@@ -85,7 +85,7 @@ public class OrderService {
         }
 
         // shares must be greater than 0
-        if (order.getNumberOfShares() <= 0) {
+        if (order.getNumberOfShares().compareTo(BigDecimal.ZERO) <= 0) {
             result.addMessage("shares must be greater than 0", ResultType.INVALID);
         }
 

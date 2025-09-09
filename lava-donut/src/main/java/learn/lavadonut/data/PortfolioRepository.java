@@ -14,6 +14,7 @@ public interface PortfolioRepository {
     Portfolio addStockToPortfolio(int userId, Stock stock);
     boolean deleteStockFromPortfolio(int userId, int stockId);
     List<Stock> findAllStocksInPortfolio(int userId);
+    List<Order> findOrdersByUserId(int userId);
     boolean updateAccountType(int userId, AccountType accountType);
     boolean sellStockFromPortfolio(int userId, int stockId);
 //TODO should the service do the calculation

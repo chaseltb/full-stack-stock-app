@@ -1,8 +1,10 @@
 package learn.lavadonut.data.mappers;
 
 import learn.lavadonut.models.Order;
+import learn.lavadonut.models.TransactionType;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -18,7 +20,7 @@ public class OrderMapper implements RowMapper<Order> {
         // order.setUserId(resultSet.getInt("user_id");
         setDateTimeFromResultSet(order, resultSet);
         order.setTransactionType(TransactionType.valueOf(resultSet.getString("transaction_type")));
-        order.setNumberOfShares(resultSet.getDouble("shares"));
+        order.setNumberOfShares(BigDecimal.valueOf(resultSet.getDouble("shares")));
         return order;
     }
 

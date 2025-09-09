@@ -1,7 +1,6 @@
 package learn.lavadonut.models;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -10,7 +9,7 @@ public class Order {
     private int id;
     private TransactionType transactionType;
     private int stockId;
-    private double numberOfShares; // since it can be a decimal
+    private BigDecimal numberOfShares; // since it can be a decimal
     private ZonedDateTime dateTime;
     private BigDecimal price;
     private int userId;
@@ -19,7 +18,7 @@ public class Order {
     public Order(){
     }
 
-    public Order(int id, TransactionType transactionType, int stockId, double numberOfShares, ZonedDateTime dateTime, BigDecimal price, int userId) {
+    public Order(int id, TransactionType transactionType, int stockId, BigDecimal numberOfShares, ZonedDateTime dateTime, BigDecimal price, int userId) {
         this.id = id;
         this.transactionType = transactionType;
         this.stockId = stockId;
@@ -54,11 +53,11 @@ public class Order {
         this.stockId = stockId;
     }
 
-    public double getNumberOfShares() {
+    public BigDecimal getNumberOfShares() {
         return numberOfShares;
     }
 
-    public void setNumberOfShares(double numberOfShares) {
+    public void setNumberOfShares(BigDecimal numberOfShares) {
         this.numberOfShares = numberOfShares;
     }
 
@@ -104,7 +103,7 @@ public class Order {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id && stockId == order.stockId && Double.compare(numberOfShares, order.numberOfShares) == 0 && userId == order.userId && transactionType == order.transactionType && Objects.equals(dateTime, order.dateTime) && Objects.equals(price, order.price);
+        return id == order.id && stockId == order.stockId && userId == order.userId && transactionType == order.transactionType && Objects.equals(numberOfShares, order.numberOfShares) && Objects.equals(dateTime, order.dateTime) && Objects.equals(price, order.price);
     }
 
     @Override
