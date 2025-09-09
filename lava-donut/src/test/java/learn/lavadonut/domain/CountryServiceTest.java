@@ -31,7 +31,7 @@ class CountryServiceTest {
     @Test
     void shouldFindById() {
         Country country = makeCountry();
-
+        when(repository.findById(1)).thenReturn(country);
         Country actual = service.findById(1);
         assertEquals(country, actual);
 
@@ -140,9 +140,10 @@ class CountryServiceTest {
         currency.setValueToUsd(new BigDecimal("1.17"));
 
         Country country = new Country(999, currency, "Italy", "ITA");
-        when(repository.update(country)).thenReturn(true);
+        when(repository.update(country)).thenReturn(false);
         Result<Country> result = service.update(country);
 
+        System.out.println(result.getType());
         assertEquals(ResultType.NOT_FOUND, result.getType());
         assertNull(result.getPayload());
     }
