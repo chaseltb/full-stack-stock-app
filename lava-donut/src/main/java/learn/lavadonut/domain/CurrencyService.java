@@ -19,7 +19,19 @@ public class CurrencyService {
 
     //TODO: add, update, delete, validate
     public Result<Currency> add(Currency currency){
+        Result<Currency> result = validate(currency);
+        if (!result.isSuccess() ){
+            return result;
+        }
 
+        if (currency.getId() != 0){
+            result.addMessage("currency cannot be set for 'add' operation!", ResultType.INVALID);
+            return result;
+        }
+
+        currency = repository.add(currency);
+        result.setPayload(currency);
+        return result;
     }
 
     public Result<Currency> update(Currency currency){
