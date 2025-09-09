@@ -44,10 +44,12 @@ public class PortfolioService {
     }
     //TODO should this return a result?
     public BigDecimal getPortfolioValue(int userId, String date) {
-        //TODO error handling
+        //TODO error handling for date
         LocalDate searchDate = LocalDate.parse(date);
         List<Order> orders = repo.findOrdersByUserId(userId);
-
+        if (orders == null) {
+            return null;
+        }
         BigDecimal totalValue = BigDecimal.ZERO;
 
         for (Order order : orders) {
