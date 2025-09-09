@@ -86,4 +86,13 @@ class CurrencyJdbcTemplateRepositoryTest {
 
         assertEquals(NEXT_ID, actual.getId());
     }
+
+    @Test
+    void shouldNotAddWithNullCurrency(){ // UNHAPPY PATH
+        Currency currency = null;
+
+        Currency actual = repository.add(currency);
+
+        assertNull(actual);
+    }
 }
