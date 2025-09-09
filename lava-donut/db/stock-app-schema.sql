@@ -1,14 +1,14 @@
-drop database if exists stock_schema;
-create database stock_schema;
-use stock_schema;
+drop database if exists stock_app;
+create database stock_app;
+use stock_app;
 
 -- SCHEMA
 -- create tables and table relationships in accordance to ERD.png in root file
 create table currencies (
 	currency_id int primary key auto_increment,
     `name` varchar(50) not null, -- EX: Euros
-    `code` varchar(12) not null,  -- EX: ISO 4217  
-    value_to_usd decimal not null, -- EX: 1.17
+    `code` varchar(12) not null,  -- EX: EUR 
+    value_to_usd decimal(10,4) not null, -- EX: 1.17
     UNIQUE (`code`),
     CHECK (value_to_usd > 0)
 );
@@ -54,7 +54,7 @@ create table orders (
 	order_id int primary key auto_increment,
     transaction_type varchar(4) not null, 
     shares int not null,
-    price decimal not null,
+    price decimal(10,4) not null,
     `date` date not null,
     stock_id int not null,
     CONSTRAINT fk_orders_stock_id

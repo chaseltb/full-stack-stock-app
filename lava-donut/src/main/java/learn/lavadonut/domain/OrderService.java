@@ -13,7 +13,7 @@ public class OrderService {
     // fields
     private final OrderRepository repository;
 
-    private OrderService(OrderRepository repository) {
+    public OrderService(OrderRepository repository) {
         this.repository = repository;
     }
 
@@ -59,6 +59,7 @@ public class OrderService {
             result.addMessage(msg, ResultType.NOT_FOUND);
         }
 
+        result.setPayload(order);
         return result;
     }
 
