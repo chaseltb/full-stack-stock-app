@@ -12,8 +12,8 @@ public class StockExchangeMapper implements RowMapper<StockExchange> {
         StockExchange se = new StockExchange();
 
         se.setId(resultSet.getInt("stock_exchange_id"));
-        se.setName("name");
-        se.setCode("code");
+        se.setName("exchange_name");
+        se.setCode("exchange_code");
         se.setTimeZone("timezone");
 
         return se;

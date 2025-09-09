@@ -13,8 +13,8 @@ public class CurrencyMapper implements RowMapper<Currency> {
         Currency currency = new Currency();
 
         currency.setId(resultSet.getInt("currency_id"));
-        currency.setName(resultSet.getString("name"));
-        currency.setCode(resultSet.getString("code"));
+        currency.setName(resultSet.getString("currency_name"));
+        currency.setCode(resultSet.getString("currency_code"));
         currency.setValueToUsd(BigDecimal.valueOf(resultSet.getFloat("value_to_usd")));
 
         return currency;

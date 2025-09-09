@@ -1,6 +1,7 @@
 package learn.lavadonut.data.mappers;
 
 import learn.lavadonut.models.Order;
+import learn.lavadonut.models.TransactionType;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.math.BigDecimal;

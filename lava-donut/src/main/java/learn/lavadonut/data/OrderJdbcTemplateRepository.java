@@ -32,7 +32,7 @@ public class OrderJdbcTemplateRepository implements OrderRepository {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, order.getStockId());
             ps.setString(2, order.getTransactionType().name());
-            ps.setDouble(3, order.getNumberOfShares());
+            ps.setBigDecimal(3, order.getNumberOfShares());
             ps.setBigDecimal(4, order.getPrice());
             ZonedDateTime zonedDateTime = order.getDateTime();
             if (zonedDateTime != null) {

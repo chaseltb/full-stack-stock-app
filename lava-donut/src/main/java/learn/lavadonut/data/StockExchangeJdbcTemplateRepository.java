@@ -21,14 +21,16 @@ public class StockExchangeJdbcTemplateRepository implements StockExchangeReposit
 
     @Override
     public List<StockExchange> findAll() {
-        final String sql = "select stock_exchange_id, `name`, `code` " +
+        final String sql = "select stock_exchange_id, `name` as exchange_name, " +
+                "`code` as exchange_code" +
                 "from stock_exchange;";
         return jdbcTemplate.query(sql, new StockExchangeMapper());
     }
 
     @Override
     public StockExchange findById(int id) {
-        final String sql = "select stock_exchange_id, `name`, `code`, time_zone " +
+        final String sql = "select stock_exchange_id, `name` as exchange_name, " +
+                " `code` as exchange_code, time_zone " +
                 "from stock_exchange where stock_exchange_id = ?;";
         return jdbcTemplate.query(sql, new StockExchangeMapper(), id)
                 .stream()

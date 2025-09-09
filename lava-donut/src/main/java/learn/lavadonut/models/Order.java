@@ -18,7 +18,7 @@ public class Order {
     public Order(){
     }
 
-    public Order(int id, TransactionType transactionType, int stockId, double numberOfShares, ZonedDateTime dateTime, BigDecimal price, int userId) {
+    public Order(int id, TransactionType transactionType, int stockId, BigDecimal numberOfShares, ZonedDateTime dateTime, BigDecimal price, int userId) {
         this.id = id;
         this.transactionType = transactionType;
         this.stockId = stockId;
@@ -57,7 +57,7 @@ public class Order {
         return numberOfShares;
     }
 
-    public BigDecimal setNumberOfShares(BigDecimal numberOfShares) {
+    public void setNumberOfShares(BigDecimal numberOfShares) {
         this.numberOfShares = numberOfShares;
     }
 
@@ -103,7 +103,7 @@ public class Order {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id && stockId == order.stockId && Double.compare(numberOfShares, order.numberOfShares) == 0 && userId == order.userId && transactionType == order.transactionType && Objects.equals(dateTime, order.dateTime) && Objects.equals(price, order.price);
+        return id == order.id && stockId == order.stockId && userId == order.userId && transactionType == order.transactionType && Objects.equals(numberOfShares, order.numberOfShares) && Objects.equals(dateTime, order.dateTime) && Objects.equals(price, order.price);
     }
 
     @Override
