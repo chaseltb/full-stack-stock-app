@@ -67,13 +67,16 @@ create table orders (
 
 create table `user` (
 	user_id int primary key auto_increment,
-    username varchar(25) not null,
     first_name varchar(150) not null,
     last_name varchar(150) not null,
     currency_id int not null,
+    app_user_id int not null,
     CONSTRAINT fk_user_currency_id
 		foreign key (currency_id)
         references currencies(currency_id),
+    CONSTRAINT fk_user_app_user_id
+    		foreign key (app_user_id)
+            references app_user(app_user_id),
 	UNIQUE (username)
 );
 

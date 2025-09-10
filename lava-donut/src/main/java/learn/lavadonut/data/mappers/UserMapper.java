@@ -15,10 +15,10 @@ public class UserMapper implements RowMapper<User> {
         user.setUserId(resultSet.getInt("user_id"));
         user.setCurrencyId(resultSet.getInt("currency_id"));
 
-        user.setUsername(resultSet.getString("username"));
-
         user.setFirstName(resultSet.getString("first_name"));
         user.setLastName(resultSet.getString("last_name"));
+
+        user.setAppUserId(resultSet.getInt("app_user_id"));
         return user;
     }
 }

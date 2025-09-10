@@ -34,7 +34,7 @@ class UserServiceTest {
     public void setUp() {
         when(currencyRepo.findById(1))
                 .thenReturn(getTestCurrency());
-        when(userRepo.findByUsername("JimmyJam")).thenReturn(null);
+        when(userRepo.findByUserId(1)).thenReturn(null);
     }
 
 
@@ -45,7 +45,7 @@ class UserServiceTest {
         user1.setUserId(1);
         User user2 = getTestUser();
         user2.setUserId(2);
-        user2.setUsername("JJJ");
+        user2.setAppUserId(2);
         users.add(user1);
         users.add(user2);
         when(userRepo.findAll()).thenReturn(users);
@@ -54,10 +54,10 @@ class UserServiceTest {
     }
 
     @Test
-    public void shouldFindByUsername() {
+    public void shouldFindByUserId() {
         User user = getTestUser();
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(user);
-        User result = service.findByUsername(user.getUsername());
+        when(userRepo.findByUserId(user.getUserId())).thenReturn(user);
+        User result = service.findByUserId(user.getUserId());
         assertNotNull(result);
         assertEquals(user, result);
     }
@@ -65,8 +65,8 @@ class UserServiceTest {
     @Test
     public void shouldNotFindNonexistingUsername() {
         User user = getTestUser();
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(null);
-        User result = service.findByUsername(user.getUsername());
+        when(userRepo.findByUserId(user.getUserId())).thenReturn(null);
+        User result = service.findByUserId(user.getUserId());
         assertNull(result);
     }
 
@@ -91,39 +91,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void shouldNotAddUserWithNullUsername() {
-        User user = getTestUser();
-        user.setUsername(null);
-        Result<User> result = service.add(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotAddUserWithBlankUsername() {
-        User user = getTestUser();
-        user.setUsername("");
-        Result<User> result = service.add(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotAddRepeatUsername() {
-        User user = getTestUser();
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(user);
-        Result<User> result = service.add(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotAddOver50CharUsername() {
-        User user = getTestUser();
-        user.setUsername("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-        Result<User> result = service.add(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotAddUserWithPositiveCurrencyId() {
+    public void shouldNotAddUserWithNegativeCurrencyId() {
         User user = getTestUser();
         user.setCurrencyId(-1);
         Result<User> result = service.add(user);
@@ -190,11 +158,35 @@ class UserServiceTest {
     }
 
     @Test
+    public void shouldNotAddUserNoAppUserId() {
+        User user = getTestUser();
+        user.setAppUserId(0);
+        Result<User> result = service.add(user);
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    public void shouldNotAddUserWithDuplicateAppUserId() {
+        User user = getTestUser();
+        user.setAppUserId(1);
+
+        User existing = getTestUser();
+        existing.setUserId(10);
+        existing.setAppUserId(1);
+
+        when(userRepo.findByUserId(1)).thenReturn(existing);
+
+        Result<User> result = service.add(user);
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
     public void shouldUpdateUser() {
         User user = getTestUpdateUser();
-        user.setUsername("Jimbo");
+        user.setAppUserId(2);
         user.setFirstName("James");
 
+        when(userRepo.update(user)).thenReturn(true);
         Result<User> result = service.update(user);
         assertTrue(result.isSuccess());
         assertEquals(result.getPayload(), user);
@@ -217,41 +209,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void shouldNotUpdateUserWithNullUsername() {
-        User user = getTestUpdateUser();
-        user.setUsername(null);
-        Result<User> result = service.update(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotUpdateUserWithBlankUsername() {
-        User user = getTestUpdateUser();
-        user.setUsername("");
-        Result<User> result = service.update(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotUpdateRepeatUsername() {
-        User user = getTestUpdateUser();
-        User repeat = getTestUpdateUser();
-        repeat.setUserId(10);
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(repeat);
-        Result<User> result = service.update(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotUpdateOver50CharUsername() {
-        User user = getTestUpdateUser();
-        user.setUsername("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-        Result<User> result = service.update(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotUpdateUserWithPositiveCurrencyId() {
+    public void shouldNotUpdateUserWithNegativeCurrencyId() {
         User user = getTestUpdateUser();
         user.setCurrencyId(-1);
         Result<User> result = service.update(user);
@@ -318,6 +276,29 @@ class UserServiceTest {
     }
 
     @Test
+    public void shouldNotUpdateUserNoAppUserId() {
+        User user = getTestUser();
+        user.setAppUserId(0);
+        Result<User> result = service.update(user);
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    public void shouldNotUpdateUserWithDuplicateAppUserId() {
+        User user = getTestUpdateUser();
+        user.setAppUserId(2);
+
+        User existing = getTestUser();
+        existing.setUserId(99);
+        existing.setAppUserId(2);
+
+        when(userRepo.findByUserId(2)).thenReturn(existing);
+
+        Result<User> result = service.update(user);
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
     public void shouldDeleteUser() {
         when(userRepo.deleteById(1)).thenReturn(true);
         boolean result = service.deleteById(1);
@@ -344,7 +325,7 @@ class UserServiceTest {
         user.setCurrencyId(1);
         user.setFirstName("Jimmy");
         user.setLastName("Jam");
-        user.setUsername("JimmyJam");
+        user.setAppUserId(1);
         return user;
     }
 

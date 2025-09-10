@@ -67,13 +67,16 @@ create table orders (
 
 create table `user` (
 	user_id int primary key auto_increment,
-    username varchar(25) not null,
     first_name varchar(150) not null,
     last_name varchar(150) not null,
     currency_id int not null,
+    app_user_id int not null,
     CONSTRAINT fk_user_currency_id
 		foreign key (currency_id)
         references currencies(currency_id),
+    CONSTRAINT fk_user_app_user_id
+    		foreign key (app_user_id)
+            references app_user(app_user_id),
 	UNIQUE (username)
 );
 
@@ -190,11 +193,11 @@ begin
         (6, 'SELL', 5, 8.05, '2023-07-05', 9);
 
 	insert into `user`
-		(user_id, username, first_name, last_name, currency_id)
+		(user_id, first_name, last_name, currency_id, app_user_id)
 	values
-		(1, 'americanUser', 'TEST FIRST NAME', 'TEST LAST NAME', 1),
-        (2, 'germanUser', 'TEST FIRST NAME', 'TEST LAST NAME', 2),
-        (3, 'chineseUser', 'TEST FIRST NAME', 'TEST LAST NAME', 3);
+		(1, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1),
+        (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2),
+        (3, 'TEST FIRST NAME', 'TEST LAST NAME', 3, 3);
 	
     insert into portfolio
 		(portfolio_id, account_type, user_id)

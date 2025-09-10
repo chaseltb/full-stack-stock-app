@@ -20,8 +20,8 @@ public class UserService {
         return repo.findAll();
     }
 
-    public User findByUsername(String username) {
-        return repo.findByUsername(username);
+    public User findByUserId(int userId) {
+        return repo.findByUserId(userId);
     }
 
     public Result<User> add(User user) {
@@ -35,8 +35,8 @@ public class UserService {
             return result;
         }
 
-        if (repo.findByUsername(user.getUsername()) != null) {
-            result.addMessage("There is already a user with this username", ResultType.INVALID);
+        if (repo.findByUserId(user.getUserId()) != null) {
+            result.addMessage("There is already a user with this user id", ResultType.INVALID);
             return result;
         }
 
@@ -58,14 +58,14 @@ public class UserService {
         }
 
         // duplicate check
-        User existing = repo.findByUsername(user.getUsername());
-        if (existing != null && existing.getUserId() != user.getUserId()) {
-            result.addMessage("There is already a user with that username", ResultType.INVALID);
+        User existing = repo.findByUserId(user.getUserId());
+        if (existing != null) {
+            result.addMessage("There is already a user with that user id", ResultType.INVALID);
             return result;
         }
 
         if (!repo.update(user)) {
-            String msg = String.format("Username: %s, was not found", user.getUsername());
+            String msg = String.format("User Id: %s, was not found", user.getUserId());
             result.addMessage(msg, ResultType.NOT_FOUND);
         }
 
@@ -81,13 +81,6 @@ public class UserService {
         if (user == null) {
             result.addMessage("User can't be null", ResultType.INVALID);
             return result;
-        }
-
-        // username
-        if (Validations.isNullOrBlank(user.getUsername())) {
-            result.addMessage("Username is required", ResultType.INVALID);
-        } else if (user.getUsername().length() > 50) {
-            result.addMessage("Username must be less than or equal to 50 characters", ResultType.INVALID);
         }
 
         // first name
@@ -109,6 +102,12 @@ public class UserService {
             result.addMessage("The user's currency id must be greater than 0", ResultType.INVALID);
         }
 
+        // app user id
+        if (user.getAppUserId() <= 0) {
+            result.addMessage("The user's app user id must be greater than 0", ResultType.INVALID);
+        }
+
         return result;
     }
+
 }
