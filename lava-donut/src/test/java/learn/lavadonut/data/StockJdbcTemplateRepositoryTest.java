@@ -105,6 +105,13 @@ class StockJdbcTemplateRepositoryTest {
         assertEquals(NEXT_ID, actual.getId());
     }
 
+    @Test
+    void shouldNotAddWithNullStock(){ // UNHAPPY PATH
+        Stock stock = null;
+        Stock actual = repository.add(stock);
+        assertNull(actual);
+    }
+
     private Stock makeStock(){
         Stock stock = new Stock();
 
