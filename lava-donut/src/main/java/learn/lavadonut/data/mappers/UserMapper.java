@@ -2,7 +2,6 @@ package learn.lavadonut.data.mappers;
 
 
 import learn.lavadonut.models.User;
-import learn.lavadonut.models.UserType;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

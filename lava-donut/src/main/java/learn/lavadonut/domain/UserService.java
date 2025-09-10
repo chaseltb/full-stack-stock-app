@@ -12,11 +12,8 @@ public class UserService {
 
     private final UserRepository repo;
 
-    private final PasswordEncoder encoder;
-
-    public UserService(UserRepository repo, PasswordEncoder encoder) {
+    public UserService(UserRepository repo) {
         this.repo = repo;
-        this.encoder = encoder;
     }
 
     public List<User> findAll() {
@@ -43,8 +40,6 @@ public class UserService {
             return result;
         }
 
-        user.setPasswordHashed(encoder.encode(user.getPasswordHashed()));
-
         user = repo.add(user);
         result.setPayload(user);
         return result;
@@ -67,11 +62,6 @@ public class UserService {
         if (existing != null && existing.getUserId() != user.getUserId()) {
             result.addMessage("There is already a user with that username", ResultType.INVALID);
             return result;
-        }
-
-        // make sure that the password is hashed
-        if (existing != null && !user.getPasswordHashed().equals(existing.getPasswordHashed())) {
-            user.setPasswordHashed(encoder.encode(user.getPasswordHashed()));
         }
 
         if (!repo.update(user)) {
@@ -112,11 +102,6 @@ public class UserService {
             result.addMessage("Last Name is required", ResultType.INVALID);
         } else if (user.getLastName().length() > 50) {
             result.addMessage("Last Name must be less than or equal to 50 characters", ResultType.INVALID);
-        }
-
-        // permission
-        if (user.getPermission() == null) {
-            result.addMessage("User permission level is required and must be a valid enum value", ResultType.INVALID);
         }
 
         // currency id

@@ -4,7 +4,6 @@ import learn.lavadonut.data.CurrencyRepository;
 import learn.lavadonut.data.UserRepository;
 import learn.lavadonut.models.Currency;
 import learn.lavadonut.models.User;
-import learn.lavadonut.models.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,22 +123,6 @@ class UserServiceTest {
     }
 
     @Test
-    public void shouldNotAddUserNullPassword() {
-        User user = getTestUser();
-        user.setPasswordHashed(null);
-        Result<User> result = service.add(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotAddUserBlankPassword() {
-        User user = getTestUser();
-        user.setPasswordHashed("");
-        Result<User> result = service.add(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
     public void shouldNotAddUserWithPositiveCurrencyId() {
         User user = getTestUser();
         user.setCurrencyId(-1);
@@ -207,22 +190,9 @@ class UserServiceTest {
     }
 
     @Test
-    public void shouldNotAddUserWithNullPermission() {
-
-        User user = getTestUser();
-        user.setPermission(null);
-        Result<User> result = service.add(user);
-        assertFalse(result.isSuccess());
-
-    }
-
-
-    @Test
     public void shouldUpdateUser() {
         User user = getTestUpdateUser();
-        user.setPermission(UserType.ADMIN);
         user.setUsername("Jimbo");
-        user.setPasswordHashed("aef4315123");
         user.setFirstName("James");
 
         Result<User> result = service.update(user);
@@ -276,22 +246,6 @@ class UserServiceTest {
     public void shouldNotUpdateOver50CharUsername() {
         User user = getTestUpdateUser();
         user.setUsername("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-        Result<User> result = service.update(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotUpdateUserNullPassword() {
-        User user = getTestUpdateUser();
-        user.setPasswordHashed(null);
-        Result<User> result = service.update(user);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
-    public void shouldNotUpdateUserBlankPassword() {
-        User user = getTestUpdateUser();
-        user.setPasswordHashed("");
         Result<User> result = service.update(user);
         assertFalse(result.isSuccess());
     }
@@ -364,16 +318,6 @@ class UserServiceTest {
     }
 
     @Test
-    public void shouldNotUpdateUserWithNullPermission() {
-
-        User user = getTestUpdateUser();
-        user.setPermission(null);
-        Result<User> result = service.update(user);
-        assertFalse(result.isSuccess());
-
-    }
-
-    @Test
     public void shouldDeleteUser() {
         when(userRepo.deleteById(1)).thenReturn(true);
         boolean result = service.deleteById(1);
@@ -401,8 +345,6 @@ class UserServiceTest {
         user.setFirstName("Jimmy");
         user.setLastName("Jam");
         user.setUsername("JimmyJam");
-        user.setPasswordHashed("D35AE22394");
-        user.setPermission(UserType.USER);
         return user;
     }
 

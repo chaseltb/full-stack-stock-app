@@ -1,7 +1,6 @@
 package learn.lavadonut.data;
 
 import learn.lavadonut.models.User;
-import learn.lavadonut.models.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +33,8 @@ class UserJdbcRepositoryTest {
         assertNotNull(actual);
         assertEquals(1, actual.getUserId());
         assertEquals("americanUser", actual.getUsername());
-        assertEquals("toBeHashed", actual.getPasswordHashed());
         assertEquals("TEST FIRST NAME", actual.getFirstName());
         assertEquals("TEST LAST NAME", actual.getLastName());
-        assertEquals(UserType.USER, actual.getPermission());
         assertEquals(3, actual.getCurrencyId());
 
     }
@@ -86,8 +83,6 @@ class UserJdbcRepositoryTest {
         user.setFirstName("Jimmy");
         user.setLastName("Jam");
         user.setUsername("JimmyJam");
-        user.setPasswordHashed("D35AE22394");
-        user.setPermission(UserType.USER);
         return user;
     }
 }

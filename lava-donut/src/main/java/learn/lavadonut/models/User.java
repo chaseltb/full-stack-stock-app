@@ -6,10 +6,8 @@ public class User {
     private int userId;
     private int currencyId;
     private String username;
-    private String passwordHashed;
     private String firstName;
     private String lastName;
-    private UserType permission;
 
     public int getUserId() {
         return userId;
@@ -35,14 +33,6 @@ public class User {
         this.username = username;
     }
 
-    public String getPasswordHashed() {
-        return passwordHashed;
-    }
-
-    public void setPasswordHashed(String passwordHashed) {
-        this.passwordHashed = passwordHashed;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -59,23 +49,16 @@ public class User {
         this.lastName = lastName;
     }
 
-    public UserType getPermission() {
-        return permission;
-    }
-
-    public void setPermission(UserType permission) {
-        this.permission = permission;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return userId == user.userId && currencyId == user.currencyId && Objects.equals(username, user.username) && Objects.equals(passwordHashed, user.passwordHashed) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && permission == user.permission;
+        return userId == user.userId && currencyId == user.currencyId && Objects.equals(username, user.username) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, currencyId, username, passwordHashed, firstName, lastName, permission);
+        return Objects.hash(userId, currencyId, username, firstName, lastName);
     }
 }
