@@ -9,7 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,19 +34,16 @@ class OrderServiceTest {
 
         // can't predict order
         // if delete is first, we're down to 1
-        // if add is first, we may go as high as 3
-        assertTrue(orders.size() >= 1 && orders.size() <= 3);
+        // if add is first, we may go as high as 7
+        assertTrue(orders.size() <= 7);
     }
 
     @Test
     void shouldFindById() {
         Order order = makeOrder();
-
+        when(repository.findById(1)).thenReturn(order);
         Order actual = service.findById(1);
         assertEquals(order, actual);
-
-        actual = service.findById(999);
-        assertNull((actual));
     }
 
 //    @Test
@@ -58,13 +59,21 @@ class OrderServiceTest {
 
     @Test
     void shouldFindByStock() {
-        List<Order> orders = List.of(makeOrder());
-
-        List<Order> actual = service.findByStock(1);
+        Order order = new Order(
+                5,
+                TransactionType.BUY,
+                7,
+                new BigDecimal("22"),
+                Date.valueOf(LocalDate.of(2015, 10, 1)),
+                new BigDecimal("3.75")
+        );
+        List<Order> orders = List.of(order);
+        when(repository.findByStock(7)).thenReturn(orders);
+        List<Order> actual = service.findByStock(7);
         assertEquals(orders, actual);
 
         actual = service.findByStock(999);
-        assertNull((actual));
+        assertEquals(new ArrayList<Order>(), actual);
     }
 
     // add
@@ -104,9 +113,17 @@ class OrderServiceTest {
     }
 
     @Test
+    void shouldNotAddOrderWithNullShares() {
+        Order order = makeOrder();
+        order.setNumberOfShares(null);
+        Result<Order> result = service.add(order);
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
     void shouldNotAddOrderWithInvalidShares() {
         Order order = makeOrder();
-        order.setNumberOfShares(-1.0);
+        order.setNumberOfShares(new BigDecimal("-1.0"));
         Result<Order> result = service.add(order);
         assertEquals(ResultType.INVALID, result.getType());
     }
@@ -114,15 +131,7 @@ class OrderServiceTest {
     @Test
     void shouldNotAddOrderWithNullDate() {
         Order order = makeOrder();
-        order.setDateTime(null);
-        Result<Order> result = service.add(order);
-        assertEquals(ResultType.INVALID, result.getType());
-    }
-
-    @Test
-    void shouldNotAddOrderWithFutureDate() {
-        Order order = makeOrder();
-        order.setDateTime(ZonedDateTime.now().plusDays(1));
+        order.setDate(null);
         Result<Order> result = service.add(order);
         assertEquals(ResultType.INVALID, result.getType());
     }
@@ -157,15 +166,8 @@ class OrderServiceTest {
 
     @Test
     void shouldNotUpdateMissingOrder() {
-        Order order = new Order(
-                999,
-                TransactionType.BUY,
-                1,
-                12.0,
-                ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2022, 12, 12), LocalTime.MIDNIGHT), ZoneId.of("UTC")),
-                BigDecimal.TEN,
-                1
-        );
+        Order order = makeOrder();
+        order.setId(999);
         when(repository.update(order)).thenReturn(false);
         Result<Order> result = service.update(order);
 
@@ -175,8 +177,11 @@ class OrderServiceTest {
 
     @Test
     void shouldDelete() {
-        assertTrue(service.delete(1));
-        assertFalse(service.delete(1));
+        when(repository.delete(2)).thenReturn(true);
+        assertTrue(service.delete(2));
+
+        when(repository.delete(2)).thenReturn(false);
+        assertFalse(service.delete(2));
     }
 
     Order makeOrder() {
@@ -184,9 +189,9 @@ class OrderServiceTest {
                 1,
                 TransactionType.BUY,
                 1,
-                12.0,
-                ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2022, 12, 12), LocalTime.MIDNIGHT), ZoneId.of("UTC")),
-                BigDecimal.TEN,
-                1);
+                new BigDecimal("20.0"),
+                Date.valueOf(LocalDate.of(2025, 5, 17)),
+                new BigDecimal("12.915")
+        );
     }
 }

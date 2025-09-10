@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,8 +37,8 @@ class OrderJdbcTemplateRepositoryTest {
 
         // can't predict order
         // if delete is first, we're down to 1
-        // if add is first, we may go as high as 3
-        assertTrue(orders.size() >= 1 && orders.size() <= 3);
+        // if add is first, we may go as high as 7
+        assertTrue(!orders.isEmpty() && orders.size() <= 7);
     }
 
     @Test
@@ -61,13 +65,21 @@ class OrderJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindByStock() {
-        List<Order> orders = List.of(makeOrder());
+        Order order = new Order(
+                5,
+                TransactionType.BUY,
+                7,
+                new BigDecimal("22"),
+                Date.valueOf(LocalDate.of(2015, 10, 1)),
+                new BigDecimal("3.75")
+        );
+        List<Order> orders = List.of(order);
 
-        List<Order> actual = repository.findByStock(1);
+        List<Order> actual = repository.findByStock(7);
         assertEquals(orders, actual);
 
         actual = repository.findByStock(999);
-        assertNull((actual));
+        assertEquals(new ArrayList<Order>(), actual);
     }
 
     @Test
@@ -79,16 +91,27 @@ class OrderJdbcTemplateRepositoryTest {
 
     @Test
     void shouldUpdate() {
-        Order order = makeOrder();
-        order.setNumberOfShares(15.0);
+        Order order = new Order(
+                3,
+                TransactionType.BUY,
+                1,
+                new BigDecimal("5.075"),
+                Date.valueOf(LocalDate.of(2022, 5, 17)),
+                new BigDecimal("12.915")
+        );
+        System.out.println(order);
+        System.out.println(repository.findById(3));
         assertTrue(repository.update(order));
-        assertFalse(repository.update(new Order()));
+
+
+        order.setId(999);
+        assertFalse(repository.update(order));
     }
 
     @Test
     void shouldDelete() {
-        assertTrue(repository.delete(1));
-        assertFalse(repository.delete(1));
+        assertTrue(repository.delete(2));
+        assertFalse(repository.delete(2));
     }
 
     Order makeOrder() {
@@ -96,9 +119,9 @@ class OrderJdbcTemplateRepositoryTest {
                 1,
                 TransactionType.BUY,
                 1,
-                12.0,
-                ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2022, 12, 12), LocalTime.MIDNIGHT), ZoneId.of("UTC")),
-                BigDecimal.TEN,
-                1);
+                new BigDecimal("20.0"),
+                Date.valueOf(LocalDate.of(2025, 5, 17)),
+                new BigDecimal("12.915")
+                );
     }
 }

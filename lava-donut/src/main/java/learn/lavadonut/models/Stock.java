@@ -65,4 +65,12 @@ public class Stock {
     public void setCountry(Country country) {
         this.country = country;
     }
+
+    public boolean equals(Stock stock){
+        return (this.name.equalsIgnoreCase(stock.getName())
+                && this.ticker.equalsIgnoreCase(stock.getTicker())
+                && this.assetType == stock.getAssetType()
+                && this.country.getId() == stock.getCountry().getId()
+                && this.stockExchange.getId() == stock.getStockExchange().getId());
+    }
 }

@@ -7,10 +7,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.sql.Types;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -34,12 +34,7 @@ public class OrderJdbcTemplateRepository implements OrderRepository {
             ps.setString(2, order.getTransactionType().name());
             ps.setBigDecimal(3, order.getNumberOfShares());
             ps.setBigDecimal(4, order.getPrice());
-            ZonedDateTime zonedDateTime = order.getDateTime();
-            if (zonedDateTime != null) {
-                ps.setTimestamp(5, Timestamp.from(zonedDateTime.toInstant()));
-            } else {
-                ps.setNull(5, Types.TIMESTAMP);
-            }
+            ps.setDate(5, order.getDate());
             return ps;
         }, keyHolder);
 
@@ -63,13 +58,13 @@ public class OrderJdbcTemplateRepository implements OrderRepository {
 
     @Override
     public List<Order> findAll() {
-        final String sql = "select order_id, stock_id, transaction_type, shares, price, `date` from orders`;";
+        final String sql = "select order_id, stock_id, transaction_type, shares, price, `date` from orders;";
         return jdbcTemplate.query(sql, new OrderMapper());
     }
 
 //    @Override
 //    public List<Order> findByUser(int userId) {
-//        String sql = "select order_id, stock_id, transaction_type, shares, price, `date` " +
+//        String sql = "select order_id, stock_id, transaction_type, shares, price, `date`, order_time, timezone_offset " +
 //                "from orders " +
 //                "where user_id = ?;";
 //
@@ -96,12 +91,16 @@ public class OrderJdbcTemplateRepository implements OrderRepository {
                 "where order_id = ?;";
 
         return jdbcTemplate.update(sql,
-                order.getStockId(), order.getTransactionType(), order.getNumberOfShares(), order.getPrice(), order.getDateTime(), order.getId()) > 0;
+                order.getStockId(), order.getTransactionType().name(), order.getNumberOfShares(), order.getPrice(), order.getDate(), order.getId()) > 0;
     }
 
     @Override
     public boolean delete(int id) {
-        final String sql = "delete from orders where order_id = ?;";
+        // handle portfolio orders
+        String sql = "delete from portfolio_orders where order_id = ?";
+        jdbcTemplate.update(sql, id);
+
+        sql = "delete from orders where order_id = ?;";
         return jdbcTemplate.update(sql, id) > 0;
     }
 }

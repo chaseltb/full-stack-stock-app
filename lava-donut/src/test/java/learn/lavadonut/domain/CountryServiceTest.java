@@ -31,7 +31,7 @@ class CountryServiceTest {
     @Test
     void shouldFindById() {
         Country country = makeCountry();
-
+        when(repository.findById(1)).thenReturn(country);
         Country actual = service.findById(1);
         assertEquals(country, actual);
 
@@ -140,26 +140,30 @@ class CountryServiceTest {
         currency.setValueToUsd(new BigDecimal("1.17"));
 
         Country country = new Country(999, currency, "Italy", "ITA");
-        when(repository.update(country)).thenReturn(true);
+        when(repository.update(country)).thenReturn(false);
         Result<Country> result = service.update(country);
 
+        System.out.println(result.getType());
         assertEquals(ResultType.NOT_FOUND, result.getType());
         assertNull(result.getPayload());
     }
 
     @Test
     void shouldDelete() {
-        assertTrue(service.delete(1));
-        assertFalse(service.delete(1));
+        when(repository.delete(3)).thenReturn(true);
+        assertTrue(service.delete(3));
+
+        when(repository.delete(3)).thenReturn(false);
+        assertFalse(service.delete(3));
     }
 
     Country makeCountry() {
         Currency currency = new Currency();
         currency.setId(1);
-        currency.setName("Euro");
-        currency.setCode("ISO 4217");
-        currency.setValueToUsd(new BigDecimal("1.17"));
+        currency.setName("United States dollar");
+        currency.setCode("USD");
+        currency.setValueToUsd(new BigDecimal("1.0"));
 
-        return new Country(1, currency, "Italy", "ITA");
+        return new Country(1, currency, "United States of America", "US");
     }
 }

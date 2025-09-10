@@ -46,9 +46,10 @@ public class CountryService {
         if (!repository.update(country)) {
             String msg = String.format("order id: %s, not found", country.getId());
             result.addMessage(msg, ResultType.NOT_FOUND);
+        } else {
+            result.setPayload(country);
         }
 
-        result.setPayload(country);
         return result;
     }
 

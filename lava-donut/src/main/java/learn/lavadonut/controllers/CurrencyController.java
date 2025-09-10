@@ -22,25 +22,25 @@ public class CurrencyController {
     //TODO: findById, add, update, deleteById
     @GetMapping("/{id}")
     public ResponseEntity<Object> findById(@PathVariable int currencyId) {
-
+        return null;
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> add(@RequestBody Currency currency) {
-
+        return null;
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int currencyId, @RequestBody Currency currency) {
-
+        return null;
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int currencyId) {
-
+        return null;
     }
 
 }

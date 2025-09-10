@@ -5,11 +5,14 @@ import learn.lavadonut.models.Country;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Repository
 public class CountryJdbcTemplateRepository implements CountryRepository{
     private final JdbcTemplate jdbcTemplate;
 
@@ -21,7 +24,7 @@ public class CountryJdbcTemplateRepository implements CountryRepository{
     public List<Country> findAll() {
 
         final String sql = "select c.country_id, c.name as country_name, " +
-                " c.code as country_code, c.currency_id, cu.currency_code, cu.currency_name, cu.value_to_usd " +
+                " c.code as country_code, c.currency_id, cu.`code` as currency_code, cu.`name` as currency_name, cu.value_to_usd " +
 
                 "from countries c " +
                 "inner join currencies cu on c.currency_id = cu.currency_id;";
@@ -33,7 +36,7 @@ public class CountryJdbcTemplateRepository implements CountryRepository{
     public Country findById(int id) {
 
         final String sql = "select c.country_id, c.name as country_name, " +
-                " c.code as country_code, c.currency_id, cu.currency_code, cu.currency_name, cu.value_to_usd " +
+                " c.code as country_code, c.currency_id, cu.`code` as currency_code, cu.`name` as currency_name, cu.value_to_usd " +
                 "from countries c " +
                 "inner join currencies cu on c.currency_id = cu.currency_id " +
                 "where country_id = ?;";
@@ -78,7 +81,35 @@ public class CountryJdbcTemplateRepository implements CountryRepository{
 
     @Override
     public boolean delete(int id) {
-        final String sql = "delete from countries where country_id = ?;";
+        // get list of stocks dependent on country
+        String sql = "select stock_id from stocks where country_id = ?;";
+        List<Integer> stockIds =  jdbcTemplate.queryForList(sql, Integer.class, id);
+
+        if (stockIds.isEmpty()) {
+            String deleteCountrySql = "delete from countries where country_id = ?;";
+            return jdbcTemplate.update(deleteCountrySql, id) > 0;
+        }
+
+        String commaSeparatedStockIds = stockIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+
+        // check for count of orders dependent on stocks
+        sql = "select count(*) from orders where stock_id in (?);";
+        Integer orderCount = jdbcTemplate.queryForObject(sql, Integer.class, commaSeparatedStockIds);
+
+        System.out.println(orderCount);
+        if (orderCount != null && orderCount > 0) {
+            return false; // cannot delete if there are dependent orders
+        }
+
+        sql = "delete from orders where stock_id in (?);";
+        jdbcTemplate.update(sql, stockIds);
+
+        sql = "delete from stocks where country_id = ?;";
+        jdbcTemplate.update(sql, id);
+
+        sql = "delete from countries where country_id = ?;";
         return jdbcTemplate.update(sql, id) > 0;
     }
 }
