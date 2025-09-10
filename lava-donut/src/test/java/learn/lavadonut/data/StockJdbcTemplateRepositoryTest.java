@@ -24,11 +24,34 @@ class StockJdbcTemplateRepositoryTest {
     @BeforeEach
     void setup() { knownGoodState.set(); }
 
+    /**
+     findAll Test!
+     **/
+
     @Test
     void shouldFindAll() {
         List<Stock> stocks = repository.findAll();
         assertFalse(stocks.isEmpty());
 
         assertEquals(NEXT_ID - 1, stocks.size());
+    }
+
+    /**
+     getStocksByIndustry Test!
+     **/
+
+    @Test
+    void shouldFindByIndustry(){ // HAPPY PATH
+        List<Stock> actual = repository.getStocksByIndustry("agriculture");
+
+        assertFalse(actual.isEmpty());
+        assertEquals(3, actual.size());
+    }
+
+    @Test
+    void shouldNotFindNonexistentIndustry(){ // UNHAPPY PATH
+        List<Stock> actual = repository.getStocksByIndustry("made up industry");
+
+        assertTrue(actual.isEmpty());
     }
 }
