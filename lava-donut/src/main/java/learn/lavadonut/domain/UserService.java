@@ -12,19 +12,16 @@ public class UserService {
 
     private final UserRepository repo;
 
-    private final PasswordEncoder encoder;
-
-    public UserService(UserRepository repo, PasswordEncoder encoder) {
+    public UserService(UserRepository repo) {
         this.repo = repo;
-        this.encoder = encoder;
     }
 
     public List<User> findAll() {
         return repo.findAll();
     }
 
-    public User findByUsername(String username) {
-        return repo.findByUsername(username);
+    public User findByUserId(int userId) {
+        return repo.findByUserId(userId);
     }
 
     public Result<User> add(User user) {
@@ -38,12 +35,10 @@ public class UserService {
             return result;
         }
 
-        if (repo.findByUsername(user.getUsername()) != null) {
-            result.addMessage("There is already a user with this username", ResultType.INVALID);
+        if (repo.findByUserId(user.getUserId()) != null) {
+            result.addMessage("There is already a user with this user id", ResultType.INVALID);
             return result;
         }
-
-        user.setPasswordHashed(encoder.encode(user.getPasswordHashed()));
 
         user = repo.add(user);
         result.setPayload(user);
@@ -63,19 +58,14 @@ public class UserService {
         }
 
         // duplicate check
-        User existing = repo.findByUsername(user.getUsername());
-        if (existing != null && existing.getUserId() != user.getUserId()) {
-            result.addMessage("There is already a user with that username", ResultType.INVALID);
+        User existing = repo.findByUserId(user.getUserId());
+        if (existing != null) {
+            result.addMessage("There is already a user with that user id", ResultType.INVALID);
             return result;
         }
 
-        // make sure that the password is hashed
-        if (existing != null && !user.getPasswordHashed().equals(existing.getPasswordHashed())) {
-            user.setPasswordHashed(encoder.encode(user.getPasswordHashed()));
-        }
-
         if (!repo.update(user)) {
-            String msg = String.format("Username: %s, was not found", user.getUsername());
+            String msg = String.format("User Id: %s, was not found", user.getUserId());
             result.addMessage(msg, ResultType.NOT_FOUND);
         }
 
@@ -93,13 +83,6 @@ public class UserService {
             return result;
         }
 
-        // username
-        if (Validations.isNullOrBlank(user.getUsername())) {
-            result.addMessage("Username is required", ResultType.INVALID);
-        } else if (user.getUsername().length() > 50) {
-            result.addMessage("Username must be less than or equal to 50 characters", ResultType.INVALID);
-        }
-
         // first name
         if (Validations.isNullOrBlank(user.getFirstName())) {
             result.addMessage("First Name is required", ResultType.INVALID);
@@ -114,16 +97,17 @@ public class UserService {
             result.addMessage("Last Name must be less than or equal to 50 characters", ResultType.INVALID);
         }
 
-        // permission
-        if (user.getPermission() == null) {
-            result.addMessage("User permission level is required and must be a valid enum value", ResultType.INVALID);
-        }
-
         // currency id
         if (user.getCurrencyId() <= 0) {
             result.addMessage("The user's currency id must be greater than 0", ResultType.INVALID);
         }
 
+        // app user id
+        if (user.getAppUserId() <= 0) {
+            result.addMessage("The user's app user id must be greater than 0", ResultType.INVALID);
+        }
+
         return result;
     }
+
 }

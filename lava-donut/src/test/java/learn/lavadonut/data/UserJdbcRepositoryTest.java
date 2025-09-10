@@ -1,11 +1,12 @@
 package learn.lavadonut.data;
 
 import learn.lavadonut.models.User;
-import learn.lavadonut.models.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,26 +26,26 @@ class UserJdbcRepositoryTest {
 
     @Test
     void shouldFindAll() {
-
+        List<User> users = repo.findAll();
+        assertNotNull(users);
+        assertTrue(users.size() >= 3);
     }
 
     @Test
-    void shouldFindByUsername() {
-        User actual = repo.findByUsername("americanUser");
+    void shouldFindByUserId() {
+        User actual = repo.findByUserId(1);
         assertNotNull(actual);
         assertEquals(1, actual.getUserId());
-        assertEquals("americanUser", actual.getUsername());
-        assertEquals("toBeHashed", actual.getPasswordHashed());
         assertEquals("TEST FIRST NAME", actual.getFirstName());
         assertEquals("TEST LAST NAME", actual.getLastName());
-        assertEquals(UserType.USER, actual.getPermission());
-        assertEquals(3, actual.getCurrencyId());
+        assertEquals(1, actual.getAppUserId());
+        assertEquals(1, actual.getCurrencyId());
 
     }
 
     @Test
-    void shouldNotFindNullUsername() {
-        User actual = repo.findByUsername(null);
+    void shouldNotFindZeroUserId() {
+        User actual = repo.findByUserId(0);
         assertNull(actual);
     }
 
@@ -77,7 +78,7 @@ class UserJdbcRepositoryTest {
 
     @Test
     void shouldNotDeleteNonexistId() {
-        assertTrue(repo.deleteById(9999));
+        assertFalse(repo.deleteById(9999));
     }
 
     private User getTestUser() {
@@ -85,9 +86,7 @@ class UserJdbcRepositoryTest {
         user.setCurrencyId(1);
         user.setFirstName("Jimmy");
         user.setLastName("Jam");
-        user.setUsername("JimmyJam");
-        user.setPasswordHashed("D35AE22394");
-        user.setPermission(UserType.USER);
+        user.setAppUserId(1);
         return user;
     }
 }

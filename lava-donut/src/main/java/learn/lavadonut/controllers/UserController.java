@@ -22,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> findByUsername(@PathVariable String username) {
+    public ResponseEntity<Object> findById(@PathVariable int userId) {
         return null;
     }
 
