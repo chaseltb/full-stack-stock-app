@@ -22,16 +22,16 @@ public class UserJdbcRepository implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        final String sql = "select user_id, currency_id, username, password_hashed, " +
-                "first_name, last_name, permission from user;";
+        final String sql = "select user_id, currency_id, " +
+                "first_name, last_name, app_user_id from `user`;";
         return jdbcTemplate.query(sql, new UserMapper());
     }
 
     @Override
-    public User findByUsername(String username) {
-        final String sql = "select user_id, currency_id, username, password_hashed, first_name, " +
-                "last_name, permission from user where username = ?;";
-        return jdbcTemplate.query(sql, new UserMapper(), username)
+    public User findByUserId(int userId) {
+        final String sql = "select user_id, currency_id, first_name, " +
+                "last_name, app_user_id from `user` where user_id = ?;";
+        return jdbcTemplate.query(sql, new UserMapper(), userId)
                 .stream()
                 .findFirst()
                 .orElse(null);
@@ -39,20 +39,18 @@ public class UserJdbcRepository implements UserRepository {
 
     @Override
     public User add(User user) {
-        final String sql = "insert into user (currency_id, username, password_hashed, first_name, " +
-                "last_name, permission) values (?, ?, ?, ?, ?, ?);";
+        final String sql = "insert into `user` (currency_id, first_name, " +
+                "last_name, app_user_id) values (?, ?, ?, ?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, user.getCurrencyId());
-            ps.setString(2, user.getUsername());
-            ps.setString(3, user.getPasswordHashed());
 
-            ps.setString(4, user.getFirstName());
-            ps.setString(5, user.getFirstName());
+            ps.setString(2, user.getFirstName());
+            ps.setString(3, user.getLastName());
 
-            ps.setString(6, user.getPermission().getValue());
+            ps.setInt(4, user.getAppUserId());
             return ps;
         }, keyHolder);
 
@@ -66,17 +64,17 @@ public class UserJdbcRepository implements UserRepository {
 
     @Override
     public boolean update(User user) {
-        final String sql = "update user set " +
-                "currency_id = ?, username = ?, password_hashed = ?, " +
-                "first_name = ?, last_name = ?, permission = ? where user_id = ?;";
+        final String sql = "update `user` set " +
+                "currency_id = ?, " +
+                "first_name = ?, last_name = ?, app_user_id = ? where user_id = ?;";
 
-        return jdbcTemplate.update(sql, user.getCurrencyId(), user.getUsername(),user.getPasswordHashed(),
-                user.getFirstName(), user.getLastName(), user.getPermission().getValue(), user.getUserId()) > 0;
+        return jdbcTemplate.update(sql, user.getCurrencyId(),
+                user.getFirstName(), user.getLastName(), user.getAppUserId(), user.getUserId()) > 0;
     }
 
     @Override
     public boolean deleteById(int userId) {
-        final String sql = "delete from user where user_id = ?;";
+        final String sql = "delete from `user` where user_id = ?;";
         return jdbcTemplate.update(sql, userId) > 0;
     }
 }
