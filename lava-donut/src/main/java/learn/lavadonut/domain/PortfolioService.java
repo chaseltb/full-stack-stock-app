@@ -1,39 +1,41 @@
 package learn.lavadonut.domain;
 
 import learn.lavadonut.data.PortfolioRepository;
+import learn.lavadonut.data.StockRepository;
 import learn.lavadonut.models.*;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.chrono.ChronoZonedDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
 
 @Service
 public class PortfolioService {
 
-    private final PortfolioRepository repo;
+    private final PortfolioRepository portfolioRepo;
+    private final StockRepository stockRepo;
 
-    public PortfolioService(PortfolioRepository repo) {
-        this.repo = repo;
+    public PortfolioService(PortfolioRepository portfolioRepo, StockRepository stockRepo) {
+        this.portfolioRepo = portfolioRepo;
+        this.stockRepo = stockRepo;
     }
 
     public Portfolio findByUserId(int userId) {
-        return repo.findByUserId(userId);
+        return portfolioRepo.findByUserId(userId);
     }
 
     public List<Stock> findAllOwnedStocksInPortfolio(int userId) {
-        return repo.findAllStocksInPortfolio(userId);
+        return portfolioRepo.findAllStocksInPortfolio(userId);
     }
     public Result<Portfolio> updateAccountType(int userId, AccountType accountType) {
         Result<Portfolio> result = new Result<>();
-        Portfolio portfolio = repo.findByUserId(userId);
+        Portfolio portfolio = portfolioRepo.findByUserId(userId);
         if (portfolio == null) {
             result.addMessage("User not found", ResultType.NOT_FOUND);
         }
-        boolean updated = repo.updateAccountType(userId, accountType);
+        boolean updated = portfolioRepo.updateAccountType(userId, accountType);
         if(updated) {
             portfolio.setAccountType(accountType);
             result.setPayload(portfolio);
@@ -42,20 +44,35 @@ public class PortfolioService {
         }
         return result;
     }
-    //TODO should this return a result?
-    public BigDecimal getPortfolioValue(int userId, String date) {
-        //TODO error handling for date
-        LocalDate searchDate = LocalDate.parse(date);
-        List<Order> orders = repo.findOrdersByUserId(userId);
-        if (orders == null) {
-            return null;
+
+    public Result<BigDecimal> getPortfolioValue(int userId, String date) {
+
+        Result<BigDecimal> result = new Result<>();
+        Date searchDate;
+        try {
+            searchDate = Date.valueOf(date);
+
+        } catch (IllegalArgumentException ex) {
+            result.addMessage("Date is not correct format (yyyy-mm-dd)", ResultType.INVALID);
+            return result;
         }
+        List<Order> orders = portfolioRepo.findOrdersByUserId(userId);
+        if (orders == null || orders.isEmpty()) {
+            result.addMessage(String.format("No Orders found for user %s", userId), ResultType.NOT_FOUND);
+            return result;
+        }
+        List<Stock> allStocks = stockRepo.findAll();
         BigDecimal totalValue = BigDecimal.ZERO;
 
         for (Order order : orders) {
-            //TODO see if chronozone actually works for check
-            if(order.getDateTime().isAfter(ChronoZonedDateTime.from(searchDate))) {
-                BigDecimal value = order.getPrice().multiply(order.getNumberOfShares());
+            //want orders before or equal to searchdate
+            if(!order.getDate().after(searchDate)) {
+                Stock stock = allStocks.stream()
+                        .filter(s -> s.getId() == order.getStockId()).findFirst().orElse(null);
+                if (stock == null || stock.getCurrentPrice() == null) {
+                    continue;
+                }
+                BigDecimal value = stock.getCurrentPrice().multiply(order.getNumberOfShares());
                 if (order.getTransactionType() == TransactionType.BUY) {
                     totalValue = totalValue.add(value);
                 } else if (order.getTransactionType() == TransactionType.SELL) {
@@ -63,32 +80,92 @@ public class PortfolioService {
                 }
             }
         }
-        return totalValue;
+        result.setPayload(totalValue);
+        return result;
     }
+
     public Result<Portfolio> updateCostBasisOnDividend(int userId, BigDecimal dividend) {
         Result<Portfolio> result = new Result<>();
-        Portfolio portfolio = repo.findByUserId(userId);
+        Portfolio portfolio = portfolioRepo.findByUserId(userId);
         if (portfolio == null) {
             result.addMessage("User not found", ResultType.NOT_FOUND);
         }
-        //TODO
+        //TODO Decide how we want to calculate cost basis, either through all orders or all stocks
 
         return result;
     }
 
-    public BigDecimal calculateCapitalGainsTax(List<Order> orders, BigDecimal taxRate) {
+    public Result<BigDecimal> calculateCapitalGainsTax(List<Order> orders, BigDecimal taxRate) {
 
-        BigDecimal totalValue = BigDecimal.ZERO;
-        for (Order order : orders) {
-            BigDecimal value = order.getPrice().multiply(order.getNumberOfShares());
-            if (order.getTransactionType() == TransactionType.SELL) {
-                totalValue = totalValue.add(value);
-            } else if (order.getTransactionType() == TransactionType.BUY) {
-                totalValue = totalValue.subtract(value);
-            }
+        Result<BigDecimal> result = new Result<>();
+        if (orders == null || orders.isEmpty()) {
+            result.setPayload(BigDecimal.ZERO);
+            return result;
         }
 
-        return totalValue.multiply(taxRate);
+        //sort by date for orders
+        orders.sort(Comparator.comparing(Order::getDate));
+        HashMap<Integer, List<Order>> mapStockOrders = new HashMap<>();
+        BigDecimal totalGains = BigDecimal.ZERO;
+
+        for (Order order : orders) {
+            int stockId = order.getStockId();
+
+            if (order.getTransactionType() == TransactionType.BUY) {
+                //add stock to map if buy
+                if (mapStockOrders.containsKey(order.getStockId())) {
+                    List<Order> os = mapStockOrders.get(order.getStockId());
+                    os.add(order);
+                    mapStockOrders.put(order.getStockId(), os);
+
+                } else {
+                    List<Order> os = new ArrayList<>();
+                    os.add(order);
+                    mapStockOrders.put(order.getStockId(), os);
+                }
+
+            } else if (order.getTransactionType() == TransactionType.SELL) {
+                BigDecimal sellShares = order.getNumberOfShares();
+                List<Order> buyOrders = mapStockOrders.get(stockId);
+
+                if (buyOrders == null || buyOrders.isEmpty()) {
+                    continue;
+                    // TODO currently skipping, but maybe throw error ?
+                    //result.addMessage(String.format("No buy orders found for stock with id %s", stockId), ResultType.INVALID);
+                }
+
+
+                int i = 0;
+                while (sellShares.compareTo(BigDecimal.ZERO) > 0 && i < buyOrders.size()) {
+                    Order buyOrder = buyOrders.get(i);
+                    BigDecimal boughtShares = buyOrder.getNumberOfShares();
+
+                    BigDecimal sharesSold;
+                    //if more sell then buy in this order set sharessold to amount of shares in buy
+                    if (sellShares.compareTo(boughtShares) > 0) {
+                        sharesSold = boughtShares;
+                    } else {
+                        sharesSold = sellShares;
+                    }
+
+
+                    BigDecimal gain = order.getPrice().subtract(buyOrder.getPrice()).multiply(sharesSold);
+                    totalGains = totalGains.add(gain);
+
+
+                    buyOrder.setNumberOfShares(boughtShares.subtract(sharesSold));
+                    sellShares = sellShares.subtract(sharesSold);
+
+                    if (buyOrder.getNumberOfShares().compareTo(BigDecimal.ZERO) == 0) {
+                        buyOrders.remove(i);
+                    } else {
+                        i++;
+                    }
+                }
+            }
+        }
+        result.setPayload(totalGains);
+        return result;
     }
 
     //TODO decide if these should be here or not, watch stock would require DB change
