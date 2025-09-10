@@ -46,7 +46,7 @@ public class OrderController {
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
-//    @Operation(summary = "Find all orders by user")
+//    @Operation(summary = "Find orders by user")
 //    @ApiResponse(responseCode = "200", description = "Orders found")
 //    @GetMapping("/{userId}")
 //    public ResponseEntity<List<Order>> findByUser(@PathVariable int userId) {
@@ -54,7 +54,7 @@ public class OrderController {
 //        return new ResponseEntity<>(orders, HttpStatus.OK);
 //    }
 
-    @Operation(summary = "Find all orders by stock")
+    @Operation(summary = "Find orders by stock")
     @ApiResponse(responseCode = "200", description = "Orders found")
     @GetMapping("/{stockId}")
     public ResponseEntity<List<Order>> findByStock(@PathVariable int stockId) {
@@ -98,7 +98,7 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204
     }
 
-    @Operation(summary = "Find an order by ID")
+    @Operation(summary = "Delete an order")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Order deleted"),
             @ApiResponse(responseCode = "404", description = "Order not found")
