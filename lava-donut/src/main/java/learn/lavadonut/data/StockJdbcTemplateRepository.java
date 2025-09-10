@@ -20,7 +20,7 @@ public class StockJdbcTemplateRepository implements StockRepository{
     //TODO: IF ERROR, RE-EXAMINE STOCK MAPPER
     @Override
     public List<Stock> findAll() {
-        final String sql = "select s.stock_id, s.`name`, s.`ticker`, s.asset_type, s.industry, "
+        final String sql = "select s.stock_id, s.`name`, s.`ticker`, s.asset_type, s.industry, s.current_price, "
                 + "se.stock_exchange_id, se.`name`, se.`code`, se.timezone, "
                 + "c.country_id, c.`name`, c.`code`, "
                 + "cu.currency_id, cu.`name`, cu.`code`, cu.value_to_usd "
@@ -34,7 +34,7 @@ public class StockJdbcTemplateRepository implements StockRepository{
 
     @Override
     public List<Stock> getStocksByIndustry(String industry) {
-        final String sql = "select s.stock_id, s.`name`, s.`ticker`, s.asset_type, s.industry, "
+        final String sql = "select s.stock_id, s.`name`, s.`ticker`, s.asset_type, s.industry, s.current_price, "
                 + "se.stock_exchange_id, se.`name`, se.`code`, se.timezone, "
                 + "c.country_id, c.`name`, c.`code`, "
                 + "cu.currency_id, cu.`name`, cu.`code`, cu.value_to_usd "
@@ -49,7 +49,7 @@ public class StockJdbcTemplateRepository implements StockRepository{
 
     @Override
     public Stock findById(int stockId) {
-        final String sql = "select s.stock_id, s.`name`, s.`ticker`, s.asset_type, s.industry, "
+        final String sql = "select s.stock_id, s.`name`, s.`ticker`, s.asset_type, s.industry, s.current_price, "
                 + "se.stock_exchange_id, se.`name`, se.`code`, se.timezone, "
                 + "c.country_id, c.`name`, c.`code`, "
                 + "cu.currency_id, cu.`name`, cu.`code`, cu.value_to_usd "
@@ -66,7 +66,7 @@ public class StockJdbcTemplateRepository implements StockRepository{
 
     @Override
     public Stock findByTicker(String ticker) {
-        final String sql = "select s.stock_id, s.`name`, s.`ticker`, s.asset_type, s.industry, "
+        final String sql = "select s.stock_id, s.`name`, s.`ticker`, s.asset_type, s.industry, s.current_price, "
                 + "se.stock_exchange_id, se.`name`, se.`code`, se.timezone, "
                 + "c.country_id, c.`name`, c.`code`, "
                 + "cu.currency_id, cu.`name`, cu.`code`, cu.value_to_usd "
@@ -83,8 +83,8 @@ public class StockJdbcTemplateRepository implements StockRepository{
 
     @Override
     public Stock add(Stock stock) {
-        final String sql = "insert into stocks (`name`, `ticker`, asset_type, industry, stock_exchange_id, country_id) "
-                + "values (?, ?, ?, ?, ?, ?);";
+        final String sql = "insert into stocks (`name`, `ticker`, asset_type, industry, current_price, stock_exchange_id, country_id) "
+                + "values (?, ?, ?, ?, ?, ?, ?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -94,8 +94,9 @@ public class StockJdbcTemplateRepository implements StockRepository{
             ps.setString(2, stock.getTicker());
             ps.setString(3, stock.getAssetType().name());
             ps.setString(4, stock.getIndustry());
-            ps.setInt(5, stock.getStockExchange().getId());
-            ps.setInt(6, stock.getCountry().getId());
+            ps.setBigDecimal(5, stock.getCurrentPrice());
+            ps.setInt(6, stock.getStockExchange().getId());
+            ps.setInt(7, stock.getCountry().getId());
 
             return ps;
         }, keyHolder);
@@ -112,15 +113,18 @@ public class StockJdbcTemplateRepository implements StockRepository{
     @Override
     public boolean update(Stock stock) {
         final String sql = "update stocks set "
-                + "`name` = ?, 'ticker' = ?, asset_type = ?, industry = ?, stock_exchange_id = ?, country_id = ?";
+                + "`name` = ?, 'ticker' = ?, asset_type = ?, industry = ?, current_price = ?, stock_exchange_id = ?, country_id = ? "
+                + "where stock_id = ?;";
 
         return jdbcTemplate.update(sql,
                 stock.getName(),
                 stock.getTicker(),
                 stock.getAssetType(),
                 stock.getIndustry(),
+                stock.getCurrentPrice(),
                 stock.getStockExchange().getId(),
-                stock.getCountry().getId()) > 0;
+                stock.getCountry().getId(),
+                stock.getId()) > 0;
     }
 
     //TODO: Potentially need to check if stock is being used by orders before delete

@@ -39,6 +39,7 @@ create table stocks (
     `ticker` varchar(25) not null,
     asset_type varchar(50) not null,
     industry varchar(50) null,
+    current_price decimal(10,4) not null,
     stock_exchange_id int not null,
     country_id int not null,
     CONSTRAINT fk_stock_stock_exchange_id
