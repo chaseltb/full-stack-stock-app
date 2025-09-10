@@ -61,6 +61,6 @@ class PortfolioJdbcTemplateRepositoryTest {
 
     @Test
     void shouldUpdateAccountType() {
-        repo.updateAccountType(1, AccountType.INVESTING);
+        assertTrue(repo.updateAccountType(1, AccountType.INVESTING));
     }
 }
