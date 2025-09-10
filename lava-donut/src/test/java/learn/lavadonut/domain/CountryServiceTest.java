@@ -150,11 +150,17 @@ class CountryServiceTest {
 
     @Test
     void shouldDelete() {
-        when(repository.delete(3)).thenReturn(true);
-        assertTrue(service.delete(3));
+        when(repository.delete(3)).thenReturn(ResultType.SUCCESS);
+        Result<Country> result = service.delete(3);
+        assertEquals(ResultType.SUCCESS, result.getType());
 
-        when(repository.delete(3)).thenReturn(false);
-        assertFalse(service.delete(3));
+        when(repository.delete(3)).thenReturn(ResultType.NOT_FOUND);
+        result = service.delete(3);
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+
+        when(repository.delete(1)).thenReturn(ResultType.INVALID);
+        result = service.delete(1);
+        assertEquals(ResultType.INVALID, result.getType());
     }
 
     Country makeCountry() {
