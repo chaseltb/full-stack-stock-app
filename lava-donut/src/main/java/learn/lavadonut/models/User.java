@@ -5,11 +5,9 @@ import java.util.Objects;
 public class User {
     private int userId;
     private int currencyId;
-    private String username;
-    private String passwordHashed;
     private String firstName;
     private String lastName;
-    private UserType permission;
+    private int appUserId;
 
     public int getUserId() {
         return userId;
@@ -25,22 +23,6 @@ public class User {
 
     public void setCurrencyId(int currencyId) {
         this.currencyId = currencyId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPasswordHashed() {
-        return passwordHashed;
-    }
-
-    public void setPasswordHashed(String passwordHashed) {
-        this.passwordHashed = passwordHashed;
     }
 
     public String getFirstName() {
@@ -59,23 +41,23 @@ public class User {
         this.lastName = lastName;
     }
 
-    public UserType getPermission() {
-        return permission;
+    public int getAppUserId() {
+        return appUserId;
     }
 
-    public void setPermission(UserType permission) {
-        this.permission = permission;
+    public void setAppUserId(int appUserId) {
+        this.appUserId = appUserId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return userId == user.userId && currencyId == user.currencyId && Objects.equals(username, user.username) && Objects.equals(passwordHashed, user.passwordHashed) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && permission == user.permission;
+        return userId == user.userId && currencyId == user.currencyId && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && appUserId == user.appUserId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, currencyId, username, passwordHashed, firstName, lastName, permission);
+        return Objects.hash(userId, currencyId, firstName, lastName, appUserId);
     }
 }

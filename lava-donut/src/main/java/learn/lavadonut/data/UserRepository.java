@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserRepository {
     List<User> findAll();
 
-    User findByUsername(String username);
+    User findByUserId(int userId);
 
     User add(User user);
 

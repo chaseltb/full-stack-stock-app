@@ -1,60 +1,49 @@
 package learn.lavadonut.security;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-@Component
-public class JwtRequestFilter extends OncePerRequestFilter {
+public class JwtRequestFilter extends BasicAuthenticationFilter {
 
-    private final JwtUtil jwtUtil;
+    private final JwtConverter converter;
 
-    public JwtRequestFilter(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
+    public JwtRequestFilter(AuthenticationManager authenticationManager, JwtConverter converter) {
+        super(authenticationManager); // 1. Must satisfy the super class.
+        this.converter = converter;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+                                    FilterChain chain) throws IOException, ServletException {
 
-        // Step 1: Get Authorization header
-        final String authHeader = request.getHeader("Authorization");
+        // Read Authorization value from request.
+        String authorization = request.getHeader("Authorization");
+        if (authorization != null && authorization.startsWith("Bearer ")) {
 
-        // Step 2: Check for Bearer token
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
+            // confirm with JwtConverter.
+            User user = converter.getUserFromToken(authorization);
+            if (user == null) {
+                response.setStatus(403); // Forbidden
+            } else {
 
-            // Step 3: Validate token
-            if (jwtUtil.isTokenValid(token)) {
-                // Step 4: Extract username and role from claims
-                String username = jwtUtil.extractUsername(token);
-                String role = jwtUtil.extractRole(token);
+                // Set auth for this request.
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                        user.getUsername(), null, user.getAuthorities());
 
-                // Step 5: Create authorities list
-                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
-
-                // Step 6: Create authenticated token
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(username, null, authorities);
-
-                // Step 7: Store in security context
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                SecurityContextHolder.getContext().setAuthentication(token);
             }
         }
-
-        // Continue with the filter chain
-        filterChain.doFilter(request, response);
+        chain.doFilter(request, response);
     }
 }
