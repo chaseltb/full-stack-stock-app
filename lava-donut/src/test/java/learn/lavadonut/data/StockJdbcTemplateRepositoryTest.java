@@ -54,4 +54,28 @@ class StockJdbcTemplateRepositoryTest {
 
         assertTrue(actual.isEmpty());
     }
+
+    /**
+     findById Test!
+     **/
+
+    @Test
+    void shouldFindById(){ // HAPPY PATH
+        Stock actual = repository.findById(1);
+        assertNotNull(actual);
+        assertEquals(1, actual.getId());
+        assertEquals("AMERICAN AIRLINES GROUP INC", actual.getName());
+        assertEquals("TEST-TICKER1", actual.getTicker());
+        assertTrue(actual.getAssetType().getName().equalsIgnoreCase("STOCK"));
+        assertEquals("airline and aviation", actual.getIndustry());
+        assertEquals("12.915", actual.getCurrentPrice().toString());
+        assertEquals(1, actual.getStockExchange().getId());
+        assertEquals(1, actual.getCountry().getId());
+    }
+
+    @Test
+    void shouldNotFindNonExistentId(){ // UNHAPPY PATH
+        Stock actual = repository.findById(999);
+        assertNull(actual);
+    }
 }
