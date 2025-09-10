@@ -68,10 +68,8 @@ create table orders (
 create table `user` (
 	user_id int primary key auto_increment,
     username varchar(25) not null,
-    password_hashed varchar(150) not null,
     first_name varchar(150) not null,
     last_name varchar(150) not null,
-    permission varchar(15) not null,
     currency_id int not null,
     CONSTRAINT fk_user_currency_id
 		foreign key (currency_id)
@@ -98,6 +96,31 @@ create table portfolio_orders (
 	CONSTRAINT fk_portfolio_orders_order_id
 		foreign key (order_id)
         references orders(order_id)
+);
+
+create table app_user (
+    app_user_id int primary key auto_increment,
+    username varchar(50) not null unique,
+    password_hash varchar(2048) not null,
+    disabled boolean not null default(0)
+);
+
+create table app_role (
+    app_role_id int primary key auto_increment,
+    `name` varchar(50) not null unique
+);
+
+create table app_user_role (
+    app_user_id int not null,
+    app_role_id int not null,
+    constraint pk_app_user_role
+        primary key (app_user_id, app_role_id),
+    constraint fk_app_user_role_user_id
+        foreign key (app_user_id)
+        references app_user(app_user_id),
+    constraint fk_app_user_role_role_id
+        foreign key (app_role_id)
+        references app_role(app_role_id)
 );
 
 -- TEST DATA
@@ -167,11 +190,11 @@ begin
         (6, 'SELL', 5, 8.05, '2023-07-05', 9);
 
 	insert into `user`
-		(user_id, username, password_hashed, first_name, last_name, permission, currency_id)
+		(user_id, username, first_name, last_name, currency_id)
 	values
-		(1, 'americanUser', 'toBeHashed', 'TEST FIRST NAME', 'TEST LAST NAME', 'USER', 1),
-        (2, 'germanUser', 'toBeHashed', 'TEST FIRST NAME', 'TEST LAST NAME', 'ADMIN', 2),
-        (3, 'chineseUser', 'toBeHashed', 'TEST FIRST NAME', 'TEST LAST NAME', 'USER', 3);
+		(1, 'americanUser', 'TEST FIRST NAME', 'TEST LAST NAME', 1),
+        (2, 'germanUser', 'TEST FIRST NAME', 'TEST LAST NAME', 2),
+        (3, 'chineseUser', 'TEST FIRST NAME', 'TEST LAST NAME', 3);
 	
     insert into portfolio
 		(portfolio_id, account_type, user_id)
@@ -191,6 +214,21 @@ begin
         (4, 3, 4),
         (5, 4, 5),
         (6, 4, 6);
+
+    insert into app_role (`name`) values
+        ('USER'),
+        ('ADMIN');
+
+    -- passwords are set to "P@ssw0rd!"
+    insert into app_user (username, password_hash, disabled)
+        values
+        ('john@smith.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
+        ('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0);
+
+    insert into app_user_role
+        values
+        (1, 2),
+        (2, 1);
         
 end //
 delimiter ;
