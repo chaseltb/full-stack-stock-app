@@ -2,6 +2,7 @@ package learn.lavadonut.domain;
 
 import learn.lavadonut.data.UserRepository;
 import learn.lavadonut.models.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +12,11 @@ public class UserService {
 
     private final UserRepository repo;
 
-    public UserService(UserRepository repo) {
+    private final PasswordEncoder encoder;
+
+    public UserService(UserRepository repo, PasswordEncoder encoder) {
         this.repo = repo;
+        this.encoder = encoder;
     }
 
     public List<User> findAll() {
@@ -39,6 +43,8 @@ public class UserService {
             return result;
         }
 
+        user.setPasswordHashed(encoder.encode(user.getPasswordHashed()));
+
         user = repo.add(user);
         result.setPayload(user);
         return result;
@@ -61,6 +67,11 @@ public class UserService {
         if (existing != null && existing.getUserId() != user.getUserId()) {
             result.addMessage("There is already a user with that username", ResultType.INVALID);
             return result;
+        }
+
+        // make sure that the password is hashed
+        if (existing != null && !user.getPasswordHashed().equals(existing.getPasswordHashed())) {
+            user.setPasswordHashed(encoder.encode(user.getPasswordHashed()));
         }
 
         if (!repo.update(user)) {
@@ -87,11 +98,6 @@ public class UserService {
             result.addMessage("Username is required", ResultType.INVALID);
         } else if (user.getUsername().length() > 50) {
             result.addMessage("Username must be less than or equal to 50 characters", ResultType.INVALID);
-        }
-
-        // password
-        if (Validations.isNullOrBlank(user.getPasswordHashed())) {
-            result.addMessage("Password is required", ResultType.INVALID);
         }
 
         // first name
