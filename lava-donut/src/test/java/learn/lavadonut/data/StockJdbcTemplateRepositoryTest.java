@@ -112,6 +112,10 @@ class StockJdbcTemplateRepositoryTest {
         assertNull(actual);
     }
 
+    /**
+     update Test!
+     **/
+
     @Test
     void shouldUpdate(){ // HAPPY PATH
         Stock stock = makeStock();
@@ -124,6 +128,22 @@ class StockJdbcTemplateRepositoryTest {
         Stock stock = makeStock();
         stock.setId(999);
         assertFalse(repository.update(stock));
+    }
+
+    /**
+     delete Test!
+     **/
+
+    @Test
+    void shouldDelete(){ // HAPPY PATH
+        int validId = 2;
+        assertTrue(repository.deleteById(validId));
+    }
+
+    @Test
+    void shouldNotDeleteWithInvalidId(){ // UNHAPPY PATH
+        int invalidId = 999;
+        assertFalse(repository.deleteById(invalidId));
     }
 
     private Stock makeStock(){
