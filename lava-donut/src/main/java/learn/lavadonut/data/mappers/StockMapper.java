@@ -18,6 +18,7 @@ public class StockMapper implements RowMapper<Stock> {
         stock.setTicker(resultSet.getString("ticker"));
         stock.setAssetType(AssetType.valueOf(resultSet.getString("asset_type")));
         stock.setIndustry(resultSet.getString("industry"));
+        stock.setCurrentPrice(resultSet.getBigDecimal("current_price"));
 
         CountryMapper countryMapper = new CountryMapper();
         stock.setCountry(countryMapper.mapRow(resultSet, i));
