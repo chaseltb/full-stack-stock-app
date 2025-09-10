@@ -1,8 +1,12 @@
 package learn.lavadonut.data;
 
+import learn.lavadonut.models.Stock;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,5 +24,11 @@ class StockJdbcTemplateRepositoryTest {
     @BeforeEach
     void setup() { knownGoodState.set(); }
 
+    @Test
+    void shouldFindAll() {
+        List<Stock> stocks = repository.findAll();
+        assertFalse(stocks.isEmpty());
 
+        assertEquals(NEXT_ID - 1, stocks.size());
+    }
 }
