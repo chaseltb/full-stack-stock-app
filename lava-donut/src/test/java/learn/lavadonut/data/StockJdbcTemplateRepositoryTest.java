@@ -112,6 +112,20 @@ class StockJdbcTemplateRepositoryTest {
         assertNull(actual);
     }
 
+    @Test
+    void shouldUpdate(){ // HAPPY PATH
+        Stock stock = makeStock();
+        stock.setId(3);
+        assertTrue(repository.update(stock));
+    }
+
+    @Test
+    void shouldNotUpdateWithInvalidId(){ // UNHAPPY PATH
+        Stock stock = makeStock();
+        stock.setId(999);
+        assertFalse(repository.update(stock));
+    }
+
     private Stock makeStock(){
         Stock stock = new Stock();
 
