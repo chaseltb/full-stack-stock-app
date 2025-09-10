@@ -53,9 +53,15 @@ public class CurrencyService {
         return result;
     }
 
-    //TODO: may need to check if being used by other objects, come back to later
     public Result<Currency> delete(int currencyId){
         Result<Currency> result = new Result<>();
+
+        int usageCount = repository.getUsageCount(currencyId);
+        if(usageCount > 0){
+            String error = String.format("currencyId: %s, is in use", currencyId);
+            result.addMessage(error, ResultType.INVALID);
+            return result;
+        }
 
         if (!repository.delete(currencyId)){
             String error = String.format("currency: %s, could not be found!",
