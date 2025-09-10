@@ -1,5 +1,7 @@
 package learn.lavadonut.controllers;
 
+import learn.lavadonut.domain.UserService;
+import learn.lavadonut.models.User;
 import learn.lavadonut.security.AuthRequest;
 import learn.lavadonut.security.AuthResponse;
 import learn.lavadonut.security.JwtUtil;
@@ -16,8 +18,11 @@ public class AuthController {
 
     private final JwtUtil jwtUtil;
 
-    public AuthController(JwtUtil jwtUtil) {
+    private final UserService service;
+
+    public AuthController(JwtUtil jwtUtil, UserService service) {
         this.jwtUtil = jwtUtil;
+        this.service = service;
     }
 
     @PostMapping("/login")
