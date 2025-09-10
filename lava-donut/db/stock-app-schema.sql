@@ -66,6 +66,13 @@ create table orders (
     CHECK (transaction_type IN ('BUY', 'SELL'))
 );
 
+create table app_user (
+    app_user_id int primary key auto_increment,
+    username varchar(50) not null unique,
+    password_hash varchar(2048) not null,
+    disabled boolean not null default(0)
+);
+
 create table `user` (
 	user_id int primary key auto_increment,
     first_name varchar(150) not null,
@@ -78,14 +85,6 @@ create table `user` (
     CONSTRAINT fk_user_app_user_id
     		foreign key (app_user_id)
             references app_user(app_user_id),
-	UNIQUE (username)
-);
-
-create table app_user (
-    app_user_id int primary key auto_increment,
-    username varchar(50) not null unique,
-    password_hash varchar(2048) not null,
-    disabled boolean not null default(0)
 );
 
 create table app_role (

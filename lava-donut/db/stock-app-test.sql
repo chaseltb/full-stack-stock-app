@@ -42,7 +42,7 @@ create table stocks (
     current_price decimal(10,4) not null,
     stock_exchange_id int not null,
     country_id int not null,
-    CONSTRAINT fk_stock_stock_exhange_id
+    CONSTRAINT fk_stock_stock_exchange_id
 		foreign key (stock_exchange_id)
         references stock_exchange(stock_exchange_id),
 	CONSTRAINT fk_stock_country_id
@@ -66,6 +66,13 @@ create table orders (
     CHECK (transaction_type IN ('BUY', 'SELL'))
 );
 
+create table app_user (
+    app_user_id int primary key auto_increment,
+    username varchar(50) not null unique,
+    password_hash varchar(2048) not null,
+    disabled boolean not null default(0)
+);
+
 create table `user` (
 	user_id int primary key auto_increment,
     first_name varchar(150) not null,
@@ -77,8 +84,7 @@ create table `user` (
         references currencies(currency_id),
     CONSTRAINT fk_user_app_user_id
     		foreign key (app_user_id)
-            references app_user(app_user_id),
-	UNIQUE (username)
+            references app_user(app_user_id)
 );
 
 create table portfolio (
@@ -100,13 +106,6 @@ create table portfolio_orders (
 	CONSTRAINT fk_portfolio_orders_order_id
 		foreign key (order_id)
         references orders(order_id)
-);
-
-create table app_user (
-    app_user_id int primary key auto_increment,
-    username varchar(50) not null unique,
-    password_hash varchar(2048) not null,
-    disabled boolean not null default(0)
 );
 
 create table app_role (
@@ -193,12 +192,17 @@ begin
         (5, 'BUY', 22, 67.95, '2015-10-01', 7),
         (6, 'SELL', 5, 64.73, '2023-07-05', 9);
 
+    -- passwords are set to "P@ssw0rd!"
+    insert into app_user (username, password_hash, disabled)
+        values
+        ('john@smith.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
+        ('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0);
+
 	insert into `user`
 		(user_id, first_name, last_name, currency_id, app_user_id)
 	values
 		(1, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1),
-        (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2),
-        (3, 'TEST FIRST NAME', 'TEST LAST NAME', 3, 3);
+        (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2);
 	
     insert into portfolio
 		(portfolio_id, account_type, user_id)
@@ -222,12 +226,6 @@ begin
     insert into app_role (`name`) values
         ('USER'),
         ('ADMIN');
-
-    -- passwords are set to "P@ssw0rd!"
-    insert into app_user (username, password_hash, disabled)
-        values
-        ('john@smith.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
-        ('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0);
 
     insert into app_user_role
         values
