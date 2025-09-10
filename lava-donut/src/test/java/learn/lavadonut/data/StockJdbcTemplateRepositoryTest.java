@@ -83,6 +83,27 @@ class StockJdbcTemplateRepositoryTest {
         assertNull(actual);
     }
 
+    /**
+     add Test!
+     **/
+
+    @Test
+    void shouldAdd(){ // HAPPY PATH
+        Stock stock = makeStock();
+        Stock actual = repository.add(stock);
+        assertNotNull(actual);
+        assertEquals(NEXT_ID, actual.getId());
+    }
+
+    @Test
+    void shouldAddWithNullIndustry(){
+        Stock stock = makeStock();
+        stock.setIndustry(null);
+
+        Stock actual = repository.add(stock);
+        assertNotNull(actual);
+        assertEquals(NEXT_ID, actual.getId());
+    }
 
     private Stock makeStock(){
         Stock stock = new Stock();
