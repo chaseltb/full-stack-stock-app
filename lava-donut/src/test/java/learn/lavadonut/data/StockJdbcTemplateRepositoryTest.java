@@ -1,11 +1,15 @@
 package learn.lavadonut.data;
 
+import learn.lavadonut.models.AssetType;
+import learn.lavadonut.models.Country;
 import learn.lavadonut.models.Stock;
+import learn.lavadonut.models.StockExchange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,5 +81,26 @@ class StockJdbcTemplateRepositoryTest {
     void shouldNotFindNonExistentId(){ // UNHAPPY PATH
         Stock actual = repository.findById(999);
         assertNull(actual);
+    }
+
+
+    private Stock makeStock(){
+        Stock stock = new Stock();
+
+        stock.setName("TEST STOCK NAME");
+        stock.setTicker("TEST-STOCK-TICKER");
+        stock.setAssetType(AssetType.STOCK);
+        stock.setIndustry("TEST-INDUSTRY");
+        stock.setCurrentPrice(BigDecimal.valueOf(10.50));
+
+        Country country = new Country();
+        country.setId(2);
+        stock.setCountry(country);
+
+        StockExchange stockExchange = new StockExchange();
+        stockExchange.setId(2);
+        stock.setStockExchange(stockExchange);
+
+        return stock;
     }
 }
