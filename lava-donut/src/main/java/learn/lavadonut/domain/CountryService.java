@@ -53,8 +53,19 @@ public class CountryService {
         return result;
     }
 
-    public boolean delete(int id) {
-        return repository.delete(id);
+    public Result<Country> delete(int id) {
+        Result<Country> result = new Result<>();
+        ResultType resultType = repository.delete(id);
+        result.setType(resultType);
+
+        if (resultType == ResultType.INVALID) {
+            String msg = String.format("country id: %s is in use and cannot be deleted", id);
+            result.addMessage(msg, ResultType.INVALID);
+        } else if (resultType == ResultType.NOT_FOUND) {
+            String msg = String.format("country id: %s was not found", id);
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+        return result;
     }
 
     private Result<Country> validate(Country country) {

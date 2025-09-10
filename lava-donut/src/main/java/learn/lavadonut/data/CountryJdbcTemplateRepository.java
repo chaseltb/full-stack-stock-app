@@ -1,11 +1,13 @@
 package learn.lavadonut.data;
 
 import learn.lavadonut.data.mappers.CountryMapper;
+import learn.lavadonut.domain.ResultType;
 import learn.lavadonut.models.Country;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -80,14 +82,19 @@ public class CountryJdbcTemplateRepository implements CountryRepository{
     }
 
     @Override
-    public boolean delete(int id) {
+    @Transactional
+    public ResultType delete(int id) {
         // get list of stocks dependent on country
         String sql = "select stock_id from stocks where country_id = ?;";
         List<Integer> stockIds =  jdbcTemplate.queryForList(sql, Integer.class, id);
 
         if (stockIds.isEmpty()) {
             String deleteCountrySql = "delete from countries where country_id = ?;";
-            return jdbcTemplate.update(deleteCountrySql, id) > 0;
+            int rowsAffected = jdbcTemplate.update(deleteCountrySql, id);
+            if (rowsAffected > 0) {
+                return ResultType.SUCCESS;
+            }
+            return ResultType.NOT_FOUND;
         }
 
         String commaSeparatedStockIds = stockIds.stream()
@@ -100,7 +107,7 @@ public class CountryJdbcTemplateRepository implements CountryRepository{
 
         System.out.println(orderCount);
         if (orderCount != null && orderCount > 0) {
-            return false; // cannot delete if there are dependent orders
+            return ResultType.INVALID; // cannot delete if there are dependent orders
         }
 
         sql = "delete from orders where stock_id in (?);";
@@ -110,6 +117,10 @@ public class CountryJdbcTemplateRepository implements CountryRepository{
         jdbcTemplate.update(sql, id);
 
         sql = "delete from countries where country_id = ?;";
-        return jdbcTemplate.update(sql, id) > 0;
+        int rowsAffected = jdbcTemplate.update(sql, id);
+        if (rowsAffected > 0) {
+            return ResultType.SUCCESS;
+        }
+        return ResultType.NOT_FOUND;
     }
 }

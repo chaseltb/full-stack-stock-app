@@ -34,4 +34,7 @@ public class Result<T> {
         this.type = type;
     }
 
+    public void setType(ResultType type) {
+        this.type = type;
+    }
 }
