@@ -134,4 +134,11 @@ public class StockJdbcTemplateRepository implements StockRepository{
                 "delete from stocks where stock_id = ?;",
                 stockId) > 0;
     }
+
+    @Override
+    public int getUsageCount(int stockId) {
+        return jdbcTemplate.queryForObject(
+                "select count(*) from orders where stock_id = ?;",
+                Integer.class, stockId);
+    }
 }
