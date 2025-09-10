@@ -78,6 +78,7 @@ public class Stock {
                 && this.ticker.equalsIgnoreCase(stock.getTicker())
                 && this.assetType == stock.getAssetType()
                 && this.country.getId() == stock.getCountry().getId()
+                && this.currentPrice.compareTo(stock.getCurrentPrice()) == 0
                 && this.stockExchange.getId() == stock.getStockExchange().getId());
     }
 }
