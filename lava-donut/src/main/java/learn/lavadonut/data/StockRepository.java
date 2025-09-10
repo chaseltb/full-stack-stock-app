@@ -18,4 +18,6 @@ public interface StockRepository {
     boolean update(Stock stock);
 
     boolean deleteById(int stockId);
+
+    int getUsageCount(int stockId);
 }

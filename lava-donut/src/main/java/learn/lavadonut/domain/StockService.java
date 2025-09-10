@@ -72,6 +72,13 @@ public class StockService {
     public Result<Stock> delete(int stockId){
         Result<Stock> result = new Result<>();
 
+        int usageCount = repository.getUsageCount(stockId);
+        if(usageCount > 0){
+            String error = String.format("stockId: %s, is in use", stockId);
+            result.addMessage(error, ResultType.INVALID);
+            return result;
+        }
+
         if (!repository.deleteById(stockId)){
             String error = String.format("stock: %s, could not be found!",
                     stockId);
