@@ -3,6 +3,8 @@ package learn.lavadonut.domain;
 import learn.lavadonut.data.StockRepository;
 import learn.lavadonut.models.Stock;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -92,6 +94,10 @@ public class StockService {
         }
         if(Validations.isNullOrBlank(stock.getTicker())){
             result.addMessage("stock must have a ticker!", ResultType.INVALID);
+        }
+
+        if(stock.getCurrentPrice().compareTo(BigDecimal.ZERO) <= 0){
+            result.addMessage("stock price must be greater than zero!", ResultType.INVALID);
         }
 
         if(stock.getStockExchange().getId() <= 0){
