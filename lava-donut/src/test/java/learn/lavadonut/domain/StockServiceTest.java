@@ -26,11 +26,24 @@ class StockServiceTest {
     StockRepository repository;
 
     /**
+     findAll Test!
+     **/
+
+    @Test
+    void shouldFindAll(){
+        List<Stock> expected = List.of(makeStock());
+        when(repository.findAll()).thenReturn(expected);
+
+        List<Stock> actual = service.findAll();
+        assertFalse(actual.isEmpty());
+    }
+
+    /**
      getStocksByIndustry Test!
      **/
 
     @Test
-    void shouldGetStocksByIndustry(){
+    void shouldGetStocksByIndustry(){ // HAPPY PATH
         List<Stock> expected = List.of(makeStock());
         when(repository.getStocksByIndustry("TEST-INDUSTRY")).thenReturn(expected);
         Result<List<Stock>> result = service.getStocksByIndustry("TEST-INDUSTRY");
@@ -41,11 +54,29 @@ class StockServiceTest {
     }
 
     @Test
-    void shouldNotReturnStockWithNullIndustry(){
+    void shouldNotReturnStockWithNullIndustry(){  // UNHAPPY PATH
         Result<List<Stock>> result = service.getStocksByIndustry(null);
 
         assertFalse(result.isSuccess());
     }
+
+    /**
+     findAll Test!
+     **/
+
+    @Test
+    void shouldFindById(){
+        Stock expected = makeStock();
+        when(repository.findById(2)).thenReturn(expected);
+
+        Stock actual = service.findById(2);
+        assertNotNull(actual);
+    }
+
+    /**
+     add Test!
+     **/
+
 
     Stock makeStock() {
         Stock stock = new Stock();
