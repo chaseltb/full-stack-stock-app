@@ -39,7 +39,7 @@ public class PortfolioJdbcTemplateRepository implements PortfolioRepository {
     public List<Stock> findAllStocksInPortfolio(int userId) {
 
         final String sql =
-                "select s.stock_id, s.name as stock_name, s.ticker, s.asset_type, s.industry, c.country_id, " +
+                "select s.stock_id, s.name as stock_name, s.current_price, s.ticker, s.asset_type, s.industry, c.country_id, " +
                         "c.name as country_name, c.code as country_code, " +
                         "cur.currency_id, cur.name as currency_name, " +
                         "cur.code as currency_code, cur.value_to_usd, " +
