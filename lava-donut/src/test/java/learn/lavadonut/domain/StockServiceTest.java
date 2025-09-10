@@ -11,8 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class StockServiceTest {
@@ -23,6 +25,27 @@ class StockServiceTest {
     @MockBean
     StockRepository repository;
 
+    /**
+     getStocksByIndustry Test!
+     **/
+
+    @Test
+    void shouldGetStocksByIndustry(){
+        List<Stock> expected = List.of(makeStock());
+        when(repository.getStocksByIndustry("TEST-INDUSTRY")).thenReturn(expected);
+        Result<List<Stock>> result = service.getStocksByIndustry("TEST-INDUSTRY");
+        assertTrue(result.isSuccess());
+
+        Stock actual = result.getPayload().get(0);
+        assertEquals("TEST-INDUSTRY", actual.getIndustry());
+    }
+
+    @Test
+    void shouldNotReturnStockWithNullIndustry(){
+        Result<List<Stock>> result = service.getStocksByIndustry(null);
+
+        assertFalse(result.isSuccess());
+    }
 
     Stock makeStock() {
         Stock stock = new Stock();
