@@ -15,4 +15,6 @@ public interface CurrencyRepository {
     boolean update (Currency currency);
 
     boolean delete (int currencyId);
+
+    int getUsageCount(int currencyId);
 }

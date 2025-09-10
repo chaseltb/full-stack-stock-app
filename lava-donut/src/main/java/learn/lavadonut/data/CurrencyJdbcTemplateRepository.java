@@ -17,6 +17,7 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
 
     public CurrencyJdbcTemplateRepository(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
+    @Override
     public List<Currency> findAll(){
         final String sql = "select currency_id, `name` as currency_name, " +
         " `code` as currency_code, value_to_usd "
@@ -24,6 +25,7 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
         return jdbcTemplate.query(sql, new CurrencyMapper());
     }
 
+    @Override
     public Currency findById(int currencyId){
         final String sql = "select currency_id, `name` as currency_name, " +
                 " `code` as currency_code, value_to_usd "
@@ -35,6 +37,7 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
                 .findFirst().orElse(null);
     }
 
+    @Override
     public Currency add(Currency currency){
        final String sql = "insert into currencies (`name`, `code`, value_to_usd) "
                + "values (?, ?, ?);";
@@ -56,6 +59,7 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
         return currency;
     }
 
+    @Override
     public boolean update(Currency currency){
         final String sql = "update currencies set "
                 + "`name` = ?, `code` = ?, value_to_usd = ? "
@@ -68,11 +72,23 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
                 currency.getId()) > 0;
     }
 
-    //TODO: Potentially need to check if stock is being used by countries or users before delete
+    @Override
     public boolean delete(int currencyId){
         return jdbcTemplate.update(
                 "delete from currencies where currency_id = ?;",
                 currencyId) > 0;
     }
 
+    @Override
+    public int getUsageCount(int currencyId){
+        int totalUse = jdbcTemplate.queryForObject(
+                "select count(*) from `user` where currency_id = ?;",
+                Integer.class, currencyId)
+                +
+                jdbcTemplate.queryForObject(
+                        "select count(*) from countries where currecy_id = ?;",
+                        Integer.class, currencyId);
+
+        return totalUse;
+    }
 }

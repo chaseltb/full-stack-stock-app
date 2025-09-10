@@ -1,5 +1,7 @@
 package learn.lavadonut.models;
 
+import java.math.BigDecimal;
+
 public class Stock {
 
     private int id;
@@ -7,6 +9,7 @@ public class Stock {
     private String ticker;
     private AssetType assetType;
     private String industry;
+    private BigDecimal currentPrice;
     private Country country;
     private StockExchange stockExchange;
 
@@ -66,11 +69,16 @@ public class Stock {
         this.country = country;
     }
 
+    public BigDecimal getCurrentPrice() {return currentPrice; }
+
+    public void setCurrentPrice(BigDecimal currentPrice){ this.currentPrice = currentPrice; }
+
     public boolean equals(Stock stock){
         return (this.name.equalsIgnoreCase(stock.getName())
                 && this.ticker.equalsIgnoreCase(stock.getTicker())
                 && this.assetType == stock.getAssetType()
                 && this.country.getId() == stock.getCountry().getId()
+                && this.currentPrice.compareTo(stock.getCurrentPrice()) == 0
                 && this.stockExchange.getId() == stock.getStockExchange().getId());
     }
 }
