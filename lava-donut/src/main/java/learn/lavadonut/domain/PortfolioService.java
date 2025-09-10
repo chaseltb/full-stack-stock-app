@@ -54,14 +54,14 @@ public class PortfolioService {
 
         for (Order order : orders) {
             //TODO see if chronozone actually works for check
-            if(order.getDateTime().isAfter(ChronoZonedDateTime.from(searchDate))) {
-                BigDecimal value = order.getPrice().multiply(order.getNumberOfShares());
-                if (order.getTransactionType() == TransactionType.BUY) {
-                    totalValue = totalValue.add(value);
-                } else if (order.getTransactionType() == TransactionType.SELL) {
-                    totalValue = totalValue.subtract(value);
-                }
-            }
+//            if(order.getDateTime().isAfter(ChronoZonedDateTime.from(searchDate))) {
+//                BigDecimal value = order.getPrice().multiply(order.getNumberOfShares());
+//                if (order.getTransactionType() == TransactionType.BUY) {
+//                    totalValue = totalValue.add(value);
+//                } else if (order.getTransactionType() == TransactionType.SELL) {
+//                    totalValue = totalValue.subtract(value);
+//                }
+//            }
         }
         return totalValue;
     }
