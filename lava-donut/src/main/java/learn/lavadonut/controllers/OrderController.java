@@ -1,7 +1,9 @@
 package learn.lavadonut.controllers;
 
 import learn.lavadonut.domain.OrderService;
+import learn.lavadonut.domain.Result;
 import learn.lavadonut.models.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +13,7 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RequestMapping("/api/order") // Base URL
 public class OrderController {
-    private OrderService service;
+    private final OrderService service;
 
     public OrderController(OrderService service) {
         this.service = service;
@@ -19,12 +21,17 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<List<Order>> findAll() {
-        return null;
+        List<Order> orders = service.findAll();
+        return new ResponseEntity<>(orders, HttpStatus.OK); // 200
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> findById(@PathVariable int id) {
-        return null;
+        Order order = service.findById(id);
+        if (order == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); // 404
+        }
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
 //    @GetMapping("/{userId}")
@@ -34,21 +41,39 @@ public class OrderController {
 
     @GetMapping("/{stockId}")
     public ResponseEntity<List<Order>> findByStock(@PathVariable int stockId) {
-        return null;
+        List<Order> orders = service.findByStock(stockId);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody Order order) {
-        return null;
+        Result<Order> result = service.add(order);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.CREATED); // 201
+        }
+        return ErrorResponse.build(result);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Order order) {
-        return null;
+        // validate id
+        if (id != order.getId()) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT); // 409
+        }
+
+        Result<Order> result = service.update(order);
+
+        if (!result.isSuccess()) {
+            return ErrorResponse.build(result);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable int id) {
-        return null;
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        if (service.delete(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
     }
 }
