@@ -77,6 +77,11 @@ public class CurrencyController {
         return ErrorResponse.build(result);
     }
 
+    @Operation(summary = "ADMIN: Delete a Currency by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Currency deleted"),
+            @ApiResponse(responseCode = "404", description = "Currency not found")
+    })
     @DeleteMapping("/{currencyId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int currencyId) {
