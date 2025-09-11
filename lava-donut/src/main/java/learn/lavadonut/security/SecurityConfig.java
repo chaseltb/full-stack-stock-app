@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // add antMatchers here to configure access to specific API endpoints
                 .antMatchers("/api/auth/authenticate").permitAll()
                 .antMatchers("/api/auth/register").permitAll()
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // For OpenAPI/SwaggerUI
                 // require authentication for any request...
                 .anyRequest().authenticated()
                 .and()
