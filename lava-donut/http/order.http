@@ -1,6 +1,8 @@
 @url = http://localhost:8080/api/order
 @token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJmaWVsZC1hZ2VudCIsInN1YiI6InVzZXJAZXhhbXBsZS5jb20iLCJhdXRob3JpdGllcyI6IlJPTEVfVVNFUiIsImV4cCI6MTc1NzYxNTI5Mn0.obeSURxNESdZpdZui95m6svfkVMbRLpMgCBo_jAJY-o
 
+### register
+
 POST http://localhost:8080/api/auth/register HTTP/1.1
 Content-Type: application/json
 
@@ -9,7 +11,7 @@ Content-Type: application/json
     "password": "Password123."
 }
 
-### 
+### login (get jwt token)
 
 POST http://localhost:8080/api/auth/authenticate HTTP/1.1
 Content-Type: application/json
