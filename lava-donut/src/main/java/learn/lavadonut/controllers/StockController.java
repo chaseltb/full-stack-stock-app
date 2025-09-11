@@ -31,9 +31,9 @@ public class StockController {
 
     @Operation(summary = "Get all Stocks by Industry")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "stocks of this industry are found!"),
+            @ApiResponse(responseCode = "200", description = "Stocks of this industry are found!"),
             @ApiResponse(responseCode = "400", description = "industry is invalid"),
-            @ApiResponse(responseCode = "404", description = "stocks not found")
+            @ApiResponse(responseCode = "404", description = "Stocks not found")
     })
     @GetMapping("/industry/{industry}")
     public ResponseEntity<Object> getStocksByIndustry(@PathVariable String industry){
@@ -44,6 +44,12 @@ public class StockController {
         return ErrorResponse.build(result);
     }
 
+    @Operation(summary = "Find a Stock by Ticker")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Stock of this ticker is found!"),
+            @ApiResponse(responseCode = "400", description = "ticker is invalid"),
+            @ApiResponse(responseCode = "404", description = "Stock not found")
+    })
     @GetMapping("/ticker/{ticker}")
     public ResponseEntity<Object> findByTicker(@PathVariable String ticker){
         Result<Stock> result = service.findByTicker(ticker);
