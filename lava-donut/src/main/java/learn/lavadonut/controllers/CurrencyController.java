@@ -37,7 +37,7 @@ public class CurrencyController {
         return ErrorResponse.build(result);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{currencyId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int currencyId, @RequestBody Currency currency) {
         if (currencyId != currency.getId()) {
@@ -52,7 +52,7 @@ public class CurrencyController {
         return ErrorResponse.build(result);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{currencyId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int currencyId) {
         Result<Currency> result = service.delete(currencyId);
