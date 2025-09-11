@@ -1,6 +1,7 @@
 package learn.lavadonut.models;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Stock {
 
@@ -71,7 +72,9 @@ public class Stock {
 
     public BigDecimal getCurrentPrice() {return currentPrice; }
 
-    public void setCurrentPrice(BigDecimal currentPrice){ this.currentPrice = currentPrice; }
+    public void setCurrentPrice(BigDecimal currentPrice){
+        this.currentPrice = currentPrice.setScale(4, RoundingMode.HALF_EVEN).stripTrailingZeros();
+    }
 
     public boolean equals(Stock stock){
         return (this.name.equalsIgnoreCase(stock.getName())
