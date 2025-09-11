@@ -73,6 +73,11 @@ public class StockController {
         return ResponseEntity.ok(stock);
     }
 
+    @Operation(summary = "ADMIN: Add a Stock")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Stock created"),
+            @ApiResponse(responseCode = "400", description = "Invalid Stock")
+    })
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> add(@RequestBody Stock stock) {
