@@ -25,6 +25,7 @@ public class StockController {
     public StockController(StockService service) { this.service = service; }
 
     @Operation(summary = "Get all Stocks")
+    @ApiResponse(responseCode = "200", description = "Stocks found")
     @GetMapping
     public List<Stock> findAll() { return service.findAll(); }
 
@@ -34,6 +35,7 @@ public class StockController {
             @ApiResponse(responseCode = "400", description = "industry is invalid"),
             @ApiResponse(responseCode = "404", description = "Stocks not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/industry/{industry}")
     public ResponseEntity<Object> getStocksByIndustry(@PathVariable String industry){
         Result<List<Stock>> result = service.getStocksByIndustry(industry);
@@ -49,6 +51,7 @@ public class StockController {
             @ApiResponse(responseCode = "400", description = "ticker is invalid"),
             @ApiResponse(responseCode = "404", description = "Stock not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/ticker/{ticker}")
     public ResponseEntity<Object> findByTicker(@PathVariable String ticker){
         Result<Stock> result = service.findByTicker(ticker);
@@ -60,9 +63,10 @@ public class StockController {
 
     @Operation(summary = "Find a Stock by ID")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Stock of this is is found!"),
+            @ApiResponse(responseCode = "200", description = "Stock of this id is found!"),
             @ApiResponse(responseCode = "404", description = "Stock not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{stockId}")
     public ResponseEntity<Object> findById(@PathVariable int stockId){
         Stock stock = service.findById(stockId);
@@ -78,7 +82,7 @@ public class StockController {
             @ApiResponse(responseCode = "400", description = "Invalid Stock")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Object> add(@RequestBody Stock stock) {
         Result<Stock> result = service.add(stock);
         if (result.isSuccess()) {
@@ -94,8 +98,8 @@ public class StockController {
             @ApiResponse(responseCode = "404", description = "Stock not found"),
             @ApiResponse(responseCode = "409", description = "ID conflict")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/{stockId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int stockId, @RequestBody Stock stock){
         if (stockId != stock.getId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -112,10 +116,11 @@ public class StockController {
     @Operation(summary = "ADMIN: Delete a Stock by ID")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Stock deleted"),
+            @ApiResponse(responseCode = "400", description = "Invalid Stock"),
             @ApiResponse(responseCode = "404", description = "Stock not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @DeleteMapping("/{stockId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int stockId) {
         Result<Stock> result = service.delete(stockId);
         if(result.isSuccess()){

@@ -10,13 +10,15 @@ import java.util.List;
 
 public interface PortfolioRepository {
 
-    Portfolio findByUserId(int userId);
-    Portfolio addStockToPortfolio(int userId, Stock stock);
-    boolean deleteStockFromPortfolio(int userId, int stockId);
+    List<Portfolio> findPortfoliosByUserId(int userId);
+    Portfolio createPortfolio(Portfolio newPortfolio);
     List<Stock> findAllStocksInPortfolio(int userId);
-    List<Order> findOrdersByUserId(int userId);
-    boolean updateAccountType(int userId, AccountType accountType);
+    List<Order> findOrdersByPortfolioId(int userId);
+    boolean updateAccountType(Portfolio p);
+
+    Portfolio addStockToPortfolio(int userId, Stock stock);
     boolean sellStockFromPortfolio(int userId, int stockId);
+    boolean deleteStockFromPortfolio(int userId, int stockId);
 //TODO should the service do the calculation
 //    BigDecimal getPortfolioValue(int userId, String date);
 //    boolean updateCostBasisOnDividend(int userId, BigDecimal dividend);
