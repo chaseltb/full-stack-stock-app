@@ -18,16 +18,18 @@ public class CurrencyController {
 
     public CurrencyController(CurrencyService service) { this.service = service; }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public List<Currency> findAll() { return service.findAll(); }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
     public Currency findById(@PathVariable int currencyId) {
         return service.findById(currencyId);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> add(@RequestBody Currency currency) {
         Result<Currency> result = service.add(currency);
         if (result.isSuccess()) {
@@ -37,7 +39,7 @@ public class CurrencyController {
     }
 
     @PutMapping("/{currencyId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int currencyId, @RequestBody Currency currency) {
         if (currencyId != currency.getId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -52,7 +54,7 @@ public class CurrencyController {
     }
 
     @DeleteMapping("/{currencyId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int currencyId) {
         Result<Currency> result = service.delete(currencyId);
         if(result.isSuccess()){
