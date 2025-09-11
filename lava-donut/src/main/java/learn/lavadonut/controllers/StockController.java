@@ -59,6 +59,11 @@ public class StockController {
         return ErrorResponse.build(result);
     }
 
+    @Operation(summary = "Find a Stock by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Stock of this is is found!"),
+            @ApiResponse(responseCode = "404", description = "Stock not found")
+    })
     @GetMapping("/{stockId}")
     public ResponseEntity<Object> findById(@PathVariable int stockId){
         Stock stock = service.findById(stockId);
