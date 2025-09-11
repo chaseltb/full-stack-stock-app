@@ -197,11 +197,20 @@ begin
         (5, 'BUY', 22, 67.95, '2015-10-01', 7),
         (6, 'SELL', 5, 64.73, '2023-07-05', 9);
 
+	insert into app_role (`name`) values
+        ('USER'),
+        ('ADMIN');
+
     -- passwords are set to "P@ssw0rd!"
     insert into app_user (username, password_hash, disabled)
         values
         ('john@smith.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
         ('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0);
+
+    insert into app_user_role
+        values
+        (1, 2),
+        (2, 1);
 
 	insert into `user`
 		(user_id, first_name, last_name, currency_id, app_user_id)
@@ -227,15 +236,6 @@ begin
         (4, 3, 4),
         (5, 4, 5),
         (6, 4, 6);
-
-    insert into app_role (`name`) values
-        ('USER'),
-        ('ADMIN');
-
-    insert into app_user_role
-        values
-        (1, 2),
-        (2, 1);
         
 end //
 delimiter ;
