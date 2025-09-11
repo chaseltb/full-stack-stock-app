@@ -84,7 +84,7 @@ create table `user` (
         references currencies(currency_id),
     CONSTRAINT fk_user_app_user_id
     		foreign key (app_user_id)
-            references app_user(app_user_id),
+            references app_user(app_user_id)
 );
 
 create table app_role (
