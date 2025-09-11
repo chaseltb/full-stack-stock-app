@@ -63,7 +63,7 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
     public boolean update(Currency currency){
         final String sql = "update currencies set "
                 + "`name` = ?, `code` = ?, value_to_usd = ? "
-                + "where currency_id = `?;";
+                + "where currency_id = ?;";
 
         return jdbcTemplate.update(sql,
                 currency.getName(),

@@ -39,7 +39,7 @@ public class Currency {
     }
 
     public void setValueToUsd(BigDecimal valueToUsd) {
-        this.valueToUsd = valueToUsd.setScale(3, RoundingMode.HALF_EVEN).stripTrailingZeros();
+        this.valueToUsd = valueToUsd.setScale(4, RoundingMode.HALF_EVEN).stripTrailingZeros();
     }
 
     //DOES NOT COMPARE IDS

@@ -34,7 +34,7 @@ class CurrencyJdbcTemplateRepositoryTest {
         List<Currency> currencies = repository.findAll();
         assertFalse(currencies.isEmpty());
 
-        assertEquals(3, currencies.size());
+        assertEquals(4, currencies.size());
     }
 
     /**
@@ -95,8 +95,12 @@ class CurrencyJdbcTemplateRepositoryTest {
         Currency actual = repository.add(currency);
 
         assertEquals(NEXT_ID, actual.getId());
+        assertEquals("Yen", actual.getName());
+        assertEquals("JPY", actual.getCode());
+        assertEquals(BigDecimal.valueOf(0.0068), actual.getValueToUsd());
     }
 
+    /* SHOULD NEVER REACH THIS POINT IN REPO, TEST IS IN DOMAIN INSTEAD
     @Test
     void shouldNotAddWithNullCurrency(){ // UNHAPPY PATH
         Currency currency = null;
@@ -105,6 +109,7 @@ class CurrencyJdbcTemplateRepositoryTest {
 
         assertNull(actual);
     }
+     */
 
     /**
      update Tests!
@@ -113,9 +118,9 @@ class CurrencyJdbcTemplateRepositoryTest {
     @Test
     void shouldUpdate(){ // HAPPY PATH
         Currency currency = new Currency();
-        currency.setName("Yen");
-        currency.setCode("JPY");
-        currency.setValueToUsd(BigDecimal.valueOf(0.0068));
+        currency.setName("Pound Sterling");
+        currency.setCode("BGP");
+        currency.setValueToUsd(BigDecimal.valueOf(1.36));
         currency.setId(2);
 
         assertTrue(repository.update(currency));
