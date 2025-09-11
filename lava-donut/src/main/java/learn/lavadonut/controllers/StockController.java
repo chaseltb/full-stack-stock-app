@@ -40,8 +40,18 @@ public class StockController {
         return ErrorResponse.build(result);
     }
 
-    @GetMapping("{stockId}")
+    @GetMapping("/{stockId}")
     public Stock findById(@PathVariable int stockId){ return service.findById(stockId); }
 
-    
+    @PostMapping
+    public ResponseEntity<Object> add(@RequestBody Stock stock) {
+        Result<Stock> result = service.add(stock);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
+        }
+        return ErrorResponse.build(result);
+    }
+
+    @PutMapping("/{stockId}")
+
 }
