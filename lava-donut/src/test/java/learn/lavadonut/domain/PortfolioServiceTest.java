@@ -1,6 +1,7 @@
 package learn.lavadonut.domain;
 
 import learn.lavadonut.data.PortfolioRepository;
+import learn.lavadonut.data.StockRepository;
 import learn.lavadonut.models.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +25,9 @@ class PortfolioServiceTest {
     @MockBean
     PortfolioRepository repo;
 
+    @MockBean
+    StockRepository stockRepo;
+
     @Test
     public void shouldFindAllStocksInPortfolio() {
 
@@ -38,8 +38,8 @@ class PortfolioServiceTest {
 
     @Test
     public void shouldNotFindNonexistingId() {
-        when(repo.findByUserId(9999)).thenReturn(null);
-        Portfolio result =  service.findByUserId(9999);
+        when(repo.findPortfoliosByUserId(9999)).thenReturn(null);
+        List<Portfolio> result =  service.findPortfoliosByUserId(9999);
         assertNull(result);
     }
 
@@ -47,30 +47,37 @@ class PortfolioServiceTest {
     public void shouldFindId() {
         Portfolio expected = new Portfolio();
         expected.setId(10);
-        expected.setAccountType(AccountType.INVESTING);
+        expected.setAccountType(AccountType.INVESTMENT);
         expected.setUserId(1);
-        when(repo.findByUserId(1)).thenReturn(expected);
-        Portfolio result =  service.findByUserId(1);
+        when(repo.findPortfoliosByUserId(1)).thenReturn(List.of(expected));
+        List<Portfolio> result =  service.findPortfoliosByUserId(1);
         assertNotNull(result);
-        assertEquals(result, expected);
+        assertEquals(result.get(0), expected);
     }
 
     @Test
     public void shouldUpdateAccountType() {
-        Result<Portfolio> result = service.updateAccountType(1, AccountType.RETIREMENT);
+        Portfolio p = getTestPortfolio();
+        p.setAccountType(AccountType.ROTH_IRA);
+        when(repo.updateAccountType(p)).thenReturn(true);
+        when(repo.findPortfoliosByUserId(1)).thenReturn(List.of(getTestPortfolio()));
+        Result<Portfolio> result = service.updateAccountType(p);
         assertTrue(result.isSuccess());
     }
 
     @Test
     public void shouldNotUpdateNullAccountType() {
-        Result<Portfolio> result = service.updateAccountType(1, null);
-        assertTrue(result.isSuccess());
+        Portfolio p = getTestPortfolio();
+        p.setAccountType(null);
+        Result<Portfolio> result = service.updateAccountType(p);
+        assertFalse(result.isSuccess());
     }
 
     @Test
     public void shouldGetPortfolioValue() {
         List<Order> orders = getTestOrders();
-        when(repo.findOrdersByUserId(1)).thenReturn(orders);
+        when(repo.findOrdersByPortfolioId(1)).thenReturn(orders);
+        when(stockRepo.findAll()).thenReturn(List.of(getTestStock()));
         Result<BigDecimal> result = service.getPortfolioValue(1, "2025-01-01");
         assertTrue(result.isSuccess());
         assertEquals(new BigDecimal("1000"), result.getPayload());
@@ -82,13 +89,45 @@ class PortfolioServiceTest {
     }
 
     @Test
+    void shouldCreatePortfolio() {
+        Portfolio p = getTestPortfolio();
+        p.setId(0);
+        Portfolio expected = getTestPortfolio();
+        expected.setId(1);
+        when(repo.createPortfolio(p)).thenReturn(expected);
+        when(repo.findPortfoliosByUserId(p.getUserId())).thenReturn(null);
+        Result<Portfolio> result = service.createPortfolio(p);
+        assertTrue(result.isSuccess());
+        assertTrue(result.getPayload().getId() > 0);
+    }
+
+    @Test
+    void shouldNotCreatePortfolioWithId() {
+        Portfolio p = getTestPortfolio();
+        p.setId(1);
+        Result<Portfolio> result = service.createPortfolio(p);
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotCreatePortfolioOfSameAccoutType() {
+        Portfolio p = getTestPortfolio();
+        p.setId(0);
+        Portfolio dupe = getTestPortfolio();
+        p.setId(10);
+        when(repo.findPortfoliosByUserId(p.getUserId())).thenReturn(List.of(dupe));
+        Result<Portfolio> result = service.createPortfolio(p);
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
     public void shouldCalculateCapitalGainsTax() {
 
         Result<BigDecimal> result = service.calculateCapitalGainsTax(getTestOrders(),
                 new BigDecimal("0.1"));
         assertTrue(result.isSuccess());
         //bought 100 for 10 each, sold 10 for 100 each so 900 in gains taxed at 10%
-        assertEquals(new BigDecimal("90"), result.getPayload());
+        assertEquals(new BigDecimal("90.0"), result.getPayload());
 
     }
 
@@ -121,12 +160,20 @@ class PortfolioServiceTest {
         return orders;
     }
 
-    public Stock getTestStock() {
+    private Stock getTestStock() {
         Stock stock = new Stock();
         stock.setId(1);
         stock.setCurrentPrice(new BigDecimal(10));
 
         return stock;
+    }
+
+    private Portfolio getTestPortfolio() {
+        Portfolio p = new Portfolio();
+        p.setUserId(1);
+        p.setAccountType(AccountType.INVESTMENT);
+        p.setId(1);
+        return p;
     }
 
 //    @Test

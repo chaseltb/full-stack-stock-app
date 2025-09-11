@@ -10,6 +10,8 @@ public class Portfolio {
     private List<Stock> stocks;
     private List<Order> orders;
     private List<Stock> watchedStocks;
+    private AccountType accountType;
+
 
     public List<Order> getOrders() {
         return orders;
@@ -18,8 +20,6 @@ public class Portfolio {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
-
-    private AccountType accountType;
 
     public List<Stock> getWatchedStocks() {
         return watchedStocks;

@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import learn.lavadonut.domain.PortfolioService;
 import learn.lavadonut.domain.Result;
-import learn.lavadonut.models.AccountType;
 import learn.lavadonut.models.Portfolio;
 import learn.lavadonut.models.Stock;
 import org.springframework.http.HttpStatus;
@@ -36,12 +35,12 @@ public class PortfolioController {
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{userId}")
-    public ResponseEntity<Portfolio> findByUserId(@PathVariable int userId) {
-        Portfolio portfolio = service.findByUserId(userId);
-        if(portfolio == null) {
+    public ResponseEntity<List<Portfolio>> findPortfoliosByUserId(@PathVariable int userId) {
+        List<Portfolio> portfolios = service.findPortfoliosByUserId(userId);
+        if(portfolios == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(portfolio);
+        return ResponseEntity.ok(portfolios);
     }
 
     @Operation(summary = "Find all stocks in a users portfolio")
@@ -50,9 +49,9 @@ public class PortfolioController {
             @ApiResponse(responseCode = "404", description = "Portfolio Stocks not found")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("/{userId}/stocks")
-    public ResponseEntity<List<Stock>> findAllStocksInPortfolio(@PathVariable int userId) {
-        List<Stock> stocks = service.findAllOwnedStocksInPortfolio(userId);
+    @GetMapping("/{portfolioId}/stocks")
+    public ResponseEntity<List<Stock>> findAllStocksInPortfolio(@PathVariable int portfolioId) {
+        List<Stock> stocks = service.findAllOwnedStocksInPortfolio(portfolioId);
         if (stocks == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -65,9 +64,9 @@ public class PortfolioController {
             @ApiResponse(responseCode = "404", description = "Portfolio not found")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("/{userId}/value")
-    public ResponseEntity<BigDecimal> getPortfolioValue(@PathVariable int userId, @RequestParam String date) {
-        Result<BigDecimal> result = service.getPortfolioValue(userId, date);
+    @GetMapping("/{portfolioId}/value")
+    public ResponseEntity<BigDecimal> getPortfolioValue(@PathVariable int portfolioId, @RequestParam String date) {
+        Result<BigDecimal> result = service.getPortfolioValue(portfolioId, date);
         if (result.isSuccess()) {
             return ResponseEntity.ok(result.getPayload());
         }
@@ -93,10 +92,13 @@ public class PortfolioController {
             @ApiResponse(responseCode = "404", description = "Portfolio not found")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @PutMapping("/{userId}")
-    public ResponseEntity<Portfolio> updateAccountType(@PathVariable int userId, @RequestParam AccountType accountType) {
+    @PutMapping("/{portfolioId}")
+    public ResponseEntity<Portfolio> updateAccountType(@PathVariable int portfolioId, @RequestParam Portfolio portfolio) {
 
-        Result<Portfolio> result = service.updateAccountType(userId, accountType);
+        if (portfolioId != portfolio.getId()) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        Result<Portfolio> result = service.updateAccountType(portfolio);
         if (result.isSuccess()) {
             return ResponseEntity.ok(result.getPayload());
         }

@@ -2,7 +2,8 @@ package learn.lavadonut.models;
 
 public enum AccountType {
     RETIREMENT(1, "Retirement"),
-    INVESTING(2, "Investing");
+    INVESTMENT(2, "Investment"),
+    ROTH_IRA(3,"Roth IRA");
 
     private int id;
     private String name;
@@ -18,5 +19,14 @@ public enum AccountType {
 
     public String getName() {
         return name;
+    }
+
+    public static AccountType fromValue(String value) {
+        for (AccountType type : AccountType.values()) {
+            if (type.name.equalsIgnoreCase(value) || type.name().equalsIgnoreCase(value)) {
+                return type;
+            }
+        }
+        return RETIREMENT;
     }
 }

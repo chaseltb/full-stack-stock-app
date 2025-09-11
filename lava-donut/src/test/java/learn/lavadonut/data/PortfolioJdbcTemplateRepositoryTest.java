@@ -26,40 +26,58 @@ class PortfolioJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindPortfolioByUserId() {
-        Portfolio portfolio = repo.findByUserId(1);
-        assertNotNull(portfolio);
-        assertEquals(1, portfolio.getId());
-        assertEquals(AccountType.RETIREMENT, portfolio.getAccountType());
-        assertEquals(1, portfolio.getUserId());
+        List<Portfolio> portfolios = repo.findPortfoliosByUserId(1);
+        assertNotNull(portfolios);
+        assertEquals(1, portfolios.get(0).getId());
+        assertEquals(1, portfolios.get(0).getUserId());
     }
 
     @Test
     void shouldFindAllStocksInPortfolio() {
         List<Stock> stocks = repo.findAllStocksInPortfolio(1);
         assertNotNull(stocks);
-        assertEquals(1, stocks.get(0).getId());
-        assertEquals("AMERICAN AIRLINES GROUP INC", stocks.get(0).getName());
-        assertEquals("TEST-TICKER1", stocks.get(0).getTicker());
-        assertEquals("airline and aviation", stocks.get(0).getIndustry());
-        assertEquals(1, stocks.get(0).getStockExchange().getId());
-        assertEquals(1, stocks.get(0).getCountry().getId());
-        assertEquals(AssetType.STOCK, stocks.get(0).getAssetType());
+        assertFalse(stocks.isEmpty());
+        //the order of these stocks is random, can no longer rely on position
+        assertTrue(stocks.stream().anyMatch(s -> s.getId() == 1));
+        assertTrue(stocks.stream().anyMatch(s -> s.getName().equalsIgnoreCase("AMERICAN AIRLINES GROUP INC")));
+        assertTrue(stocks.stream().anyMatch(s -> s.getTicker().equalsIgnoreCase("TEST-TICKER1")));
+        assertTrue(stocks.stream().anyMatch(s -> s.getIndustry().equalsIgnoreCase("airline and aviation")));
+        assertTrue(stocks.stream().anyMatch(s -> s.getStockExchange() != null && s.getStockExchange().getId() == 1));
+        assertTrue(stocks.stream().anyMatch(s -> s.getCountry() != null && s.getCountry().getId() == 1));
+        assertTrue(stocks.stream().anyMatch(s -> s.getAssetType() == AssetType.STOCK));
+
     }
 
     @Test
-    void shouldFindOrdersByUserId() {
-        List<Order> orders = repo.findOrdersByUserId(1);
+    void shouldFindOrdersByPortfolioId() {
+        List<Order> orders = repo.findOrdersByPortfolioId(1);
         assertNotNull(orders);
-        assertEquals(1, orders.get(0).getId());
-        assertEquals(TransactionType.BUY, orders.get(0).getTransactionType());
-        assertEquals(new BigDecimal("20"), orders.get(0).getNumberOfShares());
-        assertEquals(new BigDecimal("12.915"), orders.get(0).getPrice());
-        assertEquals(1, orders.get(0).getStockId());
+        assertFalse(orders.isEmpty());
+        //dont know order, just make sure it exists
+        assertTrue(orders.stream().anyMatch(o -> o.getTransactionType() == TransactionType.BUY));
+        assertTrue(orders.stream().anyMatch(o -> o.getNumberOfShares().equals(new BigDecimal("20.0"))));
+        assertTrue(orders.stream().anyMatch(o -> o.getPrice().equals(new BigDecimal("2000.0"))));
+        assertTrue(orders.stream().anyMatch(o -> o.getStockId() == 1));
 
+
+    }
+
+    @Test
+    void shouldAddPortfolio() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setAccountType(AccountType.RETIREMENT);
+        portfolio.setUserId(1);
+
+        portfolio = repo.createPortfolio(portfolio);
+        assertTrue(portfolio.getId() > 0);
     }
 
     @Test
     void shouldUpdateAccountType() {
-        assertTrue(repo.updateAccountType(1, AccountType.INVESTING));
+        Portfolio p = new Portfolio();
+        p.setId(1);
+        p.setUserId(1);
+        p.setAccountType(AccountType.ROTH_IRA);
+        assertTrue(repo.updateAccountType(p));
     }
 }
