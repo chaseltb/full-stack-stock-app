@@ -1,5 +1,8 @@
 package learn.lavadonut.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import learn.lavadonut.domain.Result;
 import learn.lavadonut.domain.StockService;
@@ -22,9 +25,16 @@ public class StockController {
 
     public StockController(StockService service) { this.service = service; }
 
+    @Operation(summary = "Get all Stocks")
     @GetMapping
     public List<Stock> findAll() { return service.findAll(); }
 
+    @Operation(summary = "Get all Stocks by Industry")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "stocks of this industry are found!"),
+            @ApiResponse(responseCode = "400", description = "industry is invalid"),
+            @ApiResponse(responseCode = "404", description = "stocks not found")
+    })
     @GetMapping("/industry/{industry}")
     public ResponseEntity<Object> getStocksByIndustry(@PathVariable String industry){
         Result<List<Stock>> result = service.getStocksByIndustry(industry);
@@ -44,7 +54,13 @@ public class StockController {
     }
 
     @GetMapping("/{stockId}")
-    public Stock findById(@PathVariable int stockId){ return service.findById(stockId); }
+    public ResponseEntity<Object> findById(@PathVariable int stockId){
+        Stock stock = service.findById(stockId);
+        if (stock == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(stock);
+    }
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
