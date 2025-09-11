@@ -110,6 +110,11 @@ public class StockController {
         return ErrorResponse.build(result);
     }
 
+    @Operation(summary = "ADMIN: Delete a Stock by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Stock deleted"),
+            @ApiResponse(responseCode = "404", description = "Stock not found")
+    })
     @DeleteMapping("/{stockId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int stockId) {
