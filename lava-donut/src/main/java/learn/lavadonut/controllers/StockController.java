@@ -53,5 +53,17 @@ public class StockController {
     }
 
     @PutMapping("/{stockId}")
+    public ResponseEntity<Object> update(@PathVariable int stockId, @RequestBody Stock stock){
+        if (stockId != stock.getId()) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        Result<Stock> result = service.update(stock);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return ErrorResponse.build(result);
+    }
 
 }
