@@ -66,4 +66,13 @@ public class StockController {
         return ErrorResponse.build(result);
     }
 
+    @DeleteMapping("/{stockId}")
+    public ResponseEntity<Object> delete(@PathVariable int stockId) {
+        Result<Stock> result = service.delete(stockId);
+        if(result.isSuccess()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return ErrorResponse.build(result);
+    }
 }
