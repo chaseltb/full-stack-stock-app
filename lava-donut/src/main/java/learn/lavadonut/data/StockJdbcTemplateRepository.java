@@ -49,10 +49,10 @@ public class StockJdbcTemplateRepository implements StockRepository{
 
     @Override
     public Stock findById(int stockId) {
-        final String sql = "select s.stock_id, s.`name`, s.`ticker`, s.asset_type, s.industry, s.current_price, "
-                + "se.stock_exchange_id, se.`name`, se.`code`, se.timezone, "
-                + "c.country_id, c.`name`, c.`code`, "
-                + "cu.currency_id, cu.`name`, cu.`code`, cu.value_to_usd "
+        final String sql = "select s.stock_id, s.`name` as stock_name, s.`ticker`, s.asset_type, s.industry, s.current_price, "
+                + "se.stock_exchange_id, se.`name` as exchange_name, se.`code` as exchange_code, se.timezone, "
+                + "c.country_id, c.`name` as country_name, c.`code` as country_code, "
+                + "cu.currency_id, cu.`name` as currency_name, cu.`code` as currency_code, cu.value_to_usd "
                 + "from stock_exchange se "
                 + "inner join stocks s on se.stock_exchange_id = s.stock_exchange_id "
                 + "inner join countries c on s.country_id = c.country_id "
