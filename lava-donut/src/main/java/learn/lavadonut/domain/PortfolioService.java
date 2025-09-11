@@ -22,22 +22,91 @@ public class PortfolioService {
         this.stockRepo = stockRepo;
     }
 
-    public Portfolio findByUserId(int userId) {
-        return portfolioRepo.findByUserId(userId);
+    public List<Portfolio> findPortfoliosByUserId(int userId) {
+        return portfolioRepo.findPortfoliosByUserId(userId);
     }
 
-    public List<Stock> findAllOwnedStocksInPortfolio(int userId) {
-        return portfolioRepo.findAllStocksInPortfolio(userId);
+    public List<Stock> findAllOwnedStocksInPortfolio(int portfolioId) {
+        return portfolioRepo.findAllStocksInPortfolio(portfolioId);
     }
-    public Result<Portfolio> updateAccountType(int userId, AccountType accountType) {
+
+    public Result<Portfolio> createPortfolio(Portfolio portfolio) {
         Result<Portfolio> result = new Result<>();
-        Portfolio portfolio = portfolioRepo.findByUserId(userId);
+
         if (portfolio == null) {
-            result.addMessage("User not found", ResultType.NOT_FOUND);
+            result.addMessage("Portfolio cannot be null.", ResultType.INVALID);
+            return result;
         }
-        boolean updated = portfolioRepo.updateAccountType(userId, accountType);
+
+        if (portfolio.getId() >= 1) {
+            result.addMessage("Portfolio cannot have an id", ResultType.INVALID);
+        }
+        if (portfolio.getUserId() <= 0) {
+            result.addMessage("Portfolio must be associated with a valid user", ResultType.INVALID);
+        }
+        if (portfolio.getAccountType() == null) {
+            result.addMessage("Portfolio must have an account type", ResultType.INVALID);
+        }
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        //prevent dupe
+        List<Portfolio> existing = portfolioRepo.findPortfoliosByUserId(portfolio.getUserId());
+        if (existing != null) {
+            for (Portfolio p : existing) {
+                if (p.getAccountType().equals(portfolio.getAccountType())) {
+                    result.addMessage("User already has a portfolio of that account type", ResultType.INVALID);
+                    return result;
+                }
+            }
+        }
+
+        Portfolio newPortfolio = portfolioRepo.createPortfolio(portfolio);
+        if (newPortfolio == null) {
+            result.addMessage("Failed to create portfolio", ResultType.INVALID);
+            return result;
+        }
+
+        result.setPayload(newPortfolio);
+        return result;
+    }
+
+
+    public Result<Portfolio> updateAccountType(Portfolio portfolio) {
+        Result<Portfolio> result = new Result<>();
+        if (portfolio == null) {
+            result.addMessage(
+                    String.format("Portfolio must be valid"),
+                    ResultType.INVALID);
+            return result;
+        }
+        if (portfolio.getAccountType() == null) {
+            result.addMessage(
+                    String.format("Account type %s is not a valid account", portfolio.getAccountType()),
+                    ResultType.INVALID);
+        }
+        if (portfolio.getId() == 0) {
+            result.addMessage(
+                    String.format("Portfolio id %s is not a valid id", portfolio.getId()),
+                    ResultType.INVALID);
+        }
+        List<Portfolio> portfolios = portfolioRepo.findPortfoliosByUserId(portfolio.getUserId());
+        if (portfolios == null) {
+            result.addMessage("User not found", ResultType.NOT_FOUND);
+            return result;
+        }
+        if (portfolios.stream().noneMatch(p -> p.getId() == portfolio.getId())) {
+            result.addMessage(
+                    String.format("No account for this user with portfolio id %s", portfolio.getId()),
+                    ResultType.INVALID);
+        }
+        if (!result.isSuccess()){
+            return result;
+        }
+        boolean updated = portfolioRepo.updateAccountType(portfolio);
         if(updated) {
-            portfolio.setAccountType(accountType);
+            portfolio.setAccountType(portfolio.getAccountType());
             result.setPayload(portfolio);
         } else {
             result.addMessage("failed to update account type", ResultType.INVALID);
@@ -45,7 +114,7 @@ public class PortfolioService {
         return result;
     }
 
-    public Result<BigDecimal> getPortfolioValue(int userId, String date) {
+    public Result<BigDecimal> getPortfolioValue(int portfolioId, String date) {
 
         Result<BigDecimal> result = new Result<>();
         Date searchDate;
@@ -56,9 +125,9 @@ public class PortfolioService {
             result.addMessage("Date is not correct format (yyyy-mm-dd)", ResultType.INVALID);
             return result;
         }
-        List<Order> orders = portfolioRepo.findOrdersByUserId(userId);
+        List<Order> orders = portfolioRepo.findOrdersByPortfolioId(portfolioId);
         if (orders == null || orders.isEmpty()) {
-            result.addMessage(String.format("No Orders found for user %s", userId), ResultType.NOT_FOUND);
+            result.addMessage(String.format("No Orders found for user %s", portfolioId), ResultType.NOT_FOUND);
             return result;
         }
         List<Stock> allStocks = stockRepo.findAll();
@@ -86,9 +155,9 @@ public class PortfolioService {
 
     public Result<Portfolio> updateCostBasisOnDividend(int userId, BigDecimal dividend) {
         Result<Portfolio> result = new Result<>();
-        Portfolio portfolio = portfolioRepo.findByUserId(userId);
-        if (portfolio == null) {
-            result.addMessage("User not found", ResultType.NOT_FOUND);
+        List<Portfolio> portfolios = portfolioRepo.findPortfoliosByUserId(userId);
+        if (portfolios == null) {
+            result.addMessage("No portfolios for user found", ResultType.NOT_FOUND);
         }
         //TODO Decide how we want to calculate cost basis, either through all orders or all stocks
 
@@ -164,7 +233,8 @@ public class PortfolioService {
                 }
             }
         }
-        result.setPayload(totalGains);
+        BigDecimal amountTaxed = totalGains.multiply(taxRate);
+        result.setPayload(amountTaxed);
         return result;
     }
 
