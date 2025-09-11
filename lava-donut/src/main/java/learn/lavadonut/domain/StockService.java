@@ -90,7 +90,6 @@ public class StockService {
         return result;
     }
 
-    //TODO: may need to check if being used by other objects, come back to later
     public Result<Stock> delete(int stockId){
         Result<Stock> result = new Result<>();
 

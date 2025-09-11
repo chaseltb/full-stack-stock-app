@@ -25,6 +25,7 @@ public class StockController {
     public StockController(StockService service) { this.service = service; }
 
     @Operation(summary = "Get all Stocks")
+    @ApiResponse(responseCode = "200", description = "Stocks found")
     @GetMapping
     public List<Stock> findAll() { return service.findAll(); }
 
@@ -62,7 +63,7 @@ public class StockController {
 
     @Operation(summary = "Find a Stock by ID")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Stock of this is is found!"),
+            @ApiResponse(responseCode = "200", description = "Stock of this id is found!"),
             @ApiResponse(responseCode = "404", description = "Stock not found")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
@@ -115,6 +116,7 @@ public class StockController {
     @Operation(summary = "ADMIN: Delete a Stock by ID")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Stock deleted"),
+            @ApiResponse(responseCode = "400", description = "Invalid Stock"),
             @ApiResponse(responseCode = "404", description = "Stock not found")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
