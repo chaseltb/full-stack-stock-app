@@ -113,13 +113,13 @@ public class StockJdbcTemplateRepository implements StockRepository{
     @Override
     public boolean update(Stock stock) {
         final String sql = "update stocks set "
-                + "`name` = ?, 'ticker' = ?, asset_type = ?, industry = ?, current_price = ?, stock_exchange_id = ?, country_id = ? "
+                + "`name` = ?, ticker = ?, asset_type = ?, industry = ?, current_price = ?, stock_exchange_id = ?, country_id = ? "
                 + "where stock_id = ?;";
 
         return jdbcTemplate.update(sql,
                 stock.getName(),
                 stock.getTicker(),
-                stock.getAssetType(),
+                stock.getAssetType().name(),
                 stock.getIndustry(),
                 stock.getCurrentPrice(),
                 stock.getStockExchange().getId(),
