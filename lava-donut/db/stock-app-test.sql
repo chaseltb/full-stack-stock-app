@@ -137,6 +137,11 @@ begin
     alter table portfolio auto_increment = 1;
     delete from `user`;
     alter table `user` auto_increment = 1;
+    delete from app_user_role;
+    delete from app_user;
+    alter table app_user auto_increment = 1;
+    delete from app_role;
+    alter table app_role auto_increment = 1;
     delete from orders;
     alter table orders auto_increment = 1;
     delete from stocks;
