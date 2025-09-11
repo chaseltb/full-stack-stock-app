@@ -73,20 +73,6 @@ create table app_user (
     disabled boolean not null default(0)
 );
 
-create table `user` (
-	user_id int primary key auto_increment,
-    first_name varchar(150) not null,
-    last_name varchar(150) not null,
-    currency_id int not null,
-    app_user_id int not null,
-    CONSTRAINT fk_user_currency_id
-		foreign key (currency_id)
-        references currencies(currency_id),
-    CONSTRAINT fk_user_app_user_id
-    		foreign key (app_user_id)
-            references app_user(app_user_id),
-);
-
 create table app_role (
     app_role_id int primary key auto_increment,
     `name` varchar(50) not null unique
@@ -103,6 +89,20 @@ create table app_user_role (
     constraint fk_app_user_role_role_id
         foreign key (app_role_id)
         references app_role(app_role_id)
+);
+
+create table `user` (
+	user_id int primary key auto_increment,
+    first_name varchar(150) not null,
+    last_name varchar(150) not null,
+    currency_id int not null,
+    app_user_id int not null,
+    CONSTRAINT fk_user_currency_id
+		foreign key (currency_id)
+        references currencies(currency_id),
+    CONSTRAINT fk_user_app_user_id
+    		foreign key (app_user_id)
+            references app_user(app_user_id)
 );
 
 create table portfolio (

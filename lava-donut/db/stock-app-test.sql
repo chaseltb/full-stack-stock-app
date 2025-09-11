@@ -73,6 +73,24 @@ create table app_user (
     disabled boolean not null default(0)
 );
 
+create table app_role (
+    app_role_id int primary key auto_increment,
+    `name` varchar(50) not null unique
+);
+
+create table app_user_role (
+    app_user_id int not null,
+    app_role_id int not null,
+    constraint pk_app_user_role
+        primary key (app_user_id, app_role_id),
+    constraint fk_app_user_role_user_id
+        foreign key (app_user_id)
+        references app_user(app_user_id),
+    constraint fk_app_user_role_role_id
+        foreign key (app_role_id)
+        references app_role(app_role_id)
+);
+
 create table `user` (
 	user_id int primary key auto_increment,
     first_name varchar(150) not null,
@@ -108,24 +126,6 @@ create table portfolio_orders (
         references orders(order_id)
 );
 
-create table app_role (
-    app_role_id int primary key auto_increment,
-    `name` varchar(50) not null unique
-);
-
-create table app_user_role (
-    app_user_id int not null,
-    app_role_id int not null,
-    constraint pk_app_user_role
-        primary key (app_user_id, app_role_id),
-    constraint fk_app_user_role_user_id
-        foreign key (app_user_id)
-        references app_user(app_user_id),
-    constraint fk_app_user_role_role_id
-        foreign key (app_role_id)
-        references app_role(app_role_id)
-);
-
 -- TEST DATA
 delimiter //
 create procedure set_known_good_state()
@@ -137,6 +137,11 @@ begin
     alter table portfolio auto_increment = 1;
     delete from `user`;
     alter table `user` auto_increment = 1;
+    delete from app_user_role;
+    delete from app_user;
+    alter table app_user auto_increment = 1;
+    delete from app_role;
+    alter table app_role auto_increment = 1;
     delete from orders;
     alter table orders auto_increment = 1;
     delete from stocks;
@@ -192,11 +197,20 @@ begin
         (5, 'BUY', 22, 67.95, '2015-10-01', 7),
         (6, 'SELL', 5, 64.73, '2023-07-05', 9);
 
+	insert into app_role (`name`) values
+        ('USER'),
+        ('ADMIN');
+
     -- passwords are set to "P@ssw0rd!"
     insert into app_user (username, password_hash, disabled)
         values
         ('john@smith.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
         ('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0);
+
+    insert into app_user_role
+        values
+        (1, 2),
+        (2, 1);
 
 	insert into `user`
 		(user_id, first_name, last_name, currency_id, app_user_id)
@@ -204,14 +218,15 @@ begin
 		(1, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1),
         (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2);
 	
+    -- ERROR IS HERE WITH REFERENCING USER ID
     insert into portfolio
 		(portfolio_id, account_type, user_id)
 	values
 		(1, 'Retirement', 1),
         (2, 'Investment', 1),
         (3, 'Roth IRA', 2),
-        (4, 'Retirement', 3),
-        (5, 'Investment', 3);
+        (4, 'Retirement', 2),
+        (5, 'Investment', 2);
         
     insert into portfolio_orders
 		(port_order_id, portfolio_id, order_id)
@@ -222,15 +237,6 @@ begin
         (4, 3, 4),
         (5, 4, 5),
         (6, 4, 6);
-
-    insert into app_role (`name`) values
-        ('USER'),
-        ('ADMIN');
-
-    insert into app_user_role
-        values
-        (1, 2),
-        (2, 1);
         
 end //
 delimiter ;
