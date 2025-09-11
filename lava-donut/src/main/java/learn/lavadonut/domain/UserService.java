@@ -1,5 +1,6 @@
 package learn.lavadonut.domain;
 
+import learn.lavadonut.data.AppUserRepository;
 import learn.lavadonut.data.CurrencyRepository;
 import learn.lavadonut.data.UserRepository;
 import learn.lavadonut.models.User;
@@ -13,11 +14,8 @@ public class UserService {
 
     private final UserRepository repo;
 
-    private final CurrencyRepository currencyRepository;
-
-    public UserService(UserRepository repo, CurrencyRepository currencyRepository) {
+    public UserService(UserRepository repo, CurrencyRepository currencyRepository, AppUserRepository appUserRepository) {
         this.repo = repo;
-        this.currencyRepository = currencyRepository;
     }
 
     public List<User> findAll() {
@@ -107,13 +105,17 @@ public class UserService {
             result.addMessage("The user's currency id must be greater than 0", ResultType.INVALID);
         }
 
-        if (currencyRepository.findById(user.getCurrencyId()) == null){
+        if (!repo.doesCurrencyExist(user.getCurrencyId())){
             result.addMessage("The user's currency id must be that of an existing currency", ResultType.INVALID);
         }
 
         // app user id
         if (user.getAppUserId() <= 0) {
             result.addMessage("The user's app user id must be greater than 0", ResultType.INVALID);
+        }
+
+        if (!repo.doesAppUserExist(user.getAppUserId())){
+            result.addMessage("The user's appUser id must be that of an existing appUser", ResultType.INVALID);
         }
 
         return result;

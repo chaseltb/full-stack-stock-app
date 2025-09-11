@@ -14,4 +14,8 @@ public interface UserRepository {
     boolean update(User user);
 
     boolean deleteById(int userId);
+
+    boolean doesCurrencyExist (int currencyId);
+
+    boolean doesAppUserExist (int userAppId);
 }

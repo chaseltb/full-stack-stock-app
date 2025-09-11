@@ -187,6 +187,8 @@ class UserServiceTest {
         user.setFirstName("James");
 
         when(userRepo.update(user)).thenReturn(true);
+        when(userRepo.doesCurrencyExist(user.getCurrencyId())).thenReturn(true);
+        when(userRepo.doesAppUserExist(user.getAppUserId())).thenReturn(true);
         Result<User> result = service.update(user);
         assertTrue(result.isSuccess());
         assertEquals(result.getPayload(), user);
