@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -68,10 +69,11 @@ class PortfolioServiceTest {
 
     @Test
     public void shouldGetPortfolioValue() {
-//        List<Order> orders = getTestOrders();
-//        when(repo.findOrdersByUserId(1)).thenReturn(orders);
-//        BigDecimal result = service.getPortfolioValue(1, "2025-01-01");
-//        assertEquals(new BigDecimal("1000"), result);
+        List<Order> orders = getTestOrders();
+        when(repo.findOrdersByUserId(1)).thenReturn(orders);
+        Result<BigDecimal> result = service.getPortfolioValue(1, "2025-01-01");
+        assertTrue(result.isSuccess());
+        assertEquals(new BigDecimal("1000"), result.getPayload());
     }
 
     @Test
@@ -81,29 +83,51 @@ class PortfolioServiceTest {
 
     @Test
     public void shouldCalculateCapitalGainsTax() {
-//
-//        BigDecimal result = service.calculateCapitalGainsTax(getTestOrders(),
-//                new BigDecimal("0.1"));
-//        assertEquals(new BigDecimal("100"), result);
+
+        Result<BigDecimal> result = service.calculateCapitalGainsTax(getTestOrders(),
+                new BigDecimal("0.1"));
+        assertTrue(result.isSuccess());
+        //bought 100 for 10 each, sold 10 for 100 each so 900 in gains taxed at 10%
+        assertEquals(new BigDecimal("90"), result.getPayload());
 
     }
 
-//    private List<Order> getTestOrders() {
-//        List<Order> orders = new ArrayList<>();
-//        Order order1 = new Order(1, TransactionType.BUY, 1, new BigDecimal(100),
-//                ZonedDateTime.of(LocalDate.of(2025, 1, 1), LocalTime.NOON, ZoneId.of("GMT")),
-//                new BigDecimal(10), 1);
-//        Order order2 = new Order(1, TransactionType.SELL, 1, new BigDecimal(10),
-//                ZonedDateTime.of(LocalDate.of(2025, 1, 2), LocalTime.NOON, ZoneId.of("GMT")),
-//                new BigDecimal(100), 1);
-//        Order order3 = new Order(1, TransactionType.BUY, 1, new BigDecimal(10),
-//                ZonedDateTime.of(LocalDate.of(2025, 9, 1), LocalTime.NOON, ZoneId.of("GMT")),
-//                new BigDecimal(80), 1);
-//        orders.add(order1);
-//        orders.add(order2);
-//        orders.add(order3);
-//        return orders;
-//    }
+    private List<Order> getTestOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order order1 = new Order();
+        order1.setId(1);
+        order1.setTransactionType(TransactionType.BUY);
+        order1.setStockId(1);
+        order1.setNumberOfShares(new BigDecimal(100));
+        order1.setDate(Date.valueOf("2025-01-01"));
+        order1.setPrice(new BigDecimal(10));
+        Order order2 = new Order();
+        order2.setId(2);
+        order2.setTransactionType(TransactionType.SELL);
+        order2.setStockId(1);
+        order2.setNumberOfShares(new BigDecimal(10));
+        order2.setDate(Date.valueOf("2025-01-02"));
+        order2.setPrice(new BigDecimal(100));
+        Order order3 = new Order();
+        order3.setId(3);
+        order3.setTransactionType(TransactionType.BUY);
+        order3.setStockId(1);
+        order3.setNumberOfShares(new BigDecimal(10));
+        order3.setDate(Date.valueOf("2025-09-02"));
+        order3.setPrice(new BigDecimal(80));
+        orders.add(order1);
+        orders.add(order2);
+        orders.add(order3);
+        return orders;
+    }
+
+    public Stock getTestStock() {
+        Stock stock = new Stock();
+        stock.setId(1);
+        stock.setCurrentPrice(new BigDecimal(10));
+
+        return stock;
+    }
 
 //    @Test
 //    public void shouldSellStockFromPortfolio() {

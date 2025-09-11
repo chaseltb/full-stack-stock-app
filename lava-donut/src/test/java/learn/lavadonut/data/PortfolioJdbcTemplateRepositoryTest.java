@@ -55,7 +55,6 @@ class PortfolioJdbcTemplateRepositoryTest {
         assertEquals(new BigDecimal("20"), orders.get(0).getNumberOfShares());
         assertEquals(new BigDecimal("12.915"), orders.get(0).getPrice());
         assertEquals(1, orders.get(0).getStockId());
-//        assertEquals(1, orders.get(0).getUserId());
 
     }
 
