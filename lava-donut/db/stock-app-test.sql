@@ -158,7 +158,9 @@ begin
 	values
 		(1, 'United States dollar', 'USD', 1.0),
         (2, 'Euro', 'EUR', 1.17),
-        (3, 'Chinese Yuan', 'CNY', 0.14);
+        (3, 'Chinese Yuan', 'CNY', 0.14),
+        (4, 'Brazilian Real', 'BRL', 0.19); -- for testing delete in repo tests
+
 
 	insert into stock_exchange
 		(stock_exchange_id, `name`, `code`, timezone)

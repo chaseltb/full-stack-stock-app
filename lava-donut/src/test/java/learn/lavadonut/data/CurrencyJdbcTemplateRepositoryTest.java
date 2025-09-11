@@ -64,6 +64,12 @@ class CurrencyJdbcTemplateRepositoryTest {
         assertEquals("Chinese Yuan", actual.getName());
         assertEquals("CNY", actual.getCode());
         assertEquals(BigDecimal.valueOf(0.14), actual.getValueToUsd());
+
+        actual = repository.findById(4);
+        assertNotNull(actual);
+        assertEquals("Brazilian Real", actual.getName());
+        assertEquals("BRL", actual.getCode());
+        assertEquals(BigDecimal.valueOf(0.19), actual.getValueToUsd());
     }
 
     @Test
@@ -132,7 +138,7 @@ class CurrencyJdbcTemplateRepositoryTest {
 
     @Test
     void shouldDelete(){ // HAPPY PATH
-        int validId = 1;
+        int validId = 4; //Brazilian real, not connected to any other table
 
         assertTrue(repository.delete(validId));
     }
