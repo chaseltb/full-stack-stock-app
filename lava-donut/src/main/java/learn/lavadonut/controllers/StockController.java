@@ -25,6 +25,7 @@ public class StockController {
     public StockController(StockService service) { this.service = service; }
 
     @Operation(summary = "Get all Stocks")
+    @ApiResponse(responseCode = "200", description = "Stocks found")
     @GetMapping
     public List<Stock> findAll() { return service.findAll(); }
 

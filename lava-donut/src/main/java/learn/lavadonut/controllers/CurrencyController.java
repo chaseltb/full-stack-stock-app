@@ -1,5 +1,7 @@
 package learn.lavadonut.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import learn.lavadonut.domain.CurrencyService;
 import learn.lavadonut.domain.Result;
 import learn.lavadonut.models.Currency;
@@ -18,6 +20,8 @@ public class CurrencyController {
 
     public CurrencyController(CurrencyService service) { this.service = service; }
 
+    @Operation(summary = "Find all Currencies")
+    @ApiResponse(responseCode = "200", description = "Currencies found")
     @GetMapping
     public List<Currency> findAll() { return service.findAll(); }
 
