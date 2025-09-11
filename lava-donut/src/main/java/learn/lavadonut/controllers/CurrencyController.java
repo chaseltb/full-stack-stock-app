@@ -21,6 +21,8 @@ public class CurrencyController {
 
     public CurrencyController(CurrencyService service) { this.service = service; }
 
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @Operation(summary = "Find all Currencies")
     @ApiResponse(responseCode = "200", description = "Currencies found")
     @GetMapping
@@ -31,6 +33,7 @@ public class CurrencyController {
             @ApiResponse(responseCode = "200", description = "Currency of this id is found!"),
             @ApiResponse(responseCode = "404", description = "Currency not found")
     })
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> findById(@PathVariable int currencyId) {
         Currency currency = service.findById(currencyId);
@@ -40,13 +43,13 @@ public class CurrencyController {
         return ResponseEntity.ok(currency);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "ADMIN: Add a Currency")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Currency created"),
             @ApiResponse(responseCode = "400", description = "Invalid Currency")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> add(@RequestBody Currency currency) {
         Result<Currency> result = service.add(currency);
         if (result.isSuccess()) {
@@ -63,7 +66,7 @@ public class CurrencyController {
             @ApiResponse(responseCode = "409", description = "ID conflict")
     })
     @PutMapping("/{currencyId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int currencyId, @RequestBody Currency currency) {
         if (currencyId != currency.getId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -84,7 +87,7 @@ public class CurrencyController {
             @ApiResponse(responseCode = "404", description = "Currency not found")
     })
     @DeleteMapping("/{currencyId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int currencyId) {
         Result<Currency> result = service.delete(currencyId);
         if(result.isSuccess()){

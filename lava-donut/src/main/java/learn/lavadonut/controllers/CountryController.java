@@ -27,6 +27,7 @@ public class CountryController {
 
     @Operation(summary = "Find all countries")
     @ApiResponse(responseCode = "200", description = "Countries found")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<Country>> findAll() {
         List<Country> countries = service.findAll();
@@ -38,6 +39,7 @@ public class CountryController {
             @ApiResponse(responseCode = "200", description = "Country found"),
             @ApiResponse(responseCode = "404", description = "Country not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
     public ResponseEntity<Country> findById(@PathVariable int id) {
         Country country = service.findById(id);
@@ -53,7 +55,7 @@ public class CountryController {
             @ApiResponse(responseCode = "400", description = "Invalid country")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> add(@RequestBody Country country) {
         Result<Country> result = service.add(country);
         if (result.isSuccess()) {
@@ -70,7 +72,7 @@ public class CountryController {
             @ApiResponse(responseCode = "409", description = "ID conflict")
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Country country) {
         // validate id
         if (id != country.getId()) {
@@ -92,7 +94,7 @@ public class CountryController {
             @ApiResponse(responseCode = "404", description = "Country not found")
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int id) {
         Result<Country> result = service.delete(id);
         if (!result.isSuccess()) {

@@ -26,6 +26,7 @@ public class StockExchangeController {
     }
 
     @Operation(summary = "Get all stock exchanges")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public List<StockExchange> findAll() {
         return service.findAll();
@@ -36,6 +37,7 @@ public class StockExchangeController {
             @ApiResponse(responseCode = "200", description = "Stock exchange found"),
             @ApiResponse(responseCode = "404", description = "Stock exchange not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{stockExchangeId}")
     public ResponseEntity<Object> findById(@PathVariable int stockExchangeId) {
         StockExchange exchange = service.findById(stockExchangeId);
@@ -50,8 +52,8 @@ public class StockExchangeController {
             @ApiResponse(responseCode = "201", description = "Stock exchange created"),
             @ApiResponse(responseCode = "400", description = "Invalid exchange input")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> add(@RequestBody StockExchange exchange) {
         Result<StockExchange> result = service.add(exchange);
         if (result.isSuccess()) {
@@ -67,8 +69,8 @@ public class StockExchangeController {
             @ApiResponse(responseCode = "404", description = "Stock exchange not found"),
             @ApiResponse(responseCode = "409", description = "ID conflict")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{stockExchangeId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int stockExchangeId, @RequestBody StockExchange exchange) {
         if (stockExchangeId != exchange.getId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -86,8 +88,8 @@ public class StockExchangeController {
             @ApiResponse(responseCode = "204", description = "Stock exchange deleted"),
             @ApiResponse(responseCode = "404", description = "Stock exchange not found")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{stockExchangeId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable int stockExchangeId) {
         if (service.deleteById(stockExchangeId)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

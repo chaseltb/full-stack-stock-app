@@ -11,6 +11,7 @@ import learn.lavadonut.models.Portfolio;
 import learn.lavadonut.models.Stock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -33,6 +34,7 @@ public class PortfolioController {
             @ApiResponse(responseCode = "200", description = "Portfolio found"),
             @ApiResponse(responseCode = "404", description = "Portfolio not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{userId}")
     public ResponseEntity<Portfolio> findByUserId(@PathVariable int userId) {
         Portfolio portfolio = service.findByUserId(userId);
@@ -47,6 +49,7 @@ public class PortfolioController {
             @ApiResponse(responseCode = "200", description = "Portfolio Stocks"),
             @ApiResponse(responseCode = "404", description = "Portfolio Stocks not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{userId}/stocks")
     public ResponseEntity<List<Stock>> findAllStocksInPortfolio(@PathVariable int userId) {
         List<Stock> stocks = service.findAllOwnedStocksInPortfolio(userId);
@@ -61,6 +64,7 @@ public class PortfolioController {
             @ApiResponse(responseCode = "200", description = "The Value of the portfolio"),
             @ApiResponse(responseCode = "404", description = "Portfolio not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{userId}/value")
     public ResponseEntity<BigDecimal> getPortfolioValue(@PathVariable int userId, @RequestParam String date) {
         Result<BigDecimal> result = service.getPortfolioValue(userId, date);
@@ -75,6 +79,7 @@ public class PortfolioController {
             @ApiResponse(responseCode = "200", description = "Cost Basis updated"),
             @ApiResponse(responseCode = "404", description = "Portfolio not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/{userId}/cost_basis")
     public ResponseEntity<Void> updateCostBasisOnDividend(@PathVariable int userId, @RequestBody BigDecimal dividend) {
 
@@ -87,6 +92,7 @@ public class PortfolioController {
             @ApiResponse(responseCode = "200", description = "Portfolio Account type updated"),
             @ApiResponse(responseCode = "404", description = "Portfolio not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/{userId}")
     public ResponseEntity<Portfolio> updateAccountType(@PathVariable int userId, @RequestParam AccountType accountType) {
 

@@ -26,6 +26,7 @@ public class UserController {
     }
 
     @Operation(summary = "Get all users")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<User> findAll() {
         return service.findAll();
@@ -36,6 +37,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User found"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{userId}")
     public ResponseEntity<Object> findById(@PathVariable int userId) {
         User user = service.findByUserId(userId);
@@ -50,6 +52,7 @@ public class UserController {
             @ApiResponse(responseCode = "201", description = "User created"),
             @ApiResponse(responseCode = "400", description = "Invalid user input")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody User user) {
         Result<User> result = service.add(user);
@@ -66,6 +69,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "409", description = "ID conflict")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{userId}")
     public ResponseEntity<Object> update(@PathVariable int userId, @RequestBody User user) {
         if (userId != user.getUserId()) {
@@ -85,7 +89,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @DeleteMapping("/{userId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable int userId) {
         if (service.deleteById(userId)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
