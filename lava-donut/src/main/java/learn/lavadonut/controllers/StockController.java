@@ -5,6 +5,7 @@ import learn.lavadonut.domain.StockService;
 import learn.lavadonut.models.Stock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class StockController {
     public Stock findById(@PathVariable int stockId){ return service.findById(stockId); }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> add(@RequestBody Stock stock) {
         Result<Stock> result = service.add(stock);
         if (result.isSuccess()) {
@@ -53,6 +55,7 @@ public class StockController {
     }
 
     @PutMapping("/{stockId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int stockId, @RequestBody Stock stock){
         if (stockId != stock.getId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -67,6 +70,7 @@ public class StockController {
     }
 
     @DeleteMapping("/{stockId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int stockId) {
         Result<Stock> result = service.delete(stockId);
         if(result.isSuccess()){
