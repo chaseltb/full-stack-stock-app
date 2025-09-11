@@ -1,5 +1,6 @@
 package learn.lavadonut.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import learn.lavadonut.domain.Result;
 import learn.lavadonut.domain.StockService;
 import learn.lavadonut.models.Stock;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RequestMapping("/api/stocks")
+@Tag(name = "Stocks Api", description = "Endpoints for managing Stocks")
 public class StockController {
 
     private final StockService service;
