@@ -1,6 +1,8 @@
 package learn.lavadonut.domain;
 
 import learn.lavadonut.data.StockExchangeRepository;
+import learn.lavadonut.data.StockRepository;
+import learn.lavadonut.models.Stock;
 import learn.lavadonut.models.StockExchange;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,11 @@ import java.util.TimeZone;
 public class StockExchangeService {
 
     private final StockExchangeRepository repo;
+    private final StockRepository stockRepo;
 
-    public StockExchangeService(StockExchangeRepository repo) {
+    public StockExchangeService(StockExchangeRepository repo, StockRepository stockRepo) {
         this.repo = repo;
+        this.stockRepo = stockRepo;
     }
 
     public List<StockExchange> findAll() {
@@ -83,8 +87,17 @@ public class StockExchangeService {
         return result;
     }
 
-    public boolean deleteById(int id) {
-        return repo.deleteById(id);
+    public Result<Void> deleteById(int exchangeId) {
+        Result<Void> result = new Result<>();
+        List<Stock> stocks = stockRepo.findAll();
+        if (stocks != null && stocks.stream().anyMatch(s -> s.getStockExchange().getId() == exchangeId)) {
+            result.addMessage("Cannot delete exchange with existing stocks", ResultType.INVALID);
+            return result;
+        }
+        if (!repo.deleteById(exchangeId)) {
+            result.addMessage("Exchange not found", ResultType.NOT_FOUND);
+        }
+        return result;
     }
 
     private Result<StockExchange> validate(StockExchange stockExchange) {

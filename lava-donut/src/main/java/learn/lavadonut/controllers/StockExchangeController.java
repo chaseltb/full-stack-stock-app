@@ -90,10 +90,11 @@ public class StockExchangeController {
     })
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{stockExchangeId}")
-    public ResponseEntity<Void> deleteById(@PathVariable int stockExchangeId) {
-        if (service.deleteById(stockExchangeId)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Object> deleteById(@PathVariable int stockExchangeId) {
+        Result<Void> result= service.deleteById(stockExchangeId);
+        if (!result.isSuccess()) {
+            return ErrorResponse.build(result);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

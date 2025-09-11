@@ -22,7 +22,7 @@ public class StockExchangeJdbcTemplateRepository implements StockExchangeReposit
     @Override
     public List<StockExchange> findAll() {
         final String sql = "select stock_exchange_id, `name` as exchange_name, " +
-                "`code` as exchange_code" +
+                "`code` as exchange_code, timezone " +
                 "from stock_exchange;";
         return jdbcTemplate.query(sql, new StockExchangeMapper());
     }
@@ -31,8 +31,7 @@ public class StockExchangeJdbcTemplateRepository implements StockExchangeReposit
     public StockExchange findById(int id) {
 
         final String sql = "select stock_exchange_id, `name` as exchange_name, " +
-                " `code` as exchange_code, time_zone " +
-
+                " `code` as exchange_code, timezone " +
                 "from stock_exchange where stock_exchange_id = ?;";
         return jdbcTemplate.query(sql, new StockExchangeMapper(), id)
                 .stream()
@@ -42,7 +41,7 @@ public class StockExchangeJdbcTemplateRepository implements StockExchangeReposit
 
     @Override
     public StockExchange add(StockExchange exchange) {
-        final String sql = "insert into stock_exchange (`name`, `code`, time_zone) " +
+        final String sql = "insert into stock_exchange (`name`, `code`, timezone) " +
                 "values (?, ?, ?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -65,7 +64,7 @@ public class StockExchangeJdbcTemplateRepository implements StockExchangeReposit
     @Override
     public boolean update(StockExchange exchange) {
         final String sql = "update stock_exchange set " +
-                "`name` = ?, `code` = ?, time_zone = ? " +
+                "`name` = ?, `code` = ?, timezone = ? " +
                 "where stock_exchange_id = ?;";
 
         return jdbcTemplate.update(sql, exchange.getName(), exchange.getCode(), exchange.getTimeZone(),

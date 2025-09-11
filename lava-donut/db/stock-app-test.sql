@@ -167,7 +167,8 @@ begin
 	values
 		(1, 'New York Stock Exchange', 'NYSE', -5),
         (2, 'Frankfurt Stock Exchange', 'XETR', 1),
-        (3, 'Shanghai Stock Exchange', 'SSE', 8);
+        (3, 'Shanghai Stock Exchange', 'SSE', 8),
+        (4, 'London Stock Exchange', 'LSE', 0);
 
     insert into countries
 		(country_id, `name`, `code`, currency_id)
