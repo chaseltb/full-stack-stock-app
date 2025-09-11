@@ -76,6 +76,8 @@ class UserServiceTest {
         User expected = getTestUser();
         expected.setUserId(1);
         when(userRepo.add(user)).thenReturn(expected);
+        when(userRepo.doesCurrencyExist(user.getCurrencyId())).thenReturn(true);
+        when(userRepo.doesAppUserExist(user.getAppUserId())).thenReturn(true);
         Result<User> result = service.add(user);
         assertTrue(result.isSuccess());
         assertEquals(result.getPayload(), expected);
@@ -187,6 +189,8 @@ class UserServiceTest {
         user.setFirstName("James");
 
         when(userRepo.update(user)).thenReturn(true);
+        when(userRepo.doesCurrencyExist(user.getCurrencyId())).thenReturn(true);
+        when(userRepo.doesAppUserExist(user.getAppUserId())).thenReturn(true);
         Result<User> result = service.update(user);
         assertTrue(result.isSuccess());
         assertEquals(result.getPayload(), user);

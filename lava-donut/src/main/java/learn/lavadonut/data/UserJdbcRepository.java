@@ -77,4 +77,18 @@ public class UserJdbcRepository implements UserRepository {
         final String sql = "delete from `user` where user_id = ?;";
         return jdbcTemplate.update(sql, userId) > 0;
     }
+
+    @Override
+    public boolean doesCurrencyExist(int currencyId){
+        return jdbcTemplate.queryForObject(
+                "select count(*) from currencies where currency_id = ?;",
+                Integer.class, currencyId) > 0;
+    }
+
+    @Override
+    public boolean doesAppUserExist(int userAppId){
+        return jdbcTemplate.queryForObject(
+                "select count(*) from app_user where app_user_id = ?;",
+                Integer.class, userAppId) > 0;
+    }
 }
