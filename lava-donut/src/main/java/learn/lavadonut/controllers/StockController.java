@@ -113,6 +113,7 @@ public class StockController {
     @Operation(summary = "ADMIN: Delete a Stock by ID")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Stock deleted"),
+            @ApiResponse(responseCode = "400", description = "Invalid Stock"),
             @ApiResponse(responseCode = "404", description = "Stock not found")
     })
     @DeleteMapping("/{stockId}")

@@ -80,6 +80,7 @@ public class CurrencyController {
     @Operation(summary = "ADMIN: Delete a Currency by ID")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Currency deleted"),
+            @ApiResponse(responseCode = "400", description = "Invalid Currency"),
             @ApiResponse(responseCode = "404", description = "Currency not found")
     })
     @DeleteMapping("/{currencyId}")
