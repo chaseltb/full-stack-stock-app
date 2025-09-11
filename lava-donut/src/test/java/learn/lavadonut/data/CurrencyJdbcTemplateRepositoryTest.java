@@ -51,7 +51,7 @@ class CurrencyJdbcTemplateRepositoryTest {
         assertNotNull(actual);
         assertEquals("United States dollar", actual.getName());
         assertEquals("USD", actual.getCode());
-        assertEquals(BigDecimal.valueOf(1.0), actual.getValueToUsd());
+        assertEquals(BigDecimal.valueOf(1), actual.getValueToUsd());
 
         actual = repository.findById(2);
         assertNotNull(actual);

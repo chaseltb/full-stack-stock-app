@@ -21,7 +21,7 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
     public List<Currency> findAll(){
         final String sql = "select currency_id, `name` as currency_name, " +
         " `code` as currency_code, value_to_usd "
-                + "from currency;";
+                + "from currencies;";
         return jdbcTemplate.query(sql, new CurrencyMapper());
     }
 
@@ -29,7 +29,7 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
     public Currency findById(int currencyId){
         final String sql = "select currency_id, `name` as currency_name, " +
                 " `code` as currency_code, value_to_usd "
-                + "from currency "
+                + "from currencies "
                 + "where currency_id = ?;";
 
         return jdbcTemplate.query(sql, new CurrencyMapper(), currencyId)
