@@ -1,6 +1,7 @@
 package learn.lavadonut.domain;
 
 import learn.lavadonut.data.StockExchangeRepository;
+import learn.lavadonut.data.StockRepository;
 import learn.lavadonut.models.Stock;
 import learn.lavadonut.models.StockExchange;
 import org.junit.jupiter.api.Test;
@@ -17,9 +18,14 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class StockExchangeServiceTest {
 
+    @Autowired
     StockExchangeService service;
 
+    @MockBean
     StockExchangeRepository repo;
+
+    @MockBean
+    StockRepository stockRepo;
 
 
     @Test
@@ -59,8 +65,9 @@ class StockExchangeServiceTest {
     public void shouldAdd() {
         StockExchange se = getTestStockExchange();
         StockExchange expected = getTestStockExchange();
-        expected.setId(1);
+        expected.setId(4);
         when(repo.add(se)).thenReturn(expected);
+        when(repo.findAll()).thenReturn(List.of());
         Result<StockExchange> result = service.add(se);
         assertTrue(result.isSuccess());
 
@@ -165,7 +172,7 @@ class StockExchangeServiceTest {
         se.setCode("LBE");
         se.setTimeZone("Europe/Luxembourg");
 
-        when(repo.add(se)).thenReturn(se);
+        when(repo.update(se)).thenReturn(true);
         Result<StockExchange> result = service.update(se);
         assertTrue(result.isSuccess());
 
@@ -266,22 +273,36 @@ class StockExchangeServiceTest {
     @Test
     public void shouldDelete() {
         when(repo.deleteById(1)).thenReturn(true);
-        boolean result = service.deleteById(1);
-        assertTrue(result);
+        when(stockRepo.findAll()).thenReturn(null);
+        Result<Void> result = service.deleteById(1);
+        assertTrue(result.isSuccess());
 
+    }
+
+    @Test
+    public void shouldNotDeleteExchangeWithStocks() {
+        when(repo.deleteById(1)).thenReturn(true);
+        Stock testStock = new Stock();
+        StockExchange se = getTestStockExchange();
+        se.setId(1);
+        testStock.setStockExchange(se);
+        when(stockRepo.findAll()).thenReturn(List.of(testStock));
+        Result<Void> result = service.deleteById(1);
+        assertFalse(result.isSuccess());
     }
 
     @Test
     public void shouldNotDeleteNonexisting() {
         when(repo.deleteById(999)).thenReturn(false);
-        boolean result = service.deleteById(999);
-        assertFalse(result);
+        when(stockRepo.findAll()).thenReturn(null);
+        Result<Void> result = service.deleteById(999);
+        assertFalse(result.isSuccess());
     }
 
     private StockExchange getTestStockExchange() {
         StockExchange se = new StockExchange();
-        se.setName("London Stock Exchange");
-        se.setCode("LSE");
+        se.setName("Taiwan Stock Exchange");
+        se.setCode("TSE");
         se.setTimeZone("Europe/London");
         return se;
     }
