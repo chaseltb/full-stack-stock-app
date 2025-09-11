@@ -1,5 +1,6 @@
 package learn.lavadonut.data;
 
+import learn.lavadonut.domain.ResultType;
 import learn.lavadonut.models.Country;
 import learn.lavadonut.models.Currency;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,8 +79,11 @@ class CountryJdbcTemplateRepositoryTest {
     void shouldDelete() {
         Country country = makeCountry();
         country.setId(4);
-        assertTrue(repository.delete(4));
-        assertFalse(repository.delete(4));
+        assertEquals(ResultType.SUCCESS, repository.delete(4));
+
+        assertEquals(ResultType.NOT_FOUND, repository.delete(4));
+
+        assertEquals(ResultType.INVALID, repository.delete(1));
     }
 
     Country makeCountry() {
