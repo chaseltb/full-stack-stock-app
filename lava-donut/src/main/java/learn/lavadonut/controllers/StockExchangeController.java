@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/stock-exchange")
+@CrossOrigin(origins = {"http://localhost:3000"})
 @Tag(name = "Stock Exchange API", description = "Endpoints for managing stock exchanges")
 public class StockExchangeController {
     private final StockExchangeService service;
