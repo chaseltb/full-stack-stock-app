@@ -207,7 +207,8 @@ begin
     insert into app_user (username, password_hash, disabled)
         values
         ('john@smith.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
-        ('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0);
+        ('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
+        ('tim@bob.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnsadfsfSi8Z3IZzQa', 0); -- FOR TESTING DELETE IN USER
 
     insert into app_user_role
         values
@@ -218,7 +219,8 @@ begin
 		(user_id, first_name, last_name, currency_id, app_user_id)
 	values
 		(1, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1),
-        (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2);
+        (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2),
+        (3, 'TEST FIRST NAME', 'TEST LAST NAME', 3, 3);  -- FOR TESTING DELETE, DOESNT CONNECT TO ANYTHING
 	
     -- ERROR IS HERE WITH REFERENCING USER ID
     insert into portfolio
