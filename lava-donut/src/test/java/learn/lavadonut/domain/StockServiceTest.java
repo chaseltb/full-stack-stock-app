@@ -67,9 +67,9 @@ class StockServiceTest {
     @Test
     void shouldFindById(){
         Stock expected = makeStock();
-        when(repository.findById(2)).thenReturn(expected);
+        when(repository.findById(1)).thenReturn(expected);
 
-        Stock actual = service.findById(2);
+        Stock actual = service.findById(1);
         assertNotNull(actual);
     }
 
@@ -77,6 +77,30 @@ class StockServiceTest {
      add Test!
      **/
 
+    @Test
+    void shouldAdd(){ // HAPPY PATH
+        Stock expected = makeStock();
+        Stock arg = makeStock();
+        arg.setId(0);
+
+        when(repository.add(arg)).thenReturn(expected);
+        Result<Stock> result = service.add(arg);
+        assertEquals(ResultType.SUCCESS, result.getType());
+
+        assertTrue(expected.equals(arg));
+    }
+    @Test
+    void shouldAddWhenIndustryIsNull(){
+        Stock expected = makeStock();
+        expected.setName(null);
+        Stock arg = makeStock();
+        arg.setName(null);
+        arg.setId(0);
+
+        when(repository.add(arg)).thenReturn(expected);
+        Result<Stock> result = service.add(arg);
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
 
     Stock makeStock() {
         Stock stock = new Stock();
