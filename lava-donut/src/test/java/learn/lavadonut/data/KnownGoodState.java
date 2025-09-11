@@ -15,6 +15,19 @@ public class KnownGoodState {
     void set() {
         if (!hasRun) {
             hasRun = true;
+
+            jdbcTemplate.update("DELETE FROM portfolio_orders WHERE portfolio_id IN (SELECT portfolio_id FROM portfolio WHERE user_id IN (SELECT user_id FROM user WHERE app_user_id = (SELECT app_user_id FROM app_user WHERE username = 'john@smith.com')))");
+            jdbcTemplate.update("DELETE FROM portfolio WHERE user_id IN (SELECT user_id FROM user WHERE app_user_id = (SELECT app_user_id FROM app_user WHERE username = 'john@smith.com'))");
+            jdbcTemplate.update("DELETE FROM user WHERE app_user_id = (SELECT app_user_id FROM app_user WHERE username = 'john@smith.com')");
+            jdbcTemplate.update("DELETE FROM app_user WHERE username = 'john@smith.com'");
+
+            // Repeat the above process for 'sally@jones.com'
+            jdbcTemplate.update("DELETE FROM portfolio_orders WHERE portfolio_id IN (SELECT portfolio_id FROM portfolio WHERE user_id IN (SELECT user_id FROM user WHERE app_user_id = (SELECT app_user_id FROM app_user WHERE username = 'sally@jones.com')))");
+            jdbcTemplate.update("DELETE FROM portfolio WHERE user_id IN (SELECT user_id FROM user WHERE app_user_id = (SELECT app_user_id FROM app_user WHERE username = 'sally@jones.com'))");
+            jdbcTemplate.update("DELETE FROM user WHERE app_user_id = (SELECT app_user_id FROM app_user WHERE username = 'sally@jones.com')");
+            jdbcTemplate.update("DELETE FROM app_user WHERE username = 'sally@jones.com'");
+
+
             jdbcTemplate.update("call set_known_good_state();");
         }
     }
