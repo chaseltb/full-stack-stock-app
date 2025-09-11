@@ -115,7 +115,7 @@ class StockServiceTest {
     }
 
     /**
-     add Test!
+     update Test!
      **/
 
     @Test
@@ -192,14 +192,14 @@ class StockServiceTest {
         zeroPrice.setCurrentPrice(BigDecimal.ZERO);
 
         Result<Stock> result = service.add(zeroPrice);
-        
+
         assertFalse(result.isSuccess());
-        
+
         Stock negativePrice = makeStock();
         negativePrice.setCurrentPrice(BigDecimal.valueOf(-10));
-        
+
         result = service.add(negativePrice);
-        
+
         assertFalse(result.isSuccess());
     }
 
@@ -266,7 +266,209 @@ class StockServiceTest {
         assertFalse(result.isSuccess());
     }
 
+    /**
+     update Test!
+     **/
 
+    @Test
+    void shouldUpdate(){ // HAPPY PATH
+        Stock arg = makeStock();
+        arg.setName("UPDATED STOCK");
+
+        when(repository.update(arg)).thenReturn(true);
+        Result<Stock> result = service.update(arg);
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+    @Test
+    void shouldUpdateWhenIndustryIsNull(){
+        Stock arg = makeStock();
+        arg.setName("UPDATED STOCK");
+        arg.setIndustry(null);
+
+        when(repository.update(arg)).thenReturn(true);
+        Result<Stock> result = service.update(arg);
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotUpdateWhenStockIsNull(){ //UNHAPPY PATH
+        Stock invalid = null;
+
+        Result<Stock> result = service.update(invalid);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateWhenNameIsNullOrBlank(){
+        Stock nullName = makeStock();
+        nullName.setName(null);
+
+        Result<Stock> result = service.update(nullName);
+
+        assertFalse(result.isSuccess());
+
+        Stock blankName = makeStock();
+        blankName.setName("");
+
+        result = service.update(blankName);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateWhenTickerIsNullOrBlank(){
+        Stock nullTicker = makeStock();
+        nullTicker.setTicker(null);
+
+        Result<Stock> result = service.update(nullTicker);
+
+        assertFalse(result.isSuccess());
+
+        Stock blankTicker = makeStock();
+        blankTicker.setTicker("");
+
+        result = service.update(blankTicker);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateWhenCurrentPriceIsLessThanOrEqualToZero(){
+        Stock zeroPrice = makeStock();
+        zeroPrice.setCurrentPrice(BigDecimal.ZERO);
+
+        Result<Stock> result = service.update(zeroPrice);
+
+        assertFalse(result.isSuccess());
+
+        Stock negativePrice = makeStock();
+        negativePrice.setCurrentPrice(BigDecimal.valueOf(-10));
+
+        result = service.update(negativePrice);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateWhenStockExchangeIdLessThanOrEqualToZero(){
+        Stock zeroStockExId = makeStock();
+        StockExchange stockExchange = new StockExchange();
+        stockExchange.setId(0);
+        zeroStockExId.setStockExchange(stockExchange);
+
+        Result<Stock> result = service.update(zeroStockExId);
+
+        assertFalse(result.isSuccess());
+
+        Stock negativeStockExId = makeStock();
+        stockExchange = new StockExchange();
+        stockExchange.setId(-10);
+        negativeStockExId.setStockExchange(stockExchange);
+
+        result = service.update(negativeStockExId);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateWhenCountryIdLessThanOrEqualToZero(){
+        Stock zeroCountryId = makeStock();
+        Country country = new Country();
+        country.setId(0);
+        zeroCountryId.setCountry(country);
+
+        Result<Stock> result = service.update(zeroCountryId);
+
+        assertFalse(result.isSuccess());
+
+        Stock negativeCountryId = makeStock();
+        country = new Country();
+        country.setId(-10);
+        negativeCountryId.setCountry(country);
+
+        result = service.update(negativeCountryId);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateDuplicateStock(){
+        Stock expected = makeStock();
+        when(repository.findAll()).thenReturn(List.of(expected));
+
+        Stock stock = makeStock();
+
+        Result<Stock> result = service.update(stock);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateWhenIdIsLessThanOrEqualToZero(){
+        Stock invalid = makeStock();
+        invalid.setId(0);
+
+        Result<Stock> result = service.update(invalid);
+
+        assertFalse(result.isSuccess());
+
+        invalid.setId(-10);
+
+        result = service.update(invalid);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateIfNotFound(){
+        Stock valid = makeStock();
+
+        when(repository.update(valid)).thenReturn(false);
+        Result<Stock> result = service.update(valid);
+
+        assertFalse(result.isSuccess());
+    }
+
+    /**
+     delete Test!
+     **/
+
+    @Test
+    void shouldDelete(){ // HAPPY PATH
+        int validId = 1;
+
+        when(repository.getUsageCount(validId)).thenReturn(0);
+        when(repository.deleteById(validId)).thenReturn(true);
+
+        Result<Stock> result = service.delete(validId);
+
+        assertTrue(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotDeleteWhenNotFound(){ // UNHAPPY PATH
+        int nonExistent = 1;
+
+        when(repository.getUsageCount(nonExistent)).thenReturn(0);
+        when(repository.deleteById(nonExistent)).thenReturn(false);
+
+        Result<Stock> result = service.delete(nonExistent);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotDeleteWhenBeingUsedByAnotherObject(){
+        int validId = 1;
+
+        when(repository.getUsageCount(validId)).thenReturn(1);
+        when(repository.deleteById(validId)).thenReturn(true);
+
+        Result<Stock> result = service.delete(validId);
+
+        assertFalse(result.isSuccess());
+    }
 
     Stock makeStock() {
         Stock stock = new Stock();
