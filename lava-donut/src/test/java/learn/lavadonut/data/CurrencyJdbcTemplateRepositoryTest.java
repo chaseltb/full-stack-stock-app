@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class CurrencyJdbcTemplateRepositoryTest {
 
-    final static int NEXT_ID = 4;
+    final static int NEXT_ID = 5;
 
     @Autowired
     CurrencyJdbcTemplateRepository repository;
