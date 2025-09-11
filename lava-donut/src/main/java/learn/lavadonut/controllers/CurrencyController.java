@@ -21,8 +21,8 @@ public class CurrencyController {
 
     //TODO: findById, add, update, deleteById
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findById(@PathVariable int currencyId) {
-        return null;
+    public Currency findById(@PathVariable int currencyId) {
+        return service.findById(currencyId);
     }
 
     @PostMapping
