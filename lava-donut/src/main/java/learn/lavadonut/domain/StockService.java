@@ -25,8 +25,30 @@ public class StockService {
 
         result.setPayload(repository.getStocksByIndustry(industry));
 
+        if(result.getPayload().isEmpty()){
+            result.addMessage("No stocks of this industry exist!", ResultType.NOT_FOUND);
+        }
+
         return result;
     }
+
+    public Result<Stock> findByTicker(String ticker){
+        Result<Stock> result = new Result<>();
+
+        if(Validations.isNullOrBlank(ticker)){
+            result.addMessage("ticker must not be null or blank!", ResultType.INVALID);
+            return result;
+        }
+
+        result.setPayload(repository.findByTicker(ticker));
+
+        if(result.getPayload() == null){
+            result.addMessage("No stocks of this ticker exist!", ResultType.NOT_FOUND);
+        }
+
+        return result;
+    }
+
 
     public Stock findById(int stockId){ return repository.findById(stockId); }
 
