@@ -266,7 +266,7 @@ class StockServiceTest {
         assertFalse(result.isSuccess());
     }
 
-    
+
 
     Stock makeStock() {
         Stock stock = new Stock();
