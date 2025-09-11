@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest
 class StockServiceTest {
 
     @Autowired
@@ -133,9 +133,9 @@ class StockServiceTest {
     @Test
     void shouldAddWhenIndustryIsNull(){
         Stock expected = makeStock();
-        expected.setName(null);
+        expected.setIndustry(null);
         Stock arg = makeStock();
-        arg.setName(null);
+        arg.setIndustry(null);
         arg.setId(0);
 
         when(repository.add(arg)).thenReturn(expected);
