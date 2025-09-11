@@ -143,6 +143,131 @@ class StockServiceTest {
         assertEquals(ResultType.SUCCESS, result.getType());
     }
 
+    @Test
+    void shouldNotAddWhenStockIsNull(){ //UNHAPPY PATH
+        Stock invalid = null;
+
+        Result<Stock> result = service.add(invalid);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotAddWhenNameIsNullOrBlank(){
+        Stock nullName = makeStock();
+        nullName.setName(null);
+
+        Result<Stock> result = service.add(nullName);
+
+        assertFalse(result.isSuccess());
+
+        Stock blankName = makeStock();
+        blankName.setName("");
+
+        result = service.add(blankName);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotAddWhenTickerIsNullOrBlank(){
+        Stock nullTicker = makeStock();
+        nullTicker.setTicker(null);
+
+        Result<Stock> result = service.add(nullTicker);
+
+        assertFalse(result.isSuccess());
+
+        Stock blankTicker = makeStock();
+        blankTicker.setTicker("");
+
+        result = service.add(blankTicker);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotAddWhenCurrentPriceIsLessThanOrEqualToZero(){
+        Stock zeroPrice = makeStock();
+        zeroPrice.setCurrentPrice(BigDecimal.ZERO);
+
+        Result<Stock> result = service.add(zeroPrice);
+        
+        assertFalse(result.isSuccess());
+        
+        Stock negativePrice = makeStock();
+        negativePrice.setCurrentPrice(BigDecimal.valueOf(-10));
+        
+        result = service.add(negativePrice);
+        
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotAddWhenStockExchangeIdLessThanOrEqualToZero(){
+        Stock zeroStockExId = makeStock();
+        StockExchange stockExchange = new StockExchange();
+        stockExchange.setId(0);
+        zeroStockExId.setStockExchange(stockExchange);
+
+        Result<Stock> result = service.add(zeroStockExId);
+
+        assertFalse(result.isSuccess());
+
+        Stock negativeStockExId = makeStock();
+        stockExchange = new StockExchange();
+        stockExchange.setId(-10);
+        negativeStockExId.setStockExchange(stockExchange);
+
+        result = service.add(negativeStockExId);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotAddWhenCountryIdLessThanOrEqualToZero(){
+        Stock zeroCountryId = makeStock();
+        Country country = new Country();
+        country.setId(0);
+        zeroCountryId.setCountry(country);
+
+        Result<Stock> result = service.add(zeroCountryId);
+
+        assertFalse(result.isSuccess());
+
+        Stock negativeCountryId = makeStock();
+        country = new Country();
+        country.setId(-10);
+        negativeCountryId.setCountry(country);
+
+        result = service.add(negativeCountryId);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotAddDuplicateStock(){
+        Stock expected = makeStock();
+        when(repository.findAll()).thenReturn(List.of(expected));
+
+        Stock stock = makeStock();
+
+        Result<Stock> result = service.add(stock);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotAddWhenIdIsNotZero(){
+        Stock stock = makeStock();
+
+        Result<Stock> result = service.add(stock);
+
+        assertFalse(result.isSuccess());
+    }
+
+    
+
     Stock makeStock() {
         Stock stock = new Stock();
 
