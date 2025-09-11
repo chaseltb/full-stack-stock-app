@@ -51,7 +51,8 @@ public class OrderController {
 
 //    @Operation(summary = "Find orders by user")
 //    @ApiResponse(responseCode = "200", description = "Orders found")
-//    @GetMapping("/{userId}")
+//    @GetMapping("/user/{userId}")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 //    public ResponseEntity<List<Order>> findByUser(@PathVariable int userId) {
 //        List<Order> orders = service.findByUser(userId);
 //        return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -60,7 +61,7 @@ public class OrderController {
     @Operation(summary = "Find orders by stock")
     @ApiResponse(responseCode = "200", description = "Orders found")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("/{stockId}")
+    @GetMapping("/stock/{stockId}")
     public ResponseEntity<List<Order>> findByStock(@PathVariable int stockId) {
         List<Order> orders = service.findByStock(stockId);
         return new ResponseEntity<>(orders, HttpStatus.OK);

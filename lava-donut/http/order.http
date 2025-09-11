@@ -1,23 +1,51 @@
 @url = http://localhost:8080/api/order
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJmaWVsZC1hZ2VudCIsInN1YiI6InVzZXJAZXhhbXBsZS5jb20iLCJhdXRob3JpdGllcyI6IlJPTEVfVVNFUiIsImV4cCI6MTc1NzYxNTI5Mn0.obeSURxNESdZpdZui95m6svfkVMbRLpMgCBo_jAJY-o
+
+### register
+
+POST http://localhost:8080/api/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "user@example.com",
+    "password": "Password123."
+}
+
+### login (get jwt token)
+
+POST http://localhost:8080/api/auth/authenticate HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "user@example.com",
+    "password": "Password123."
+}
+
+### findAll
 
 GET {{url}} HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### findById - happy path
 
 GET {{url}}/1 HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### findById - unhappy path
 
 GET {{url}}/999 HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### findByStock
 
-GET {{url}}/7 HTTP/1.1
+GET {{url}}/stock/7 HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### add - happy path
 
 POST {{url}} HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "transactionType": "BUY",
@@ -31,6 +59,7 @@ Content-Type: application/json
 
 POST {{url}} HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {}
 
@@ -38,6 +67,7 @@ Content-Type: application/json
 
 PUT {{url}}/2 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "id": 2,
@@ -52,6 +82,7 @@ Content-Type: application/json
 
 PUT {{url}}/999 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "id": 999,
@@ -66,6 +97,7 @@ Content-Type: application/json
 
 PUT {{url}}/1 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "id": 2,
@@ -80,6 +112,7 @@ Content-Type: application/json
 
 PUT {{url}}/1 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "id": 1,
@@ -93,7 +126,9 @@ Content-Type: application/json
 ### delete - happy path
 
 DELETE {{url}}/3 HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### delete - unhappy path (NOT FOUND)
 
 DELETE {{url}}/999 HTTP/1.1
+Authorization: Bearer {{token}}

@@ -79,6 +79,7 @@ class CountryJdbcTemplateRepositoryTest {
     void shouldDelete() {
         Country country = makeCountry();
         country.setId(4);
+        repository.add(country);
         assertEquals(ResultType.SUCCESS, repository.delete(4));
 
         assertEquals(ResultType.NOT_FOUND, repository.delete(4));
