@@ -61,7 +61,7 @@ public class StockController {
 
     @Operation(summary = "Find a Stock by ID")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Stock of this is is found!"),
+            @ApiResponse(responseCode = "200", description = "Stock of this id is found!"),
             @ApiResponse(responseCode = "404", description = "Stock not found")
     })
     @GetMapping("/{stockId}")

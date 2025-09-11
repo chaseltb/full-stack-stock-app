@@ -2,6 +2,7 @@ package learn.lavadonut.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import learn.lavadonut.domain.CurrencyService;
 import learn.lavadonut.domain.Result;
 import learn.lavadonut.models.Currency;
@@ -25,9 +26,18 @@ public class CurrencyController {
     @GetMapping
     public List<Currency> findAll() { return service.findAll(); }
 
+    @Operation(summary = "Find a Currency by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Currency of this id is found!"),
+            @ApiResponse(responseCode = "404", description = "Currency not found")
+    })
     @GetMapping("/{id}")
-    public Currency findById(@PathVariable int currencyId) {
-        return service.findById(currencyId);
+    public ResponseEntity<Object> findById(@PathVariable int currencyId) {
+        Currency currency = service.findById(currencyId);
+        if (currency == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(currency);
     }
 
     @PostMapping
