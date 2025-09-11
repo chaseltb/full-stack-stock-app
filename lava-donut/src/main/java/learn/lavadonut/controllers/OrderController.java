@@ -9,6 +9,7 @@ import learn.lavadonut.domain.Result;
 import learn.lavadonut.models.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class OrderController {
 
     @Operation(summary = "Find all orders")
     @ApiResponse(responseCode = "200", description = "Orders found")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<Order>> findAll() {
         List<Order> orders = service.findAll();
@@ -37,6 +39,7 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Order found"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
     public ResponseEntity<Order> findById(@PathVariable int id) {
         Order order = service.findById(id);
@@ -48,7 +51,8 @@ public class OrderController {
 
 //    @Operation(summary = "Find orders by user")
 //    @ApiResponse(responseCode = "200", description = "Orders found")
-//    @GetMapping("/{userId}")
+//    @GetMapping("/user/{userId}")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 //    public ResponseEntity<List<Order>> findByUser(@PathVariable int userId) {
 //        List<Order> orders = service.findByUser(userId);
 //        return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -56,7 +60,8 @@ public class OrderController {
 
     @Operation(summary = "Find orders by stock")
     @ApiResponse(responseCode = "200", description = "Orders found")
-    @GetMapping("/{stockId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/stock/{stockId}")
     public ResponseEntity<List<Order>> findByStock(@PathVariable int stockId) {
         List<Order> orders = service.findByStock(stockId);
         return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -67,6 +72,7 @@ public class OrderController {
             @ApiResponse(responseCode = "201", description = "Order created"),
             @ApiResponse(responseCode = "400", description = "Invalid order")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody Order order) {
         Result<Order> result = service.add(order);
@@ -83,6 +89,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Order not found"),
             @ApiResponse(responseCode = "409", description = "ID conflict")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Order order) {
         // validate id
@@ -103,6 +110,7 @@ public class OrderController {
             @ApiResponse(responseCode = "204", description = "Order deleted"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         if (service.delete(id)) {

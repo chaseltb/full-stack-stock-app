@@ -125,3 +125,88 @@ create table portfolio_orders (
 		foreign key (order_id)
         references orders(order_id)
 );
+
+    insert into currencies
+		(currency_id, `name`, `code`, value_to_usd)
+	values
+		(1, 'United States dollar', 'USD', 1.0),
+        (2, 'Euro', 'EUR', 1.17),
+        (3, 'Chinese Yuan', 'CNY', 0.14);
+
+	insert into stock_exchange
+		(stock_exchange_id, `name`, `code`, timezone)
+	values
+		(1, 'New York Stock Exchange', 'NYSE', -5),
+        (2, 'Frankfurt Stock Exchange', 'XETR', 1),
+        (3, 'Shanghai Stock Exchange', 'SSE', 8);
+
+    insert into countries
+		(country_id, `name`, `code`, currency_id)
+	values
+		(1, 'United States of America', 'US', 1),
+        (2, 'Federal Republic of Germany', 'DE', 2),
+        (3, 'People''s Republic of China', 'CN', 3);
+
+	insert into stocks
+		(stock_id, `name`, ticker, asset_type, industry, current_price, stock_exchange_id, country_id)
+	values
+		(1, 'AMERICAN AIRLINES GROUP INC', 'TEST-TICKER1', 'STOCK', 'airline and aviation', 12.915, 1, 1), -- price: 12.915
+        (2, 'AMERICAN TEST STOCK 1', 'TEST-TICKER2', 'ETF', 'agriculture', 5.0, 1, 1),
+        (3, 'AMERICAN TEST STOCK 2', 'TEST-TICKER3', 'BOND', 'technology', 6.8, 1,1),
+        (4, 'GERMAN TEST STOCK 1', 'TEST-TICKER4', 'STOCK', 'airline and aviation', 9.6, 2, 2),
+        (5, 'GERMAN TEST STOCK 2', 'TEST-TICKER5', 'ETF', 'agriculture', 78.5, 2, 2),
+        (6, 'GERMAN TEST STOCK 3', 'TEST-TICKER6', 'STOCK', 'technology', 95.4, 2, 2),
+        (7, 'CHINESE TEST STOCK 1', 'TEST-TICKER7', 'STOCK', 'airline and aviation', 0.01, 3, 3),
+        (8, 'CHINESE TEST STOCK 2', 'TEST-TICKER8', 'ETF', 'agriculture', 0.45, 3, 3),
+        (9, 'CHINESE TEST STOCK 3', 'TEST-TICKER9', 'BOND', 'technology', 0.001, 3, 3);
+
+	insert into orders
+		(order_id, transaction_type, shares, price, `date`, stock_id)
+	values
+		(1, 'BUY', 20, 2000, '2025-05-17', 1),
+        (2, 'SELL', 5, 232.50, '2024-03-08', 3),
+        (3, 'BUY', 1, 250.876, '2022-08-09', 5),
+        (4, 'SELL', 100, 45.085, '2002-12-16', 6),
+        (5, 'BUY', 22, 67.95, '2015-10-01', 7),
+        (6, 'SELL', 5, 64.73, '2023-07-05', 9);
+
+    -- passwords are set to "P@ssw0rd!"
+    insert into app_user (username, password_hash, disabled)
+        values
+        ('john@smith.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
+        ('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0);
+
+	insert into `user`
+		(user_id, first_name, last_name, currency_id, app_user_id)
+	values
+		(1, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1),
+        (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2),
+        (3, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1);
+	
+    insert into portfolio
+		(portfolio_id, account_type, user_id)
+	values
+		(1, 'Retirement', 1),
+        (2, 'Investment', 1),
+        (3, 'Roth IRA', 2),
+        (4, 'Retirement', 3),
+        (5, 'Investment', 3);
+        
+    insert into portfolio_orders
+		(port_order_id, portfolio_id, order_id)
+	values
+		(1, 1, 1),
+        (2, 1, 2),
+        (3, 2, 3),
+        (4, 3, 4),
+        (5, 4, 5),
+        (6, 4, 6);
+
+    insert into app_role (`name`) values
+        ('USER'),
+        ('ADMIN');
+
+    insert into app_user_role
+        values
+        (1, 2),
+        (2, 1);

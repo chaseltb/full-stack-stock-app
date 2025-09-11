@@ -27,6 +27,7 @@ public class CountryController {
 
     @Operation(summary = "Find all countries")
     @ApiResponse(responseCode = "200", description = "Countries found")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<Country>> findAll() {
         List<Country> countries = service.findAll();
@@ -38,6 +39,7 @@ public class CountryController {
             @ApiResponse(responseCode = "200", description = "Country found"),
             @ApiResponse(responseCode = "404", description = "Country not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
     public ResponseEntity<Country> findById(@PathVariable int id) {
         Country country = service.findById(id);
