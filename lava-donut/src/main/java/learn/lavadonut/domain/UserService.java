@@ -1,5 +1,6 @@
 package learn.lavadonut.domain;
 
+import learn.lavadonut.data.CurrencyRepository;
 import learn.lavadonut.data.UserRepository;
 import learn.lavadonut.models.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,8 +13,11 @@ public class UserService {
 
     private final UserRepository repo;
 
-    public UserService(UserRepository repo) {
+    private final CurrencyRepository currencyRepository;
+
+    public UserService(UserRepository repo, CurrencyRepository currencyRepository) {
         this.repo = repo;
+        this.currencyRepository = currencyRepository;
     }
 
     public List<User> findAll() {
@@ -69,6 +73,7 @@ public class UserService {
             result.addMessage(msg, ResultType.NOT_FOUND);
         }
 
+        result.setPayload(user);
         return result;
     }
 
@@ -100,6 +105,10 @@ public class UserService {
         // currency id
         if (user.getCurrencyId() <= 0) {
             result.addMessage("The user's currency id must be greater than 0", ResultType.INVALID);
+        }
+
+        if (currencyRepository.findById(user.getCurrencyId()) == null){
+            result.addMessage("The user's currency id must be that of an existing currency", ResultType.INVALID);
         }
 
         // app user id
