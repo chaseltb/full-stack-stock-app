@@ -55,7 +55,12 @@ public class CurrencyController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int currencyId) {
-        return null;
+        Result<Currency> result = service.delete(currencyId);
+        if(result.isSuccess()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return ErrorResponse.build(result);
     }
 
 }
