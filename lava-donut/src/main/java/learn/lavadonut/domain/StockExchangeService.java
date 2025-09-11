@@ -2,10 +2,12 @@ package learn.lavadonut.domain;
 
 import learn.lavadonut.data.StockExchangeRepository;
 import learn.lavadonut.models.StockExchange;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.TimeZone;
 
+@Service
 public class StockExchangeService {
 
     private final StockExchangeRepository repo;
