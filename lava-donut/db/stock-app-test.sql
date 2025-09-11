@@ -73,6 +73,24 @@ create table app_user (
     disabled boolean not null default(0)
 );
 
+create table app_role (
+    app_role_id int primary key auto_increment,
+    `name` varchar(50) not null unique
+);
+
+create table app_user_role (
+    app_user_id int not null,
+    app_role_id int not null,
+    constraint pk_app_user_role
+        primary key (app_user_id, app_role_id),
+    constraint fk_app_user_role_user_id
+        foreign key (app_user_id)
+        references app_user(app_user_id),
+    constraint fk_app_user_role_role_id
+        foreign key (app_role_id)
+        references app_role(app_role_id)
+);
+
 create table `user` (
 	user_id int primary key auto_increment,
     first_name varchar(150) not null,
@@ -106,24 +124,6 @@ create table portfolio_orders (
 	CONSTRAINT fk_portfolio_orders_order_id
 		foreign key (order_id)
         references orders(order_id)
-);
-
-create table app_role (
-    app_role_id int primary key auto_increment,
-    `name` varchar(50) not null unique
-);
-
-create table app_user_role (
-    app_user_id int not null,
-    app_role_id int not null,
-    constraint pk_app_user_role
-        primary key (app_user_id, app_role_id),
-    constraint fk_app_user_role_user_id
-        foreign key (app_user_id)
-        references app_user(app_user_id),
-    constraint fk_app_user_role_role_id
-        foreign key (app_role_id)
-        references app_role(app_role_id)
 );
 
 -- TEST DATA
