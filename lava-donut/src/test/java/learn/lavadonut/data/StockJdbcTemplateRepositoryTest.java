@@ -106,12 +106,14 @@ class StockJdbcTemplateRepositoryTest {
         assertTrue(NEXT_ID + 1 == actual.getId() || NEXT_ID == actual.getId());
     }
 
+    /* SHOULD NEVER GET TO THIS POINT, TEST IN DOMAIN
     @Test
     void shouldNotAddWithNullStock(){ // UNHAPPY PATH
         Stock stock = null;
         Stock actual = repository.add(stock);
         assertNull(actual);
     }
+    */
 
     /**
      update Test!
@@ -120,6 +122,7 @@ class StockJdbcTemplateRepositoryTest {
     @Test
     void shouldUpdate(){ // HAPPY PATH
         Stock stock = makeStock();
+        stock.setTicker("UPDATED-TICKER");
         stock.setId(3);
         assertTrue(repository.update(stock));
     }
