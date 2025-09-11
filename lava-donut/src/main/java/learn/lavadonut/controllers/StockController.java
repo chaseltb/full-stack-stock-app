@@ -88,6 +88,13 @@ public class StockController {
         return ErrorResponse.build(result);
     }
 
+    @Operation(summary = "ADMIN: Update a Stock")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Stock updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "Stock not found"),
+            @ApiResponse(responseCode = "409", description = "ID conflict")
+    })
     @PutMapping("/{stockId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int stockId, @RequestBody Stock stock){
