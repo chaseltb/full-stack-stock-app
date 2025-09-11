@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,10 +55,19 @@ class StockServiceTest {
     }
 
     @Test
-    void shouldNotReturnStockWithNullIndustry(){  // UNHAPPY PATH
+    void shouldNotReturnStocksWithNullIndustry(){  // UNHAPPY PATH
         Result<List<Stock>> result = service.getStocksByIndustry(null);
 
         assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotReturnStocksWithNoExistingIndustry(){
+        List<Stock> expected = new ArrayList<>();
+        when(repository.getStocksByIndustry("DOESNT-EXIST")).thenReturn(expected);
+        Result<List<Stock>> result = service.getStocksByIndustry("DOESNT-EXIST");
+        assertFalse(result.isSuccess());
+        assertEquals(ResultType.NOT_FOUND, result.getType());
     }
 
     /**
@@ -71,6 +81,37 @@ class StockServiceTest {
 
         Stock actual = service.findById(1);
         assertNotNull(actual);
+    }
+
+    /**
+     findByTicker Test!
+     **/
+
+    @Test
+    void shouldFindByTicker(){ // HAPPY PATH
+        Stock expected = makeStock();
+        when(repository.findByTicker("TEST-STOCK-TICKER")).thenReturn(expected);
+
+        Result<Stock> result = service.findByTicker("TEST-STOCK-TICKER");
+
+        assertTrue(result.isSuccess());
+        assertEquals("TEST-STOCK-TICKER", result.getPayload().getTicker());
+    }
+
+    @Test
+    void shouldNotFindNullTicker(){ // UNHAPPY PATH
+        Result<Stock> result = service.findByTicker(null);
+
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotFindNonExistingTicker(){
+        Stock expected = null;
+        when(repository.findByTicker("DOESNT-EXIST")).thenReturn(expected);
+        Result<Stock> result = service.findByTicker("DOESNT-EXIST");
+        assertFalse(result.isSuccess());
+        assertEquals(ResultType.NOT_FOUND, result.getType());
     }
 
     /**
