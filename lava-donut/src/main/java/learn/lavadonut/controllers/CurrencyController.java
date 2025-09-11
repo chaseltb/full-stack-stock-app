@@ -40,6 +40,11 @@ public class CurrencyController {
         return ResponseEntity.ok(currency);
     }
 
+    @Operation(summary = "ADMIN: Add a Currency")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Currency created"),
+            @ApiResponse(responseCode = "400", description = "Invalid Currency")
+    })
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> add(@RequestBody Currency currency) {
@@ -50,6 +55,13 @@ public class CurrencyController {
         return ErrorResponse.build(result);
     }
 
+    @Operation(summary = "ADMIN: Update a Currency")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Currency updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "Currency not found"),
+            @ApiResponse(responseCode = "409", description = "ID conflict")
+    })
     @PutMapping("/{currencyId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int currencyId, @RequestBody Currency currency) {
