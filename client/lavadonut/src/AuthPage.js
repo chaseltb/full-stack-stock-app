@@ -2,7 +2,7 @@ import { useState } from "react";
 import React from "react";
 import { Container, Box, Typography, Paper, 
     TextField, Checkbox, Button, FormControlLabel, 
-    Alert, Box, Link } from "@mui/material";
+    Box, Link } from "@mui/material";
 
 function AuthPage () {
     // state variables
@@ -54,7 +54,47 @@ function AuthPage () {
     return (
         <>
             <Container maxWidth="sm">
-            
+                // paper makes a drop shadow to make containers look 3d
+                <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10}}>
+                    <Typography variant="h2" align="center">
+                        {isLogin ? "Login" : "Register"}
+                    </Typography>
+                    <Typography align="center" variant="h4" sx={{ mt: 4 }}>
+                        Stock App
+                    </Typography>
+
+                    // error will go here 
+                    
+                </Paper>
+
+                <Box component="form" onSubmit={handleSubmit}>
+                    // register and login use username+password
+                    <TextField label="Username" name="username" fullWidth margin="normal" 
+                        value={username} onChange={handleChange} />
+                    <TextField label="Password" name="password" fullWidth margin="normal" 
+                        value={password} onChange={handleChange} />
+
+                    {!isLogin && (
+                        <>
+                            <TextField label="First Name" name="firstName" fullWidth margin="normal"
+                                value={firstName} onChange={handleChange} />
+                            <TextField label="Last Name" name="lastName" fullWidth margin="normal"
+                                value={lastName} onChange={handleChange} />
+                            // replace with a dropdown of currency and store as currency id? might have to call currency api in useEffect though??
+                            <TextField label="Currency Id" name="currency" fullWidth margin="normal"
+                                value={currency} onChange={handleChange} />
+                        </>
+                    )}
+
+                    <FormControlLabel control={<Checkbox/>}>
+                        Keep me logged in
+                    </FormControlLabel>
+                    
+                    <Button type="submit" fullWidth sx={{ mt: 2, borderRadius: 2}}>
+                        {isLogin ? "Login": "Register"}
+                    </Button>
+                </Box>
+
             </Container>
         
         </>
