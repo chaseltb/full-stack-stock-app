@@ -92,7 +92,8 @@ function AuthPage() {
                         {error}</Alert>}
 
 
-                    <Box component="form" onSubmit={handleSubmit}>
+                    <Box component="form" onSubmit={handleSubmit} 
+                        sx={{ display: "flex", flexDirection: "column"}}>
                      {/* register and login use username+password */}
                         <TextField label="Username" name="username" fullWidth margin="normal"
                             value={username} onChange={handleChange} />
@@ -115,7 +116,7 @@ function AuthPage() {
                             label="Keep me logged in"
                         />        
 
-                        <Button type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 2, borderRadius: 2 }}>
+                        <Button type="submit" variant="contained" color="primary" sx={{ mt: 2, borderRadius: 5, width: "50%", alignSelf: "center" }}>
                             {isLogin ? "Login" : "Register"}
                         </Button>
                     </Box>
@@ -125,14 +126,14 @@ function AuthPage() {
             <Typography align="center" sx={{ p: 4 }}>
                 {isLogin ? (
                     <>
-                        Don't have an account?
+                        Don't have an account?{" "}
                         <Link component="button" type="button" underline="hover" onClick={() => setIsLogin(false)}>
                             Register for a free account
                         </Link>
                     </>
                 ) : (
                     <>
-                        Already have an account?
+                        Already have an account?{" "}
                         <Link component="button" type="button" underline="hover" onClick={() => setIsLogin(true)}>
                             Login
                         </Link>
