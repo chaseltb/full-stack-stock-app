@@ -104,6 +104,12 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.15</version> <!-- or latest 1.6.x -->
         </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.3</version> <!-- check for the latest version -->
+        </dependency>
     </dependencies>
 
 </project>
