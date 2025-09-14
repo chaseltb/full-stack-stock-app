@@ -29,7 +29,7 @@ function CountryList() {
             };
             fetch(`${url}/${id}`, init)
             .then(response => {
-                if (response === 200) {
+                if (response.status === 200) {
                     const newCountries = countries.filter(c => c.id !== id);
                     setCountries(newCountries);
                 } else {
@@ -54,6 +54,9 @@ function CountryList() {
                         <tr>
                             <th>Country Code</th>
                             <th>Country Name</th>
+                            <th>Currency Code</th>
+                            <th>Currency Name</th>
+                            <th>Value to USD</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -62,6 +65,9 @@ function CountryList() {
                             <tr key={country.id}>
                                 <td>{country.code}</td>
                                 <td>{country.name}</td>
+                                <td>{country.currency?.code}</td>
+                                <td>{country.currency?.name}</td>
+                                <td>{country.currency?.valueToUsd}</td>
                                 <td>
                                     <Link
                                         to={`country/edit/${country.id}`}
