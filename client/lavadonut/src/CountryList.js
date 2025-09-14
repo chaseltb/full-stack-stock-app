@@ -8,7 +8,12 @@ function CountryList() {
 
     // Use Effect
     useEffect(() => {
-        fetch(url)
+        const token = localStorage.getItem('token');
+        fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then(response => {
             if (response.status === 200) {
                 return response.json();
@@ -22,10 +27,14 @@ function CountryList() {
 
     // Handle deleting an agent
     const handleDeleteCountry = (id) => {
+        const token = localStorage.getItem('token');
         const country = countries.find(c => c.id === id);
         if (window.confirm(`Delete Country: ${country.id} - ${country.code}`)) {
             const init = {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             };
             fetch(`${url}/${id}`, init)
             .then(response => {
