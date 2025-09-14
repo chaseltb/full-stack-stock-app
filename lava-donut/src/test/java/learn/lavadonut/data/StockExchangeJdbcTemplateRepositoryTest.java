@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest
 class StockExchangeJdbcTemplateRepositoryTest {
 
     @Autowired
@@ -37,7 +37,7 @@ class StockExchangeJdbcTemplateRepositoryTest {
         assertEquals(1, exchange.getId());
         assertEquals("New York Stock Exchange", exchange.getName());
         assertEquals("NYSE", exchange.getCode());
-        assertEquals(-5, exchange.getTimeZone());
+        assertEquals("-5", exchange.getTimeZone());
     }
 
     @Test
@@ -45,13 +45,14 @@ class StockExchangeJdbcTemplateRepositoryTest {
         StockExchange se = getTestStockExchange();
         StockExchange actual = repo.add(se);
         assertNotNull(se);
-        assertEquals(4, actual.getId());
+        assertEquals(5, actual.getId());
     }
 
     @Test
     void shouldUpdate() {
         StockExchange se = getTestStockExchange();
         se.setId(3);
+        se.setCode("TEST");
         assertTrue(repo.update(se));
     }
 
@@ -64,7 +65,7 @@ class StockExchangeJdbcTemplateRepositoryTest {
 
     @Test
     void shouldDeleteById() {
-        assertTrue(repo.deleteById(2));
+        assertTrue(repo.deleteById(4));
     }
     @Test
     void shouldNotDeleteNonExistingId() {
@@ -73,9 +74,9 @@ class StockExchangeJdbcTemplateRepositoryTest {
 
     private StockExchange getTestStockExchange() {
         StockExchange se = new StockExchange();
-        se.setName("London Stock Exchange");
-        se.setCode("LSE");
-        se.setTimeZone("Europe/London");
+        se.setName("Taiwan Stock Exchange");
+        se.setCode("TSE");
+        se.setTimeZone("+9");
         return se;
     }
 

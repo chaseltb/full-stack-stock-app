@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest
 class OrderJdbcTemplateRepositoryTest {
     @Autowired
     OrderJdbcTemplateRepository repository;
@@ -69,9 +69,9 @@ class OrderJdbcTemplateRepositoryTest {
                 5,
                 TransactionType.BUY,
                 7,
-                new BigDecimal("22"),
+                new BigDecimal("22.0"),
                 Date.valueOf(LocalDate.of(2015, 10, 1)),
-                new BigDecimal("3.75")
+                new BigDecimal("67.95")
         );
         List<Order> orders = List.of(order);
 
@@ -121,7 +121,7 @@ class OrderJdbcTemplateRepositoryTest {
                 1,
                 new BigDecimal("20.0"),
                 Date.valueOf(LocalDate.of(2025, 5, 17)),
-                new BigDecimal("12.915")
+                new BigDecimal("2000.0")
                 );
     }
 }

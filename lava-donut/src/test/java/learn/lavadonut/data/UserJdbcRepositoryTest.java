@@ -10,8 +10,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest
 class UserJdbcRepositoryTest {
+
+    private final int NEXT_ID = 4;
 
     @Autowired
     UserJdbcRepository repo;
@@ -54,7 +56,7 @@ class UserJdbcRepositoryTest {
         User user = getTestUser();
         User actual = repo.add(user);
         assertNotNull(actual);
-        assertEquals(4, actual.getUserId());
+        assertEquals(NEXT_ID, actual.getUserId());
     }
 
     @Test
@@ -73,7 +75,7 @@ class UserJdbcRepositoryTest {
 
     @Test
     void shouldDeleteById() {
-        assertTrue(repo.deleteById(2));
+        assertTrue(repo.deleteById(3)); // should link to test for delete entry in test db
     }
 
     @Test

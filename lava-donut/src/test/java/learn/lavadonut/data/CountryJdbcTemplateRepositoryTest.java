@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest
 class CountryJdbcTemplateRepositoryTest {
     @Autowired
     CountryJdbcTemplateRepository repository;
@@ -79,6 +79,8 @@ class CountryJdbcTemplateRepositoryTest {
     void shouldDelete() {
         Country country = makeCountry();
         country.setId(4);
+        country.setCode("tst");
+        repository.add(country);
         assertEquals(ResultType.SUCCESS, repository.delete(4));
 
         assertEquals(ResultType.NOT_FOUND, repository.delete(4));

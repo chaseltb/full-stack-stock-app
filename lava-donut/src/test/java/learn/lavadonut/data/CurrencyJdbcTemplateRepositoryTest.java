@@ -11,10 +11,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest
 class CurrencyJdbcTemplateRepositoryTest {
 
-    final static int NEXT_ID = 4;
+    final static int NEXT_ID = 5;
 
     @Autowired
     CurrencyJdbcTemplateRepository repository;
@@ -34,7 +34,7 @@ class CurrencyJdbcTemplateRepositoryTest {
         List<Currency> currencies = repository.findAll();
         assertFalse(currencies.isEmpty());
 
-        assertEquals(3, currencies.size());
+        assertEquals(4, currencies.size());
     }
 
     /**
@@ -51,7 +51,7 @@ class CurrencyJdbcTemplateRepositoryTest {
         assertNotNull(actual);
         assertEquals("United States dollar", actual.getName());
         assertEquals("USD", actual.getCode());
-        assertEquals(BigDecimal.valueOf(1.0), actual.getValueToUsd());
+        assertEquals(BigDecimal.valueOf(1), actual.getValueToUsd());
 
         actual = repository.findById(2);
         assertNotNull(actual);
@@ -64,6 +64,12 @@ class CurrencyJdbcTemplateRepositoryTest {
         assertEquals("Chinese Yuan", actual.getName());
         assertEquals("CNY", actual.getCode());
         assertEquals(BigDecimal.valueOf(0.14), actual.getValueToUsd());
+
+        actual = repository.findById(4);
+        assertNotNull(actual);
+        assertEquals("Brazilian Real", actual.getName());
+        assertEquals("BRL", actual.getCode());
+        assertEquals(BigDecimal.valueOf(0.19), actual.getValueToUsd());
     }
 
     @Test
@@ -89,8 +95,12 @@ class CurrencyJdbcTemplateRepositoryTest {
         Currency actual = repository.add(currency);
 
         assertEquals(NEXT_ID, actual.getId());
+        assertEquals("Yen", actual.getName());
+        assertEquals("JPY", actual.getCode());
+        assertEquals(BigDecimal.valueOf(0.0068), actual.getValueToUsd());
     }
 
+    /* SHOULD NEVER REACH THIS POINT IN REPO, TEST IS IN DOMAIN INSTEAD
     @Test
     void shouldNotAddWithNullCurrency(){ // UNHAPPY PATH
         Currency currency = null;
@@ -99,6 +109,7 @@ class CurrencyJdbcTemplateRepositoryTest {
 
         assertNull(actual);
     }
+     */
 
     /**
      update Tests!
@@ -107,9 +118,9 @@ class CurrencyJdbcTemplateRepositoryTest {
     @Test
     void shouldUpdate(){ // HAPPY PATH
         Currency currency = new Currency();
-        currency.setName("Yen");
-        currency.setCode("JPY");
-        currency.setValueToUsd(BigDecimal.valueOf(0.0068));
+        currency.setName("Pound Sterling");
+        currency.setCode("BGP");
+        currency.setValueToUsd(BigDecimal.valueOf(1.36));
         currency.setId(2);
 
         assertTrue(repository.update(currency));
@@ -132,7 +143,7 @@ class CurrencyJdbcTemplateRepositoryTest {
 
     @Test
     void shouldDelete(){ // HAPPY PATH
-        int validId = 1;
+        int validId = 4; //Brazilian real, not connected to any other table
 
         assertTrue(repository.delete(validId));
     }

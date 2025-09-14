@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -30,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // add antMatchers here to configure access to specific API endpoints
                 .antMatchers("/api/auth/authenticate").permitAll()
                 .antMatchers("/api/auth/register").permitAll()
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // For OpenAPI/SwaggerUI
                 // require authentication for any request...
                 .anyRequest().authenticated()
                 .and()

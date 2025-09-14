@@ -1,6 +1,7 @@
 package learn.lavadonut.models;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Currency {
 
@@ -38,7 +39,7 @@ public class Currency {
     }
 
     public void setValueToUsd(BigDecimal valueToUsd) {
-        this.valueToUsd = valueToUsd;
+        this.valueToUsd = valueToUsd.setScale(4, RoundingMode.HALF_EVEN).stripTrailingZeros();
     }
 
     //DOES NOT COMPARE IDS
