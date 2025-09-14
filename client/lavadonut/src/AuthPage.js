@@ -1,8 +1,7 @@
 import { useState } from "react";
 import React from "react";
-import { Container, Box, Typography, Paper, 
-    TextField, Checkbox, Button, FormControlLabel, 
-    Box, Link } from "@mui/material";
+import { Container, Box, Typography, Paper, TextField, Checkbox, 
+    Button, FormControlLabel, Link } from "@mui/material";
 
 function AuthPage () {
     // state variables
@@ -51,6 +50,26 @@ function AuthPage () {
 
     };
 
+    const handleChange = (event) => {
+        switch (event.target.value) {
+            case "username":
+                setUsername(event.target.value);
+                break;
+            case "password":
+                setPassword(event.target.value);
+                break;
+            case "firstName":
+                setFirstName(event.target.value);
+                break;
+            case "lastName":
+                setLastName(event.target.value);
+                break;
+            case "currency":
+                setCurrency(event.target.value);
+                break;
+        }
+    };
+
     return (
         <>
             <Container maxWidth="sm">
@@ -94,9 +113,25 @@ function AuthPage () {
                         {isLogin ? "Login": "Register"}
                     </Button>
                 </Box>
-
             </Container>
-        
+
+            <Typography align="center" sx={{ p: 4}}>
+                {isLogin ? (
+                    <>
+                        Don't have an account?
+                        <Link href="" underline="hover" onClick={() => setIsLogin(false)}>
+                            Register for a free account
+                        </Link>
+                    </>
+                ) : (
+                    <>
+                        Already have an account?
+                        <Link href="" underline="hover" onClick={() => setIsLogin(true)}>
+                            Login
+                        </Link>
+                    </>
+                )}
+            </Typography>
         </>
     )
 
