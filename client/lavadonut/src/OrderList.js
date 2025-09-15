@@ -15,26 +15,26 @@ function OrderList() {
         async function fetchData() {
             const token = localStorage.getItem('token');
             try {
-                const ordersRes = await fetch("http://localhost:8080/api/order", {
+                const ordersResponse = await fetch("http://localhost:8080/api/order", {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     }
                 });
 
-                const stocksRes = await fetch("http://localhost:8080/api/stocks", {
+                const stocksResponse = await fetch("http://localhost:8080/api/stocks", {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     }
                 });
 
-                if (!ordersRes.ok || !stocksRes.ok) {
+                if (!ordersResponse.ok || !stocksResponse.ok) {
                     throw new Error("Unauthorized or failed fetch");
                 }
 
-                const ordersData = await ordersRes.json();
-                const stocksData = await stocksRes.json();
+                const ordersData = await ordersResponse.json();
+                const stocksData = await stocksResponse.json();
 
                 setOrders(ordersData);
                 setStocks(stocksData);

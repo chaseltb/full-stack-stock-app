@@ -101,7 +101,7 @@ function CountryForm() {
         })
         .then(data => {
             if (data.id) {
-                navigate('/');
+                navigate('/countries');
             } else {
                 setErrors(data);
             }
@@ -133,7 +133,7 @@ function CountryForm() {
         })
         .then(data => {
             if (data.id) {
-                navigate('/');
+                navigate('/countries');
             } else {
                 setErrors(data);
             }
