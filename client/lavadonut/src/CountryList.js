@@ -13,7 +13,8 @@ function CountryList() {
         const token = localStorage.getItem('token');
         fetch(url, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
         })
         .then(response => {
@@ -27,7 +28,7 @@ function CountryList() {
         .catch(console.log);
     }, []);
 
-    // Handle deleting an agent
+    // Handle deleting a country
     const handleDeleteCountry = (id) => {
         const token = localStorage.getItem('token');
         const country = countries.find(c => c.id === id);
@@ -63,7 +64,8 @@ function CountryList() {
                 <Stack 
                     direction="row" 
                     justifyContent="space-between" 
-                    alignItems="center" mb={4}
+                    alignItems="center"
+                    mb={4}
                 >
                     <Typography variant="h2" fontWeight="bold">
                         List of Countries ({countries.length})

@@ -4,9 +4,9 @@ function RequireAuth({ children }) {
     const token = localStorage.getItem('token');
     const location = useLocation();
 
-    // Redirect to login if token is not valid
+    // Redirect to register if token is not valid
     if (!token) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/" state={{ from: location }} replace />;
     }
 
     return children;
