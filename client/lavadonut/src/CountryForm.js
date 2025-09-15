@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
+import { Box, Button, TextField, Typography, Alert, Grid } from "@mui/material";
 
 const COUNTRY_DEFAULT = {
     code: "",
@@ -142,21 +143,32 @@ function CountryForm() {
 
     return (
         <>
-            <section>
-                <h2>
+            <Box sx={{ maxWidth: 600, mx: "auto", mt: 4 }}>
+                {/* <h2>
                     {id > 0 ? "Update a Country" : "Add a Country"}
-                </h2>
+                </h2> */}
+                <Typography variant="h2" gutterBottom>
+                    {id > 0 ? "Update a Country" : "Add a Country"}
+                </Typography>
                 {errors.length > 0 && (
-                    <div>
-                        <p>The following errors were found:</p>
+                    // <div>
+                    //     <p>The following errors were found:</p>
+                    //     <ul>
+                    //         {errors.map((error) => (
+                    //             <li key={error}>{error}</li>
+                    //         ))}
+                    //     </ul>
+                    // </div>
+                    <Alert severity="error" sx={{ mb: 2 }}>
+                        <Typography variant="subtitle2">The following errors were found:</Typography>
                         <ul>
                             {errors.map((error) => (
                                 <li key={error}>{error}</li>
-                            ))}
-                        </ul>
-                    </div>
+                             ))}
+                         </ul>
+                    </Alert>
                 )}
-                <form onSubmit={handleSubmit}>
+                {/* <form onSubmit={handleSubmit}>
                     <fieldset>
                         <label htmlFor="countryCode">Country Code</label>
                         <input
@@ -215,8 +227,75 @@ function CountryForm() {
                             Cancel
                         </Link>
                     </div>
-                </form>
-            </section>
+                </form> */}
+                <Box component="form" onSubmit={handleSubmit} noValidate>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Country Code"
+                                name="countryCode"
+                                value={country.code}
+                                onChange={handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Country Name"
+                                name="countryName"
+                                value={country.name}
+                                onChange={handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Currency Code"
+                                name="currencyCode"
+                                value={country.currency.code}
+                                onChange={handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Currency Name"
+                                name="currencyName"
+                                value={country.currency.name}
+                                onChange={handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Value to USD"
+                                name="valueToUsd"
+                                type="number"
+                                value={country.currency.valueToUsd}
+                                onChange={handleChange}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between'}}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                        >
+                            {id > 0 ? "Update" : "Submit"}
+                        </Button>
+                        <Button
+                            component={Link}
+                            to="/countries"
+                            variant="outlined"
+                            color="error"
+                        >
+                            Cancel
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
         </>
     );
 }
