@@ -17,20 +17,11 @@ import java.math.BigDecimal;
 @Service
 public class AlpacaService {
 
-//    @Value("${alpaca.api.endpoint")
-//    private String alpacaEndpoint;
-
     @Value("${alpaca.api.key}")
     private String alpacaKey;
 
     @Value("${alpaca.api.secret}")
     private String alpacaSecret;
-
-//    @Value("${alpaca.api.key}")
-//    private String alpacaKey;
-//
-//    @Value("${alpaca.api.secret}")
-//    private String alpacaSecret;
 
     @Value("${alpaca.api.endpoint}")
     private String alpacaEndpoint;
@@ -53,7 +44,7 @@ public class AlpacaService {
         );
     }
 
-    public Result<Stock> updateStockFromAlpaca(String ticker) {
+    public Result<Stock> updatePriceFromAlpaca(String ticker) {
         Result<Stock> result = new Result<>();
         Stock stock = repo.findByTicker(ticker);
         if (stock == null) {

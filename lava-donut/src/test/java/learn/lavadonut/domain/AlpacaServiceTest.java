@@ -28,7 +28,7 @@ class AlpacaServiceTest {
 
         when(repo.findByTicker("AAPL")).thenReturn(stock);
         when(repo.update(stock)).thenReturn(true);
-        Result<Stock> result = service.updateStockFromAlpaca("AAPL");
+        Result<Stock> result = service.updatePriceFromAlpaca("AAPL");
         assertTrue(result.isSuccess());
         assertEquals(1, result.getPayload().getId());
         assertNotEquals(BigDecimal.ZERO, result.getPayload().getCurrentPrice());
@@ -36,14 +36,14 @@ class AlpacaServiceTest {
 
     @Test
     void shouldNotUpdateNullStock() {
-        Result<Stock> result = service.updateStockFromAlpaca(null);
+        Result<Stock> result = service.updatePriceFromAlpaca(null);
         assertFalse(result.isSuccess());
     }
 
     @Test
     void shouldNotUpdateNonexistingStock() {
         when(repo.findByTicker("TEST")).thenReturn(null);
-        Result<Stock> result = service.updateStockFromAlpaca("TEST");
+        Result<Stock> result = service.updatePriceFromAlpaca("TEST");
         assertFalse(result.isSuccess());
     }
 
