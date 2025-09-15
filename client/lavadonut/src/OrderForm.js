@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { Box, Button, TextField, Typography, Alert, Grid, Select, FormControl, InputLabel, MenuItem } from "@mui/material";
+import { Box, Button, TextField, Typography, Alert, Grid, Select, FormControl, InputLabel, MenuItem, Radio, RadioGroup, FormControlLabel, Autocomplete } from "@mui/material";
 
 const ORDER_DEFAULT = {
     transactionType: "BUY",
@@ -146,8 +146,8 @@ function OrderForm() {
 
     return (
         <>
-            <Box sx={{ maxWidth: 600, mx: "auto", mt: 4 }}>
-                <Typography variant="h2" gutterBottom>
+            <Box sx={{ maxWidth: 400, mx: "auto", mt: 6 }}>
+                <Typography variant="h2" align="center" gutterBottom>
                     {id > 0 ? "Update an Order" : "Add an Order"}
                 </Typography>
                 {errors.length > 0 && (
@@ -161,42 +161,47 @@ function OrderForm() {
                     </Alert>
                 )}
             </Box>
-            <Box component="form" onSubmit={handleSubmit} noValidate>
+            <Box 
+                component="form" 
+                onSubmit={handleSubmit} 
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                    backgroundColor: "#f8f6fc",
+                    padding: 3,
+                    borderRadius: 2,
+                    boxShadow: 2
+                }} 
+                noValidate
+            >
                 <Grid container spacing={2}>
                     {/* Select either BUY or SELL */}
-                    <Grid item xs={12}>
-                        <FormControl fullWidth>
-                            <InputLabel id="transactionType-label">Transaction Type</InputLabel>
-                            <Select
-                                labelId="transactionType-label"
-                                name="transactionType"
-                                value={order.transactionType}
-                                label="Transaction Type"
-                                onChange={handleChange}
-                            >
-                                <MenuItem value="BUY">BUY</MenuItem>
-                                <MenuItem value="SELL">SELL</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <Typography variant="subtitle1" gutterBottom>
+                            Order Type
+                        </Typography>
+                        <RadioGroup
+                            row
+                            name="transactionType"
+                            value={order.transactionType}
+                            onChange={handleChange}
+                        >
+                            <FormControlLabel value="BUY" control={<Radio />} label="Buy" />
+                            <FormControlLabel value="SELL" control={<Radio />} label="Sell" />
+                        </RadioGroup>
+                    </Box>
                     {/* Choose stock by stockId */}
                     <Grid item xs={12}>
-                        <FormControl fullWidth>
-                            <InputLabel id="stockId-label">Stock</InputLabel>
-                            <Select
-                                labelId="stockId-label"
-                                name="stockId"
-                                value={order.stockId}
-                                label="Stock"
-                                onChange={handleChange}
-                            >
-                                {stocks.map((stock) => {
-                                    <MenuItem key={stock.id} value={stock.id}>
-                                        {stock.ticker} - {stock.name}
-                                    </MenuItem>
-                                })}
-                            </Select>
-                        </FormControl>
+                        <Autocomplete
+                            options={stocks}
+                            getOptionLabel={(option) => `${option.name} (${option.ticker})`}
+                            renderInput={(params) => <TextField {...params} label="Stock" />}
+                            value={stocks.find(s => s.id === order.stockId) || null}
+                            onChange={(event, newValue) => {
+                                setOrder({ ...order, stockId: newValue ? newValue.id : 0 });
+                            }}
+                        />
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
@@ -211,10 +216,11 @@ function OrderForm() {
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
-                            label="date"
-                            name="Date"
+                            label="Date"
+                            name="date"
                             type="date"
                             value={order.date}
+                            InputLabelProps={{ shrink: true }}
                             onChange={handleChange}
                         />
                     </Grid>
