@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.*;
 
@@ -161,6 +162,44 @@ public class PortfolioService {
         }
         //TODO Decide how we want to calculate cost basis, either through all orders or all stocks
 
+        return result;
+    }
+
+    public Result<BigDecimal> calculateCostBasis(List<Order> orders) {
+        Result<BigDecimal> result = new Result<>();
+        result.setPayload(BigDecimal.ZERO);
+        if (orders == null || orders.isEmpty()) {
+            result.addMessage("No orders found", ResultType.NOT_FOUND);
+            return result;
+        }
+
+        BigDecimal totalValue = BigDecimal.ZERO;
+        BigDecimal totalShares = BigDecimal.ZERO;
+
+        for (Order order : orders) {
+            BigDecimal shares = order.getNumberOfShares();
+            BigDecimal cost = shares.multiply(order.getPrice());
+
+            if (order.getTransactionType() == TransactionType.BUY) {
+                totalValue = totalValue.add(cost);
+                totalShares = totalShares.add(shares);
+
+            } else if (order.getTransactionType() == TransactionType.SELL) {
+                if (totalShares.compareTo(BigDecimal.ZERO) > 0) {
+                    BigDecimal avgCostPerShare = totalValue.divide(totalShares, 2, RoundingMode.HALF_UP);
+                    BigDecimal costReduction = avgCostPerShare.multiply(shares);
+
+                    totalShares = totalShares.subtract(shares);
+                    totalValue = totalValue.subtract(costReduction);
+                }
+            }
+        }
+
+        if (totalShares.compareTo(BigDecimal.ZERO) > 0) {
+             result.setPayload(totalValue.divide(totalShares, 2, RoundingMode.HALF_UP));
+        } else {
+            result.addMessage("No shares found", ResultType.NOT_FOUND);
+        }
         return result;
     }
 
