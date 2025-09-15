@@ -2,7 +2,9 @@ package learn.lavadonut.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,13 +14,23 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtConverter converter;
 
     public SecurityConfig(JwtConverter converter) {
         this.converter = converter;
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // Completely bypass security for these paths
+        web.ignoring()
+                .antMatchers("/swagger-ui/**", "/swagger-ui.html")
+                .antMatchers("/v3/api-docs/**");
     }
 
     @Override
@@ -31,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // add antMatchers here to configure access to specific API endpoints
                 .antMatchers("/api/auth/authenticate").permitAll()
                 .antMatchers("/api/auth/register").permitAll()
-                .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // For OpenAPI/SwaggerUI
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN") // For OpenAPI/SwaggerUI
                 // require authentication for any request...
                 .anyRequest().authenticated()
                 .and()

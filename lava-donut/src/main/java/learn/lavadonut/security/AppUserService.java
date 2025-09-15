@@ -34,13 +34,18 @@ public class AppUserService implements UserDetailsService {
         return appUser;
     }
 
-    public AppUser create(String username, String password) {
+    public AppUser create(String username, String password, boolean admin) {
         validate(username);
         validatePassword(password);
 
         password = encoder.encode(password);
 
-        AppUser appUser = new AppUser(0, username, password, false, List.of("User"));
+        AppUser appUser;
+        if (admin) {
+            appUser = new AppUser(0, username, password, false, List.of("Admin"));
+        } else {
+            appUser = new AppUser(0, username, password, false, List.of("User"));
+        }
 
         return repository.create(appUser);
     }

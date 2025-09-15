@@ -1,5 +1,6 @@
 package learn.lavadonut.controllers;
 
+import learn.lavadonut.domain.UserService;
 import learn.lavadonut.models.AppUser;
 import learn.lavadonut.security.AppUserService;
 import learn.lavadonut.security.JwtConverter;
@@ -29,11 +30,13 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtConverter converter;
     private final AppUserService appUserService;
+    private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtConverter converter, AppUserService appUserService) {
+    public AuthController(AuthenticationManager authenticationManager, JwtConverter converter, AppUserService appUserService, UserService service) {
         this.authenticationManager = authenticationManager;
         this.converter = converter;
         this.appUserService = appUserService;
+        this.userService = service;
     }
 
     @PostMapping("/authenticate")
@@ -64,12 +67,52 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> createAccount(@RequestBody Map<String, String> credentials) {
         AppUser appUser = null;
+        learn.lavadonut.models.User user = null;
 
         try {
             String username = credentials.get("username");
             String password = credentials.get("password");
 
-            appUser = appUserService.create(username, password);
+            appUser = appUserService.create(username, password, false);
+            user = new learn.lavadonut.models.User();
+            user.setAppUserId(appUser.getAppUserId());
+            user.setFirstName(credentials.get("firstName"));
+            user.setLastName(credentials.get("lastName"));
+            user.setCurrencyId(Integer.parseInt(credentials.get("currencyId")));
+
+            userService.add(user);
+        } catch (ValidationException ex) {
+            return new ResponseEntity<>(List.of(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (DuplicateKeyException ex) {
+            return new ResponseEntity<>(List.of("The provided username already exists"), HttpStatus.BAD_REQUEST);
+        }
+
+        // happy path...
+
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("appUserId", appUser.getAppUserId());
+
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
+    }
+
+    // to register an admin
+    @PostMapping("/adminuser")
+    public ResponseEntity<?> createAdmin(@RequestBody Map<String, String> credentials) {
+        AppUser appUser = null;
+        learn.lavadonut.models.User user = null;
+
+        try {
+            String username = credentials.get("username");
+            String password = credentials.get("password");
+
+            appUser = appUserService.create(username, password, true);
+            user = new learn.lavadonut.models.User();
+            user.setAppUserId(appUser.getAppUserId());
+            user.setFirstName(credentials.get("firstName"));
+            user.setLastName(credentials.get("lastName"));
+            user.setCurrencyId(Integer.parseInt(credentials.get("currencyId")));
+
+            userService.add(user);
         } catch (ValidationException ex) {
             return new ResponseEntity<>(List.of(ex.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (DuplicateKeyException ex) {
