@@ -1,0 +1,138 @@
+import { useState, useEffect } from "react";
+import React from "react";
+
+import { Container, Alert, Box, Paper, Typography, Button, TextField } from "@mui/material";
+
+function HomeScreen() {
+    const [stocks, setStocks] = useState([]);
+    const [watchlist, setWatchlist] = useState([]);
+
+    const [error, setError] = useState("");
+    const url = "http://localhost:8080/api/";
+
+    useEffect(() => {
+        loadStocks();
+        loadWatchlist();
+    }, []); // run once on page load
+
+    const loadStocks = async () => {
+        setError("");
+
+        const mockStocks = [
+                {
+                    id: 1,
+                    name: "Apple Inc.",
+                    symbol: "AAPL",
+                    shares: 25,
+                    avgPrice: 145.67,
+                    unrealizedGainOrLoss: 320.45
+                },
+                {
+                    id: 2,
+                    name: "Tesla Inc.",
+                    symbol: "TSLA",
+                    shares: 10,
+                    avgPrice: 720.50,
+                    unrealizedGainOrLoss: -150.30
+                },
+                {
+                    id: 3,
+                    name: "Amazon.com Inc.",
+                    symbol: "AMZN",
+                    shares: 5,
+                    avgPrice: 3300.00,
+                    unrealizedGainOrLoss: 1025.75
+                }
+            ];
+            setStocks(mockStocks);
+
+        try {
+            // fetch user's stocks api
+        } catch (error) {
+            setError(error);
+        }
+    }
+
+    const loadWatchlist = async () => {
+        const mockWatchlist = [
+                { name: "Microsoft", symbol: "MSFT", description: "Cloud, productivity, and software giant" },
+                { name: "Nvidia", symbol: "NVDA", description: "Leader in GPUs and AI hardware" },
+                { name: "Meta Platforms", symbol: "META", description: "Social media and metaverse company" }
+            ];
+            setWatchlist(mockWatchlist);
+        try {
+            // fetch user's watchlist (in portfolio?)
+        } catch (error) {
+            setError(error);
+        }
+    }
+
+    return (
+        <Container maxWidth="lg">
+            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10}}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                    <Typography variant="h2">
+                        Stock App
+                    </Typography>
+                    <Button variant="contained" sx={{ borderRadius: 5 }}>
+                        Add Stock
+                    </Button>
+                </Box>
+            </Paper>
+
+            {error && <Alert severity="error" sx={{ mb: 4 }}>
+                {error}
+            </Alert>}
+
+            <Box sx={{ display: "flex", gap: 2, overflowX: "auto", pb: 2 }}>
+                {/* stocks mapped to individual paper elements (look like cards) */}
+                {stocks.map((stock) => (
+                    <Paper key={stock.id} elevation={2} sx={{ p: 2, borderRadius: 6 }}>
+                        <Box>
+                            <Typography variant="h4">
+                                {stock.name}
+                            </Typography>
+                            <Typography variant="body1" color="textSecondary">
+                                {stock.symbol}
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant="body1">
+                                Total shares: {stock.shares}
+                            </Typography>
+                            <Typography variant="body1">
+                                Average Price: ${stock.avgPrice.toFixed(2)}
+                            </Typography>
+                            <Typography variant="body1" color={stock.unrealizedGainOrLoss >= 0 ? "success" : "error"}>
+                                Unrealized Gain or Loss: ${stock.unrealizedGainOrLoss.toFixed(2)}
+                            </Typography>
+                        </Box>
+                        <Button variant="contained" sx={{ borderRadius: 6 }}>
+                            View Orders
+                        </Button>
+                    </Paper>
+                ))}
+            </Box>
+
+            {/* Watchlist shows a vertically scrolling list of stocks */}
+            <Typography variant="h4" sx={{ mt: 5, mb: 5, p: 2}}>
+                Watchlist
+            </Typography>
+
+            {watchlist.map((item, index) => (
+                <Paper key={index} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 5}}>
+                    <Typography variant="h4">
+                        {item.name} ({item.symbol})
+                    </Typography>
+                    <Typography variant="body">
+                        {item.description}
+                    </Typography>
+                </Paper>
+            ))}
+        </Container>
+        
+
+    );
+}
+
+export default HomeScreen;
