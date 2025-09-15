@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,6 +23,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public SecurityConfig(JwtConverter converter) {
         this.converter = converter;
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // Completely bypass security for these paths
+        web.ignoring()
+                .antMatchers("/swagger-ui/**", "/swagger-ui.html")
+                .antMatchers("/v3/api-docs/**");
     }
 
     @Override
