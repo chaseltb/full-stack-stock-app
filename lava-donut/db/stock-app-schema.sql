@@ -180,41 +180,33 @@ create table portfolio_orders (
 		(user_id, first_name, last_name, currency_id, app_user_id)
 	values
 		(1, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1),
-        (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2),
-        (3, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1);
-<<<<<<< HEAD
+		(2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2),
+		(3, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1);
 
-=======
-	
->>>>>>> dev
-    insert into portfolio
+	insert into portfolio
 		(portfolio_id, account_type, user_id)
 	values
 		(1, 'Retirement', 1),
-        (2, 'Investment', 1),
-        (3, 'Roth IRA', 2),
-        (4, 'Retirement', 3),
-        (5, 'Investment', 3);
-<<<<<<< HEAD
+		(2, 'Investment', 1),
+		(3, 'Roth IRA', 2),
+		(4, 'Retirement', 3),
+		(5, 'Investment', 3);
 
-=======
-        
->>>>>>> dev
-    insert into portfolio_orders
+	insert into portfolio_orders
 		(port_order_id, portfolio_id, order_id)
 	values
 		(1, 1, 1),
-        (2, 1, 2),
-        (3, 2, 3),
-        (4, 3, 4),
-        (5, 4, 5),
-        (6, 4, 6);
+		(2, 1, 2),
+		(3, 2, 3),
+		(4, 3, 4),
+		(5, 4, 5),
+		(6, 4, 6);
 
-    insert into app_role (`name`) values
-        ('USER'),
-        ('ADMIN');
+	insert into app_role (`name`) values
+		('USER'),
+		('ADMIN');
 
-    insert into app_user_role
-        values
-        (1, 2),
-        (2, 1);
+	insert into app_user_role
+		values
+		(1, 2),
+		(2, 1);

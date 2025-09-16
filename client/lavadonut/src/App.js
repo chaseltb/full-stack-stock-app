@@ -15,7 +15,10 @@ function App() {
     <Router>
       <Routes>
         {/* Auth route */}
-        <Route path="/" element={<AuthPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+
+        {/* Home route */}
+        <Route path="/" element={<HomeScreen />}/>
 
         {/* Protected routes */}
         <Route path="/countries" element={<RequireAuth> <CountryList /> </RequireAuth>}/>
@@ -24,7 +27,6 @@ function App() {
         <Route path="/orders" element={<RequireAuth> <OrderList /> </RequireAuth>}/>
         <Route path="/order/add" element={<RequireAuth> <OrderForm /> </RequireAuth>} />
         <Route path="/order/edit/:id" element={<RequireAuth> <OrderForm /> </RequireAuth>}/>
-        <Route path="/home" element={<HomeScreen />}/>
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />

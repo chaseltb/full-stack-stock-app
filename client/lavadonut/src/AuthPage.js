@@ -1,8 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import {
     Container, Box, Typography, Paper, TextField, Checkbox,
-    Button, FormControlLabel, Link, Alert
+    Button, FormControlLabel, Link, Alert,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
 } from "@mui/material";
 
 function AuthPage() {
@@ -19,9 +23,43 @@ function AuthPage() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [currency, setCurrency] = useState("");
+    const [currencies, setCurrencies] = useState([]);
 
     const navigate = useNavigate();
     const url = "http://localhost:8080/api/";
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+    const safeFrom = from && from !== "/auth" ? from : "/"; // redirect away from register
+
+    // Get currencies with useEffect
+    useEffect(() => {
+        if (!isLogin) {
+            fetch("http://localhost:8080/api/currency")
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return Promise.reject(`Unexpected Status Code: ${response.status}`);
+                }
+            })
+            .then(data => {
+                if (Array.isArray(data)) {
+                    setCurrencies(data);
+                } else if (data.currencies) {
+                    setCurrencies(data.currencies);
+                } else {
+                    setCurrencies([]);
+                }
+            })
+            .catch(console.log);
+        }
+    });
+
+    // Redirect away if already logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+        return <Navigate to="/" replace />;
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -41,7 +79,7 @@ function AuthPage() {
                 body: JSON.stringify(requestBody)
             });
 
-            const data = response.json();
+            const data = await response.json();
             if (isLogin) {
                 // login
                 if (data.token) {
@@ -52,12 +90,19 @@ function AuthPage() {
                     }
                 }
                 alert("Login successful!");
+                navigate(safeFrom, { replace: true }); // Return user to original path
             } else {
                 // register
-                alert("Registration successful! You can now log in.");
-                setIsLogin(true);
+                if (data.token) {
+                    if (keepLogin) {
+                        localStorage.setItem("token", data.token);
+                    } else {
+                        sessionStorage.setItem("token", data.token);
+                    }
+                    alert("Registration successful! You are now logged in.");
+                    navigate("/");
+                }
             }
-            navigate("/home");
 
         } catch (error) {
             setError(error);
@@ -119,8 +164,22 @@ function AuthPage() {
                                 <TextField label="Last Name" name="lastName" fullWidth margin="normal"
                                     value={lastName} onChange={handleChange} />
                              {/* replace with a dropdown of currency and store as currency id? might have to call currency api in useEffect though?? */}
-                                <TextField label="Currency Id" name="currency" fullWidth margin="normal"
-                                    value={currency} onChange={handleChange} />
+                                <FormControl fullWidth margin="normal">
+                                    <InputLabel id="currency-label">Currency</InputLabel>
+                                    <Select
+                                        labelId="currency-label"
+                                        name="currency"
+                                        value={currency}
+                                        label="Currency"
+                                        onChange={handleChange}
+                                    >
+                                        {currencies.map((c) => (
+                                            <MenuItem key={c.id} value={c.id}>
+                                                {c.code} ({c.name})
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </>
                         )}
 
