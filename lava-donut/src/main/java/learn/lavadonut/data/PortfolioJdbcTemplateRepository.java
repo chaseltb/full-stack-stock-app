@@ -63,6 +63,19 @@ public class PortfolioJdbcTemplateRepository implements PortfolioRepository {
     }
 
     @Override
+    public Portfolio findPortfolioById(int portfolioId) {
+        final String sql = "select portfolio_id, user_id, account_type from portfolio where portfolio_id = ?;";
+        Portfolio portfolio = jdbcTemplate.queryForObject(sql, new PortfolioMapper(), portfolioId);
+
+        if (portfolio != null) {
+            portfolio.setStocks(findAllStocksInPortfolio(portfolio.getId()));
+            portfolio.setOrders(findOrdersByPortfolioId(portfolio.getId()));
+
+        }
+        return portfolio;
+    }
+
+    @Override
     public List<Stock> findAllStocksInPortfolio(int portfolioId) {
 
         final String sql =

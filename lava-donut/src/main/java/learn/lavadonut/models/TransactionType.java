@@ -2,7 +2,8 @@ package learn.lavadonut.models;
 
 public enum TransactionType {
     BUY(1, "Buy"),
-    SELL(2, "Sell");
+    SELL(2, "Sell"),
+    DIVIDEND(3, "Dividend");
 
     private int id;
     private String name;

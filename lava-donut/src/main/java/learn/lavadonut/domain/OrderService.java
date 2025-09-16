@@ -2,6 +2,7 @@ package learn.lavadonut.domain;
 
 import learn.lavadonut.data.OrderRepository;
 import learn.lavadonut.models.Order;
+import learn.lavadonut.models.TransactionType;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -90,8 +91,13 @@ public class OrderService {
         }
 
         // shares must be greater than 0
-        else if (order.getNumberOfShares().compareTo(BigDecimal.ZERO) <= 0) {
+        else if (order.getNumberOfShares().compareTo(BigDecimal.ZERO) <= 0
+                && !order.getTransactionType().equals(TransactionType.DIVIDEND)) {
             result.addMessage("shares must be greater than 0", ResultType.INVALID);
+        }
+        else if (order.getNumberOfShares().compareTo(BigDecimal.ZERO) == 0
+                && order.getTransactionType().equals(TransactionType.DIVIDEND)) {
+            result.addMessage("shares for a dividend must be  0", ResultType.INVALID);
         }
 
         // date is required

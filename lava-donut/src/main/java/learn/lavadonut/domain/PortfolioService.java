@@ -1,5 +1,6 @@
 package learn.lavadonut.domain;
 
+import learn.lavadonut.data.OrderRepository;
 import learn.lavadonut.data.PortfolioRepository;
 import learn.lavadonut.data.StockRepository;
 import learn.lavadonut.models.*;
@@ -10,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -17,12 +19,17 @@ public class PortfolioService {
 
     private final PortfolioRepository portfolioRepo;
     private final StockRepository stockRepo;
+    private final OrderRepository orderRepo;
 
-    public PortfolioService(PortfolioRepository portfolioRepo, StockRepository stockRepo) {
+    public PortfolioService(PortfolioRepository portfolioRepo, StockRepository stockRepo, OrderRepository orderRepo) {
         this.portfolioRepo = portfolioRepo;
         this.stockRepo = stockRepo;
+        this.orderRepo = orderRepo;
     }
 
+    public Portfolio findPortfolioById(int portfolioId) {
+        return portfolioRepo.findPortfolioById(portfolioId);
+    }
     public List<Portfolio> findPortfoliosByUserId(int userId) {
         return portfolioRepo.findPortfoliosByUserId(userId);
     }
@@ -154,13 +161,36 @@ public class PortfolioService {
         return result;
     }
 
-    public Result<Portfolio> updateCostBasisOnDividend(int userId, BigDecimal dividend) {
+    public Result<Portfolio> updateCostBasisOnDividend(int portfolioId, int stockId, BigDecimal dividend) {
         Result<Portfolio> result = new Result<>();
-        List<Portfolio> portfolios = portfolioRepo.findPortfoliosByUserId(userId);
-        if (portfolios == null) {
-            result.addMessage("No portfolios for user found", ResultType.NOT_FOUND);
+        Portfolio portfolio = portfolioRepo.findPortfolioById(portfolioId);
+        if (portfolio == null) {
+            result.addMessage("No portfolio was found", ResultType.NOT_FOUND);
         }
-        //TODO Decide how we want to calculate cost basis, either through all orders or all stocks
+
+        List<Order> orders = portfolio.getOrders();
+        if (orders == null) {
+            result.addMessage("No orders found in portfolio", ResultType.NOT_FOUND);
+        }
+        BigDecimal stockShares = orders.stream().filter(o -> o.getTransactionType() == TransactionType.BUY)
+                .map(Order::getNumberOfShares)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (stockShares.compareTo(BigDecimal.ZERO) == 0) {
+            result.addMessage("No shares of this stock in portfolio", ResultType.NOT_FOUND);
+            return result;
+        }
+        BigDecimal totalDividend = stockShares.multiply(dividend);
+
+        Order dividendOrder = new Order();
+        dividendOrder.setPrice(totalDividend);
+        dividendOrder.setStockId(stockId);
+        dividendOrder.setDate(Date.valueOf(LocalDate.now()));
+        dividendOrder.setTransactionType(TransactionType.DIVIDEND);
+        dividendOrder.setNumberOfShares(stockShares);
+        orderRepo.add(dividendOrder);
+        orders.add(dividendOrder);
+        portfolio.setOrders(orders);
+        result.setPayload(portfolio);
 
         return result;
     }
@@ -192,6 +222,8 @@ public class PortfolioService {
                     totalShares = totalShares.subtract(shares);
                     totalValue = totalValue.subtract(costReduction);
                 }
+            } else if (order.getTransactionType() == TransactionType.DIVIDEND) {
+                totalValue = totalValue.subtract(order.getPrice());
             }
         }
 
