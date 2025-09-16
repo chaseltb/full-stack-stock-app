@@ -9,8 +9,17 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+// USE EFFECT TO FETCH PORTFOLIO FROM URL
+
+
 
 function OrderHistory() {
+
+    const { id } = useParams();
+
   ChartJS.register(
     CategoryScale,
     LinearScale,
