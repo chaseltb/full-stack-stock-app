@@ -78,14 +78,14 @@ function Stock({stock, onBack}) {
                         <Paper key={order.id} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 6 }}>
                             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                 <Box>
-                                    <Typography variant="h4" color={order.type === "Buy" ? "success.main" : "error.main"}>
-                                        {order.type}: {order.date}
+                                    <Typography variant="h4" color={order.transactionType === "BUY" ? "success.main" : "error.main"}>
+                                        {order.transactionType}: {order.date}
                                     </Typography>
                                     <Typography variant="body1">
                                         Shares: {order.shares}
                                     </Typography>
                                     <Typography variant="body1">
-                                        Average Price: ${order.averagePrice}
+                                        Price: ${order.price}
                                     </Typography>
                                 </Box>
                                 <Button variant="contained" sx={{ borderRadius: 5 }}>
