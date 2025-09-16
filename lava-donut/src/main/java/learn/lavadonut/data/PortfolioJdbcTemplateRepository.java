@@ -116,19 +116,17 @@ public class PortfolioJdbcTemplateRepository implements PortfolioRepository {
         return jdbcTemplate.update(sql, p.getAccountType().getName(), p.getId()) > 0;
     }
 
-//TODO decide if these are needed
+
     @Override
-    public boolean sellStockFromPortfolio(int userId, int stockId) {
-        return false;
-    }
-    @Override
-    public Portfolio addStockToPortfolio(int userId, Stock stock) {
-        return null;
+    public boolean addOrderToPortfolio(int portfolioId, int orderId) {
+        final String sql = "insert into portfolio_orders (portfolio_id, order_id) values (?, ?);";
+        return jdbcTemplate.update(sql, portfolioId, orderId) > 0;
     }
 
     @Override
-    public boolean deleteStockFromPortfolio(int userId, int stockId) {
-        return false;
+    public boolean removeOrderFromPortfolio(int portfolioId, int orderId) {
+        final String sql = "delete from portfolio_orders where portfolio_id = ? and order_id = ?;";
+        return jdbcTemplate.update(sql, portfolioId, orderId) > 0;
     }
 
 }

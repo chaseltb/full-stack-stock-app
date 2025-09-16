@@ -8,6 +8,7 @@ import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.sound.sampled.Port;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
@@ -17,11 +18,13 @@ import java.util.*;
 @Service
 public class PortfolioService {
 
+    private final OrderService orderService;
     private final PortfolioRepository portfolioRepo;
     private final StockRepository stockRepo;
     private final OrderRepository orderRepo;
 
-    public PortfolioService(PortfolioRepository portfolioRepo, StockRepository stockRepo, OrderRepository orderRepo) {
+    public PortfolioService(OrderService orderService, PortfolioRepository portfolioRepo, StockRepository stockRepo, OrderRepository orderRepo) {
+        this.orderService = orderService;
         this.portfolioRepo = portfolioRepo;
         this.stockRepo = stockRepo;
         this.orderRepo = orderRepo;
@@ -77,6 +80,31 @@ public class PortfolioService {
         }
 
         result.setPayload(newPortfolio);
+        return result;
+    }
+
+    public Result<Portfolio> addOrderToPortfolio(int portfolioId, Order newOrder) {
+        Result<Portfolio> result = new Result<>();
+        Result<Order> orderResult = orderService.add(newOrder);
+        if (!orderResult.isSuccess()) {
+            result.addMessage("Could not create order: " + orderResult.getMessages(), ResultType.INVALID);
+            return result;
+        }
+        Portfolio portfolio = portfolioRepo.findPortfolioById(portfolioId);
+        if (portfolio == null) {
+            result.addMessage(
+                    String.format("Portfolio must be valid"),
+                    ResultType.NOT_FOUND);
+            return result;
+        }
+
+        boolean success = portfolioRepo.addOrderToPortfolio(portfolioId, orderResult.getPayload().getId());
+        if (!success) {
+            result.addMessage("Failed to link order to portfolio", ResultType.INVALID);
+            return result;
+        }
+        Portfolio p = portfolioRepo.findPortfolioById(portfolioId);
+        result.setPayload(p);
         return result;
     }
 
@@ -309,15 +337,5 @@ public class PortfolioService {
         return result;
     }
 
-    //TODO decide if these should be here or not, watch stock would require DB change
-//    public Portfolio addWatchStockToPortfolio(int userId, Stock stock) {
-//
-//    }
-//
-//    public boolean deleteWatchStockFromPortfolio(int userId, int stockId){
-//
-//    }
-//    public boolean sellStockFromPortfolio(int userId, int stockId) {
-//
-//    }
+
 }
