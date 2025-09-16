@@ -9,7 +9,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<AuthPage />}/>
-          <Route path="/OrderHistory/:id" element={<OrderHistory />}/>
+          <Route path="/OrderHistory/:name/:id" element={<OrderHistory />}/>
         </Routes>
       </Router>
     </>

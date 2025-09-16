@@ -18,8 +18,8 @@ import { useParams } from "react-router-dom";
 
 function OrderHistory() {
 
-    const [orders, setOrders] = useState([]); // has many orders
-    const [stock, setStocks] = useState([]); // has many stocks
+    const [userOrders, setOrders] = useState([]); // has many orders
+    const [userStock, setStocks] = useState([]); // has many stocks
     const [portfolio, setPortfolio] = useState();  // one portfolio
 
     const { id } = useParams();
