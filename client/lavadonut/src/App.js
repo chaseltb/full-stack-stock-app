@@ -1,5 +1,5 @@
 import React from "react";
-
+import {Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import AuthPage from "./AuthPage";
 import NotFound from "./NotFound";
 import CountryList from "./CountryList";
@@ -17,8 +17,7 @@ function App() {
         <Route path="/" element={<AuthPage />} />
 
         {/* Protected routes */}
-        <Route path="/countries"
-          element={<RequireAuth> <CountryList /> </RequireAuth>}/>
+        <Route path="/countries" element={<RequireAuth> <CountryList /> </RequireAuth>}/>
         <Route path="/country/add" element={<RequireAuth> <CountryForm /> </RequireAuth>} />
         <Route path="/country/edit/:id" element={<RequireAuth> <CountryForm /> </RequireAuth>}/>
         <Route path="/home" element={<RequireAuth> <HomeScreen /> </RequireAuth>}/>
