@@ -61,7 +61,7 @@ function OrderHistory() {
   };
 
   const orderHistory = {
-    labels: userStocks.map(stock => stock.name), // check if order and stock are same before mapping
+    labels: userStocks.map(stock => stock.name), // check if order and stock are same before
     datasets: [
       {
         label: "Cost",
