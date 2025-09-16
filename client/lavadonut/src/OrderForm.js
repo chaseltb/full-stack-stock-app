@@ -165,13 +165,13 @@ function OrderForm() {
                 component="form" 
                 onSubmit={handleSubmit} 
                 sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    backgroundColor: "#f8f6fc",
-                    padding: 3,
+                    width: "100%",
+                    maxWidth: 480,
+                    mx: "auto",
+                    p: 4,
+                    backgroundColor: "#fff",
                     borderRadius: 2,
-                    boxShadow: 2
+                    boxShadow: 3
                 }} 
                 noValidate
             >

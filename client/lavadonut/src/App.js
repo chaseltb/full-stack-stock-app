@@ -7,6 +7,8 @@ import NotFound from "./NotFound";
 import CountryList from "./CountryList";
 import RequireAuth from "./RequireAuth";
 import CountryForm from "./CountryForm";
+import OrderForm from "./OrderForm";
+import OrderList from "./OrderList";
 
 function App() {
   return (
@@ -16,10 +18,12 @@ function App() {
         <Route path="/" element={<AuthPage />} />
 
         {/* Protected routes */}
-        <Route path="/countries"
-          element={<RequireAuth> <CountryList /> </RequireAuth>}/>
+        <Route path="/countries" element={<RequireAuth> <CountryList /> </RequireAuth>}/>
         <Route path="/country/add" element={<RequireAuth> <CountryForm /> </RequireAuth>} />
         <Route path="/country/edit/:id" element={<RequireAuth> <CountryForm /> </RequireAuth>}/>
+        <Route path="/orders" element={<RequireAuth> <OrderList /> </RequireAuth>}/>
+        <Route path="/order/add" element={<RequireAuth> <OrderForm /> </RequireAuth>} />
+        <Route path="/order/edit/:id" element={<RequireAuth> <OrderForm /> </RequireAuth>}/>
         <Route path="/home" element={<RequireAuth> <HomeScreen /> </RequireAuth>}/>
 
         {/* Catch-all */}

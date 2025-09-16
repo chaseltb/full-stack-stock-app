@@ -95,7 +95,7 @@ function OrderList() {
                     variant="contained" 
                     color="primary"
                     component={Link}
-                    to={'order/add'}
+                    to={'/order/add'}
                     startIcon={<Add />}
                 >
                     Add an Order
