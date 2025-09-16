@@ -46,7 +46,7 @@ function AuthPage() {
             } else {
                 // register
             }
-
+            
         } catch (error) {
             setError(error);
         }
