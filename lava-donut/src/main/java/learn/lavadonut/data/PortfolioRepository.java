@@ -14,8 +14,8 @@ public interface PortfolioRepository {
     List<Portfolio> findPortfoliosByUserId(int userId);
     Portfolio findPortfolioById(int portfolioId);
     Portfolio createPortfolio(Portfolio newPortfolio);
-    List<Stock> findAllStocksInPortfolio(int userId);
-    List<Order> findOrdersByPortfolioId(int userId);
+    List<Stock> findAllStocksInPortfolio(int portfolioId);
+    List<Order> findOrdersByPortfolioId(int portfolioId);
     boolean updateAccountType(Portfolio p);
     boolean addOrderToPortfolio(int portfolioId, int orderId);
     boolean removeOrderFromPortfolio(int portfolioId, int orderId);
