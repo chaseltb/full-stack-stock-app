@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react";
 import { Container, Box, Typography, Paper, Alert, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 import React from "react";
 
 // Insert Orderhistory, pass portfolio id to Order history
@@ -67,6 +68,14 @@ function Portfolios() {
                                         Unrealized Gain/Loss: 
                                 </Typography>
                             </Box>
+
+                            <Link
+                                component="button"
+                                variant="outlined"
+                                to={`/portfolios/order-history/:name/${portfolio.id}`}
+                            >
+                                Order History
+                            </Link>
                         </Paper>
                     ))}
                 </Box>
