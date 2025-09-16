@@ -37,8 +37,8 @@ class OrderJdbcTemplateRepositoryTest {
 
         // can't predict order
         // if delete is first, we're down to 1
-        // if add is first, we may go as high as 7
-        assertTrue(!orders.isEmpty() && orders.size() <= 7);
+        // if add is first, we may go as high as 7 (8, now with portfolio tests)
+        assertTrue(!orders.isEmpty() && orders.size() <= 8);
     }
 
     @Test
