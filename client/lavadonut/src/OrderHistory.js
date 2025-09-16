@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,30 +14,29 @@ import { useParams } from "react-router-dom";
 
 // USE EFFECT TO FETCH PORTFOLIO FROM URL
 
-
-
 function OrderHistory() {
+  const [portfolio, setPortfolio] = useState(); // one portfolio
 
-    const [userOrders, setOrders] = useState([]); // has many orders
-    const [userStock, setStocks] = useState([]); // has many stocks
-    const [portfolio, setPortfolio] = useState();  // one portfolio
+  const { id } = useParams();
+  const { name } = useParams();
 
-    const { id } = useParams();
+  const url = `http://localhost:8080/api/portfolio/${id}`;
 
-    const url = `http://localhost:8080/api/portfolio/${id}`;
+  useEffect(() => {
+    fetch(url)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          return Promise.reject(`Unexpected Status Code: ${response.status}`);
+        }
+      })
+      .then((data) => setPortfolio(data))
+      .catch(console.log);
+  });
 
-    useEffect(() => {
-        fetch(url)
-            .then((response) => {
-                if (response.status === 200) {
-                    return response.json();
-                } else {
-                    return Promise.reject(`Unexpected Status Code: ${response.status}`);
-                }
-            })
-            .then((data) => setPortfolio(data))
-            .catch(console.log);
-    },);
+  const userOrders = portfolio.orders;
+  const userStocks = portfolio.stocks;
 
   ChartJS.register(
     CategoryScale,
@@ -56,36 +55,21 @@ function OrderHistory() {
       },
       title: {
         display: true,
-        text: "Chart.js Bar Chart",
+        text: `${name} Order History`,
       },
     },
   };
 
-  const data = {
-    labels: [
-      "RENT",
-      "GROCERIES",
-      "UTILITIES",
-      "ENTERTAINMENT",
-      "TRANSPORTATION",
-    ],
+  const orderHistory = {
+    labels: userStocks.map(stock => stock.name), 
     datasets: [
       {
-        label: "Expenses",
-        data: [1200, 300, 150, 180, 35],
+        label: "Cost",
+        data: userOrders.map(order => order.price), //need to dynamically introduce data
         backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
           "rgba(255, 99, 132, 0.2)",
         ],
         borderColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
           "rgba(255, 99, 132, 0.2)",
         ],
         borderWidth: 1,
@@ -93,9 +77,11 @@ function OrderHistory() {
     ],
   };
 
+
+  // format page in to display stock and order info
   return (
     <>
-      <Bar options={options} data={data} />
+      <Bar options={options} data={orderHistory} />
     </>
   );
 }
