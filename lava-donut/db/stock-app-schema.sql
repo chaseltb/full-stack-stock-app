@@ -182,7 +182,11 @@ create table portfolio_orders (
 		(1, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1),
         (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2),
         (3, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1);
+<<<<<<< HEAD
+
+=======
 	
+>>>>>>> dev
     insert into portfolio
 		(portfolio_id, account_type, user_id)
 	values
@@ -191,7 +195,11 @@ create table portfolio_orders (
         (3, 'Roth IRA', 2),
         (4, 'Retirement', 3),
         (5, 'Investment', 3);
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> dev
     insert into portfolio_orders
 		(port_order_id, portfolio_id, order_id)
 	values
