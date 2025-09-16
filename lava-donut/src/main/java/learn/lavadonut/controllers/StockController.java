@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import learn.lavadonut.domain.AlpacaService;
 import learn.lavadonut.domain.Result;
 import learn.lavadonut.domain.StockService;
 import learn.lavadonut.models.Stock;
@@ -22,7 +23,12 @@ public class StockController {
 
     private final StockService service;
 
-    public StockController(StockService service) { this.service = service; }
+    private final AlpacaService alpacaService;
+
+    public StockController(StockService service, AlpacaService alpacaService) {
+        this.service = service;
+        this.alpacaService = alpacaService;
+    }
 
     @Operation(summary = "Get all Stocks")
     @ApiResponse(responseCode = "200", description = "Stocks found")
@@ -127,6 +133,22 @@ public class StockController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
+        return ErrorResponse.build(result);
+    }
+
+    @Operation(summary = "ADMIN: Update a Stocks price from external API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Stock updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "Stock not found")
+    })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PutMapping("/alpaca/{ticker}")
+    public ResponseEntity<Object> updatePriceFromAlpaca(@PathVariable String ticker) {
+        Result<Stock> result = alpacaService.updatePriceFromAlpaca(ticker);
+        if (result.isSuccess()) {
+            return ResponseEntity.ok(result.getPayload());
+        }
         return ErrorResponse.build(result);
     }
 }
