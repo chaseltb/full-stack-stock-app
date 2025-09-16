@@ -1,5 +1,4 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import AuthPage from "./AuthPage";
 import NotFound from "./NotFound";
@@ -25,6 +24,7 @@ function App() {
         <Route path="/home" element={<RequireAuth> <HomeScreen /> </RequireAuth>}/>
         <Route path="/stock" element={<RequireAuth> <Stock /> </RequireAuth>}/>
         <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
+
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
