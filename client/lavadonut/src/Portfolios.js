@@ -25,7 +25,7 @@ function Portfolios() {
     return (
         <Container maxWidth="lg">
             <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItem: "center", mb: 4}}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4}}>
                     <Typography variant="h2">
                         Portfolios
                     </Typography>
@@ -59,7 +59,7 @@ function Portfolios() {
                                     Total Value:
                                 </Typography>
                                 <Typography variant="body1" 
-                                    color={portfolio.unrealizedGainOrLoss >= 0 ? "success" : "error"}>
+                                    color={portfolio.unrealizedGainOrLoss >= 0 ? "success.main" : "error.main"}>
                                         Unrealized Gain/Loss: 
                                 </Typography>
                             </Box>

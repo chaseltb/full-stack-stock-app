@@ -10,7 +10,7 @@ function Stock({stock, onBack}) {
     const url = "http://localhost:8080/api/";
 
     useEffect(() => {
-        if (Stock.id) {
+        if (stock?.id) {
             loadOrders();
         }
     }, [stock]);
@@ -78,7 +78,7 @@ function Stock({stock, onBack}) {
                         <Paper key={order.id} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 6 }}>
                             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                 <Box>
-                                    <Typography variant="h4" color={order.type === "Buy" ? "success" : "error"}>
+                                    <Typography variant="h4" color={order.type === "Buy" ? "success.main" : "error.main"}>
                                         {order.type}: {order.date}
                                     </Typography>
                                     <Typography variant="body1">
