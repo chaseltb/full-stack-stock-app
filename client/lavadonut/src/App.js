@@ -9,6 +9,7 @@ import CountryForm from "./CountryForm";
 import HomeScreen from "./HomeScreen";
 import Portfolios from "./Portfolios";
 import Stock from "./Stock";
+import OrderHistory from "./OrderHistory";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/home" element={<RequireAuth> <HomeScreen /> </RequireAuth>}/>
         <Route path="/stock" element={<RequireAuth> <Stock /> </RequireAuth>}/>
         <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
+        <Route path="/portfolios/order-history/:name/:id" element={<RequireAuth> <OrderHistory/> </RequireAuth>}/>
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
