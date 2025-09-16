@@ -18,7 +18,26 @@ import { useParams } from "react-router-dom";
 
 function OrderHistory() {
 
+    const [orders, setOrders] = useState([]); // has many orders
+    const [stock, setStocks] = useState([]); // has many stocks
+    const [portfolio, setPortfolio] = useState();  // one portfolio
+
     const { id } = useParams();
+
+    const url = `http://localhost:8080/api/portfolio/${id}`;
+
+    useEffect(() => {
+        fetch(url)
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return Promise.reject(`Unexpected Status Code: ${response.status}`);
+                }
+            })
+            .then((data) => setPortfolio(data))
+            .catch(console.log);
+    },);
 
   ChartJS.register(
     CategoryScale,
