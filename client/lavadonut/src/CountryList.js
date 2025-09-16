@@ -74,7 +74,7 @@ function CountryList() {
                         variant="contained" 
                         color="primary"
                         component={Link}
-                        to={'country/add'}
+                        to={'/country/add'}
                         startIcon={<Add />}
                     >
                         Add a Country
