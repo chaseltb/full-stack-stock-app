@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import {useState, useEffect} from "react";
 import { Container, Box, Typography, Paper, Alert, Button } from "@mui/material";
 import React from "react";
@@ -67,6 +66,17 @@ function Portfolios() {
                         </Paper>
                     ))}
                 </Box>
+
+                {portfolios.length === 0 && (
+                    <Box sx={{ textAlign: "center" }}>
+                        <Typography variant="h4" sx={{ mb: 2 }}>
+                            You haven't added any portfolios
+                        </Typography>
+                        <Button variant="contained" sx={{ borderRadius: 4}}>
+                            Create a portfolio
+                        </Button>
+                    </Box>
+                )}
             </Paper>
         </Container>
     );

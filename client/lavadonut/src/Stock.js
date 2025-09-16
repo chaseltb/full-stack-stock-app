@@ -3,7 +3,7 @@ import React from "react";
 import { Container, Box, Typography, Paper, Alert, Button, IconButton } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 
-function Stock() {
+function Stock({stock, onBack}) {
     const [orders, setOrders] = useState([]);
     const [error, setError] = useState("");
 
