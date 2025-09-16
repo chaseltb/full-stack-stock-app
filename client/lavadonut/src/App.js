@@ -11,6 +11,7 @@ import OrderForm from "./OrderForm";
 import OrderList from "./OrderList";
 import Stock from "./Stock";
 import Portfolios from "./Portfolios";
+import OrderHistory from "./OrderHistory";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/order/edit/:id" element={<RequireAuth> <OrderForm /> </RequireAuth>}/>
         <Route path="/stock" element={<RequireAuth> <Stock /> </RequireAuth>}/>
         <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
+        <Route path="/order/history" element={<RequireAuth> <OrderHistory /> </RequireAuth>}/>
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
