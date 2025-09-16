@@ -53,7 +53,7 @@ function AuthPage() {
             })
             .catch(console.log);
         }
-    });
+    }, [isLogin]);
 
     // Redirect away if already logged in
     const token = localStorage.getItem("token");
