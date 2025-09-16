@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Routes, BrowserRouter as Router, Route, Navigate } from "react-router-dom";
 import AuthPage from "./AuthPage";
 import NotFound from "./NotFound";
 import CountryList from "./CountryList";

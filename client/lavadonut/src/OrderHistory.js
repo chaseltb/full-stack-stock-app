@@ -16,6 +16,8 @@ import { useParams } from "react-router-dom";
 
 function OrderHistory() {
   const [portfolio, setPortfolio] = useState(); // one portfolio
+  const [userOrders, setOrders] = useState([]);
+  const [userStocks, setStocks] = useState([]);
 
   const { id } = useParams();
   const { name } = useParams();
@@ -35,8 +37,15 @@ function OrderHistory() {
       .catch(console.log);
   });
 
+  /*
   const userOrders = portfolio.orders;
+  userOrders.sort();
   const userStocks = portfolio.stocks;
+  userStocks.sort();
+  */
+
+  setOrders(portfolio.orders.sort((a , b) => a.stockId - b.stockId));
+  setStocks(portfolio.stocks.sort((a , b) => a.id - b.id));
 
   ChartJS.register(
     CategoryScale,
