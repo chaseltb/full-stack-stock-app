@@ -9,6 +9,8 @@ import RequireAuth from "./RequireAuth";
 import CountryForm from "./CountryForm";
 import OrderForm from "./OrderForm";
 import OrderList from "./OrderList";
+import Stock from "./Stock";
+import Portfolios from "./Portfolios";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Route path="/orders" element={<RequireAuth> <OrderList /> </RequireAuth>}/>
         <Route path="/order/add" element={<RequireAuth> <OrderForm /> </RequireAuth>} />
         <Route path="/order/edit/:id" element={<RequireAuth> <OrderForm /> </RequireAuth>}/>
+        <Route path="/stock" element={<RequireAuth> <Stock /> </RequireAuth>}/>
+        <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
