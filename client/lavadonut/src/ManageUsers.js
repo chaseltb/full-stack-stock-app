@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import { Container, Box, Typography, Paper, Button, TextField, Alert,
-    Dialog, DialogContent, DialogActions } from "@mui/material";
+    Dialog, DialogContent, DialogActions, 
+    IconButton,
+    DialogTitle} from "@mui/material";
 import { Add, Edit, Delete} from "@mui/icons-material";
 
 function ManageUsers() {
@@ -146,9 +148,67 @@ function ManageUsers() {
                 </Alert>}
 
                 {/* users list  */}
+                {users.map((user) => {
+                    <Paper key={user.id} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 4 }}>
+                        <Box>
+                            <Box>
+                                <Typography>
+                                    {user.firstName} {user.lastName}
+                                </Typography>
+                                <Typography variant="body1" color="textSecondary">
+                                    {user.username}
+                                </Typography>
+                                <Box sx={{ p: 2}}>
+                                    <Chip lable={user.role} size="small">
+                                    </Chip>
+                                    <Chip lable={user.currencyName} size="small">
+                                    </Chip>
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Button variant="outlined" onClick={() => handleViewUser(user)} sx={{ p: 2, borderRadius: 2 }}>
+                            View User
+                        </Button>
+                    </Paper>
+                })}
+
+                {users.length === 0 && (
+                    <Box sx={{ textAlign: "center" }}>
+                        <Typography variant="h5">
+                            No users were found
+                        </Typography>
+                        {/* maybe an add button? */}
+                    </Box>
+                )}
             </Paper>
 
             {/* view dialog if open  */}
+            <Dialog open={viewDialog} onClose={() => setViewDialog(false)}>
+                <DialogTitle>
+                    View User:
+                </DialogTitle>
+                <DialogContent>
+                    {selectedUser && (
+                        <Box>
+                            <Typography>
+                                User id: {selectedUser.id}
+                            </Typography>
+                            <Typography>
+                                Username: {selectedUser.username}
+                            </Typography>
+                            <Typography>
+                                Full name: {selectedUser.firstName} {selectedUser.lastName}
+                            </Typography>
+                            
+                            <Chip lable={selectedUser.role} size="small">
+                            </Chip>
+                            <Chip lable={selectedUser.currencyName} size="small">
+                            </Chip>
+
+                        </Box>
+                    )}
+                </DialogContent>
+            </Dialog>
 
 
             {/* create dialog if open  */}
