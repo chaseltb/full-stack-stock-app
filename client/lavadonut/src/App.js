@@ -24,7 +24,7 @@ function App() {
         <Route path="/orders" element={<RequireAuth> <OrderList /> </RequireAuth>}/>
         <Route path="/order/add" element={<RequireAuth> <OrderForm /> </RequireAuth>} />
         <Route path="/order/edit/:id" element={<RequireAuth> <OrderForm /> </RequireAuth>}/>
-        <Route path="/home" element={<RequireAuth> <HomeScreen /> </RequireAuth>}/>
+        <Route path="/home" element={<HomeScreen />}/>
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />

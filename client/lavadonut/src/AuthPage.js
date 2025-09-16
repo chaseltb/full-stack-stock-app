@@ -1,5 +1,5 @@
 import { useState } from "react";
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Container, Box, Typography, Paper, TextField, Checkbox,
     Button, FormControlLabel, Link, Alert
@@ -20,6 +20,7 @@ function AuthPage() {
     const [lastName, setLastName] = useState("");
     const [currency, setCurrency] = useState("");
 
+    const navigate = useNavigate();
     const url = "http://localhost:8080/api/";
 
     const handleSubmit = async (event) => {
@@ -43,9 +44,20 @@ function AuthPage() {
             const data = response.json();
             if (isLogin) {
                 // login
+                if (data.token) {
+                    if (keepLogin) {
+                        localStorage.setItem("token", data.token);
+                    } else {
+                        sessionStorage.setItem("token", data.token);
+                    }
+                }
+                alert("Login successful!");
             } else {
                 // register
+                alert("Registration successful! You can now log in.");
+                setIsLogin(true);
             }
+            navigate("/home");
 
         } catch (error) {
             setError(error);
