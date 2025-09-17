@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.validation.ValidationException;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +50,12 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(authToken);
 
             if (authentication.isAuthenticated()) {
-                String jwtToken = converter.getTokenFromUser((User) authentication.getPrincipal());
+                User principal = (User) authentication.getPrincipal();
+
+                AppUser appUser = (AppUser) appUserService.loadUserByUsername(principal.getUsername());
+                learn.lavadonut.models.User user = userService.findByAppUserId(appUser.getAppUserId());
+
+                String jwtToken = converter.getTokenFromUser(principal, appUser.getAppUserId(), user.getUserId());
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put("jwt_token", jwtToken);

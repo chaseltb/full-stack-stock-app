@@ -26,6 +26,8 @@ public class UserService {
         return repo.findByUserId(userId);
     }
 
+    public User findByAppUserId(int appUserId) { return repo.findByAppUserId(appUserId);}
+
     public Result<User> add(User user) {
         Result<User> result = validate(user);
         if (!result.isSuccess()) {

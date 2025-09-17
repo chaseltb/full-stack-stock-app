@@ -9,6 +9,8 @@ public interface UserRepository {
 
     User findByUserId(int userId);
 
+    User findByAppUserId(int userId);
+
     User add(User user);
 
     boolean update(User user);

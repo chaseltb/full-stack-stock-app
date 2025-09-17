@@ -8,6 +8,7 @@ import {
     Select,
     MenuItem
 } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
 
 const CURRENCY_DATA = [
     {
@@ -112,6 +113,11 @@ function AuthPage() {
                         } else {
                             sessionStorage.setItem("token", data.jwt_token);
                         }
+
+                        const decoded = jwtDecode(data.jwt_token);
+                        const userId = decoded.userId;
+                        localStorage.setItem("userId", userId);
+
                         alert("Login successful!");
                         navigate('/');
                     } else {
