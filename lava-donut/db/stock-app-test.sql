@@ -207,7 +207,8 @@ begin
         values
         ('john@smith.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
         ('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
-        ('tim@bob.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnsadfsfSi8Z3IZzQa', 0);
+        ('tim@bob.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnsadfsfSi8Z3IZzQa', 0),
+        ('james@bond.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBssdojbgdsasfSi8Z3IZzQa', 0); -- for testing delete
 
     insert into app_user_role values
         (1, 2),
@@ -218,7 +219,8 @@ begin
     values
         (1, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 1),
         (2, 'TEST FIRST NAME', 'TEST LAST NAME', 2, 2),
-        (3, 'TEST FIRST NAME', 'TEST LAST NAME', 3, 3);
+        (3, 'TEST FIRST NAME', 'TEST LAST NAME', 3, 3),
+        (4, 'TEST FIRST NAME', 'TEST LAST NAME', 1, 4); -- for testing delete
 
     insert into portfolio
         (portfolio_id, account_type, user_id)

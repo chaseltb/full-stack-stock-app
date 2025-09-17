@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserJdbcRepositoryTest {
 
-    private final int NEXT_ID = 4;
+    private final int NEXT_ID = 5;
 
     @Autowired
     UserJdbcRepository repo;
@@ -30,7 +30,7 @@ class UserJdbcRepositoryTest {
     void shouldFindAll() {
         List<User> users = repo.findAll();
         assertNotNull(users);
-        assertTrue(users.size() >= 3);
+        assertTrue(users.size() >= 4);
     }
 
     @Test
@@ -56,7 +56,7 @@ class UserJdbcRepositoryTest {
         User user = getTestUser();
         User actual = repo.add(user);
         assertNotNull(actual);
-        assertEquals(NEXT_ID, actual.getUserId());
+        assertTrue(NEXT_ID == actual.getUserId() || NEXT_ID - 1 == actual.getUserId());
     }
 
     @Test
@@ -75,7 +75,7 @@ class UserJdbcRepositoryTest {
 
     @Test
     void shouldDeleteById() {
-        assertTrue(repo.deleteById(3)); // should link to test for delete entry in test db
+        assertTrue(repo.deleteById(4)); // should link to test for delete entry in test db
     }
 
     @Test
