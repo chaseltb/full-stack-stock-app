@@ -259,7 +259,7 @@ function OrderList() {
 
     // Handle deleting an order
     const handleDeleteOrder = (id) => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         const order = orders.find(o => o.id === id);
         if (window.confirm(`Delete Order: ${order.id}`)) {
             const init = {
@@ -270,7 +270,7 @@ function OrderList() {
             };
             fetch(`${url}/${id}`, init)
             .then(response => {
-                if (response.status === 200) {
+                if (response.status === 204) {
                     const newOrders = orders.filter(o => o.id !== id);
                     setOrders(newOrders);
                 } else {
