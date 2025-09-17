@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import React from "react";
-
+import { jwtDecode } from "jwt-decode";
 import { Container, Alert, Box, Paper, Typography, Button, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 
 function HomeScreen() {
     const [stocks, setStocks] = useState([]);
     const [watchlist, setWatchlist] = useState([]);
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
 
     const [error, setError] = useState("");
     const url = "http://localhost:8080/api/";
@@ -16,6 +18,7 @@ function HomeScreen() {
         loadWatchlist();
     }, []); // run once on page load
 
+    
     const loadStocks = async () => {
         setError("");
 
@@ -50,7 +53,7 @@ function HomeScreen() {
         try {
             // fetch user's stocks api
         } catch (error) {
-            setError(error);
+            setError(error.message);
         }
     }
 

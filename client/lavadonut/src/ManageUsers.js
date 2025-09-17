@@ -91,7 +91,7 @@ function ManageUsers() {
             // get users api call
             setUsers(mockUsers);
         } catch (error) {
-            setError(error);
+            setError(error.message);
         }
     };
 

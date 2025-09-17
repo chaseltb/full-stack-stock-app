@@ -15,7 +15,8 @@ import React from "react";
 function Portfolios() {
   const [portfolios, setPortfolios] = useState([]);
   const [error, setError] = useState("");
-
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
   const user = {
     id: 1,
     username: "sally@jones.com",
@@ -35,7 +36,7 @@ function Portfolios() {
     try {
       // fetch portfolios url
       const portfolioResponse = await fetch(
-        `http://localhost:8080/api/portfolio/${user.id}`, // needs to be provided userId
+        `http://localhost:8080/api/portfolio/${userId}`, // needs to be provided userId
         {
           headers: {
             Authorization: `Bearer ${token}`,
