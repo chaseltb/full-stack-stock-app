@@ -9,7 +9,7 @@ import {
   Legend,
   scales,
 } from "chart.js";
-import { Container, Paper, Box, Typography} from "@mui/material";
+import { Container, Paper, Box, Typography } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -23,10 +23,16 @@ function OrderHistory() {
 
   const { id } = useParams();
 
+  const token = localStorage.getItem('token');
   const url = `http://localhost:8080/api/portfolio/${id}`;
 
   useEffect(() => {
-    fetch(url)
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
         if (response.status === 200) {
           return response.json();
@@ -83,44 +89,44 @@ function OrderHistory() {
     ],
   };
 
-  function getStockName(orderStockId){
-    userStocks.forEach(stock => {if(stock.id === orderStockId){
-      return stock.name;
-    }})
+  function getStockName(orderStockId) {
+    userStocks.forEach((stock) => {
+      if (stock.id === orderStockId) {
+        return stock.name;
+      }
+    });
   }
 
-  function getStockPrice(orderStockId){
-        userStocks.forEach(stock => {if(stock.id === orderStockId){
-      return stock.currentPrice;
-    }})
+  function getStockPrice(orderStockId) {
+    userStocks.forEach((stock) => {
+      if (stock.id === orderStockId) {
+        return stock.currentPrice;
+      }
+    });
   }
 
   // format page in to display stock and order info
   return (
     <>
-      <Container maxWidth = "lg">
+      <Container maxWidth="lg">
         <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
           {userOrders.map((order) => (
-              <Box>
-                <Typography variant="h2" align="center">
-                  ${getStockName(order.stockId)}
-                </Typography>
-                <Typography variant="body1">
-                  Date: ${order.date}
-                </Typography>
-                <Typography variant="body1">
-                  Transaction Type: ${order.transactionType}
-                </Typography>
-                <Typography variant="body1">
-                  Shares: ${order.shares}
-                </Typography>
-                <Typography variant="body1">
-                  Total Price: ${order.price}
-                </Typography>
-                <Typography variant="body1">
-                  Stock Price: ${getStockPrice(order.stockId)}
-                </Typography>
-              </Box>
+            <Box>
+              <Typography variant="h2" align="center">
+                ${getStockName(order.stockId)}
+              </Typography>
+              <Typography variant="body1">Date: ${order.date}</Typography>
+              <Typography variant="body1">
+                Transaction Type: ${order.transactionType}
+              </Typography>
+              <Typography variant="body1">Shares: ${order.shares}</Typography>
+              <Typography variant="body1">
+                Total Price: ${order.price}
+              </Typography>
+              <Typography variant="body1">
+                Stock Price: ${getStockPrice(order.stockId)}
+              </Typography>
+            </Box>
           ))}
           <Bar options={options} data={orderHistory} />
         </Paper>
