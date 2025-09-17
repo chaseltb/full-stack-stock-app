@@ -9,7 +9,7 @@ import {
   Legend,
   scales,
 } from "chart.js";
-import { Container, Paper, Box, Typography } from "@mui/material";
+import { Container, Paper, Box, Typography, Alert} from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -112,6 +112,11 @@ function OrderHistory() {
     <>
       <Container maxWidth="lg">
         <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
+          {error && (
+            <Alert severity="error" sx={{ mb: 4 }}>
+                {error}
+              </Alert>
+          )}
           {userOrders.map((order) => (
             <Box>
               <Typography variant="h2" align="center">
