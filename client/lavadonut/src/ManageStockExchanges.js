@@ -99,7 +99,7 @@ function ManageStockExchanges() {
         setCreateDialog(false);
         setEditing(false);
         setSelectedExchange(null);
-        setExchangeName("");
+        setName("");
         setCode("");
         setTimeZone("");
     }
