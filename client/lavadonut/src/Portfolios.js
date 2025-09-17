@@ -1,6 +1,9 @@
 import {useState, useEffect} from "react";
 import { Container, Box, Typography, Paper, Alert, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 import React from "react";
+
+// Insert Orderhistory, pass portfolio id to Order history
 
 function Portfolios() {
     const [portfolios, setPortfolios] = useState([]);
@@ -22,6 +25,8 @@ function Portfolios() {
         }
     };
 
+    //place button that has link to OrderHistory
+
     return (
         <Container maxWidth="lg">
             <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
@@ -42,7 +47,7 @@ function Portfolios() {
                 <Box sx={{ display: "grid", gap: 3}}>
                     {portfolios.map((portfolio) => (
                         <Paper key={portfolio.id} elevation={2} sx={{ p: 2, borderRadius: 10}}>
-                            <Box sx={{ p: 2, mb: 2}}>
+                            <Box sx={{ p: 2, mb: 2, width: 1/3}}>
                                 <Typography variant="body1">
                                     {portfolio.name}
                                 </Typography>
@@ -63,6 +68,14 @@ function Portfolios() {
                                         Unrealized Gain/Loss: 
                                 </Typography>
                             </Box>
+
+                            <Link
+                                component="button"
+                                variant="outlined"
+                                to={`/portfolios/order-history/${portfolio.id}`}
+                            >
+                                Order History
+                            </Link>
                         </Paper>
                     ))}
                 </Box>
