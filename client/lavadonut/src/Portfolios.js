@@ -7,7 +7,7 @@ import {
   Alert,
   Button,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import React from "react";
 
 // Insert Orderhistory, pass portfolio id to Order history
@@ -17,13 +17,6 @@ function Portfolios() {
   const [error, setError] = useState("");
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const user = {
-    id: 1,
-    username: "sally@jones.com",
-    password: "P@ssw0rd!",
-    firstName: "sally",
-    lastName: "jones"
-  }; 
   const url = "http://localhost:8080/api/portfolio";
 
   useEffect(() => {
@@ -103,13 +96,13 @@ function Portfolios() {
                 </Typography>
               </Box>
 
-              <Link
-                component="button"
+              <Button
                 variant="outlined"
+                component={Link}
                 to={`/portfolios/order-history/${portfolio.id}`}
               >
                 Order History
-              </Link>
+              </Button>
             </Paper>
           ))}
         </Box>
