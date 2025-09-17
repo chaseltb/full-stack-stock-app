@@ -16,6 +16,13 @@ function Portfolios() {
   const [portfolios, setPortfolios] = useState([]);
   const [error, setError] = useState("");
 
+  const user = {
+    id: 1,
+    username: "sally@jones.com",
+    password: "P@ssw0rd!",
+    firstName: "sally",
+    lastName: "jones"
+  }; 
   const url = "http://localhost:8080/api/";
 
   useEffect(() => {
@@ -37,7 +44,7 @@ function Portfolios() {
         }
       );
     } catch (error) {
-      setError(error);
+      setError(error.message || "Portfolios failed to load");
     }
   };
 

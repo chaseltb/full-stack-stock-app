@@ -134,7 +134,7 @@ function AuthPage() {
                 }
             }
         } catch (error) {
-            setError(error);
+            setError(error.message || "Authentication failed");
         }
 
     };
