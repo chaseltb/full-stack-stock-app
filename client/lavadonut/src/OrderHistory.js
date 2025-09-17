@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // USE EFFECT TO FETCH PORTFOLIO FROM URL
+//REFERENCE CONTEXT TO GET USER OBJ OR ID
 
 function OrderHistory() {
   const [portfolio, setPortfolio] = useState(); // one portfolio
