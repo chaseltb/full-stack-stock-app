@@ -17,7 +17,7 @@ const STOCK_EXCHANGE_DATA = [
         timezone: 1
     },
     {
-        id: 1,
+        id: 3,
         name: 'Shanghai Stock Exchange',
         code: 'SSE',
         timezone: 8
@@ -62,7 +62,7 @@ const COUNTRY_DATA = [
         id: 3,
         name: 'People\'s Republic of China',
         code: 'CN',
-        currency: CURRENCY_DATA[3]
+        currency: CURRENCY_DATA[2]
     }
 ];
 
@@ -74,8 +74,8 @@ const STOCK_DATA = [
         assetType: 'STOCK',
         industry: 'Airline and Aviation',
         currentPrice: 12.915,
-        country: COUNTRY_DATA[1],
-        stockExchange: STOCK_EXCHANGE_DATA[1]
+        country: COUNTRY_DATA[0],
+        stockExchange: STOCK_EXCHANGE_DATA[0]
     },
     {
         id: 2,
@@ -84,8 +84,8 @@ const STOCK_DATA = [
         assetType: 'ETF',
         industry: 'Agriculture',
         currentPrice: 5.0,
-        country: COUNTRY_DATA[1],
-        stockExchange: STOCK_EXCHANGE_DATA[1]
+        country: COUNTRY_DATA[0],
+        stockExchange: STOCK_EXCHANGE_DATA[0]
     },
     {
         id: 3,
@@ -94,8 +94,8 @@ const STOCK_DATA = [
         assetType: 'BOND',
         industry: 'Technology',
         currentPrice: 6.8,
-        country: COUNTRY_DATA[1],
-        stockExchange: STOCK_EXCHANGE_DATA[1]
+        country: COUNTRY_DATA[0],
+        stockExchange: STOCK_EXCHANGE_DATA[0]
     },
     {
         id: 4,
@@ -104,8 +104,8 @@ const STOCK_DATA = [
         assetType: 'STOCK',
         industry: 'Airline and Aviation',
         currentPrice: 9.6,
-        country: COUNTRY_DATA[2],
-        stockExchange: STOCK_EXCHANGE_DATA[2]
+        country: COUNTRY_DATA[1],
+        stockExchange: STOCK_EXCHANGE_DATA[1]
     },
     {
         id: 5,
@@ -114,8 +114,8 @@ const STOCK_DATA = [
         assetType: 'ETF',
         industry: 'Agriculture',
         currentPrice: 78.5,
-        country: COUNTRY_DATA[2],
-        stockExchange: STOCK_EXCHANGE_DATA[2]
+        country: COUNTRY_DATA[1],
+        stockExchange: STOCK_EXCHANGE_DATA[1]
     },
     {
         id: 6,
@@ -124,8 +124,8 @@ const STOCK_DATA = [
         assetType: 'STOCK',
         industry: 'Technology',
         currentPrice: 95.4,
-        country: COUNTRY_DATA[2],
-        stockExchange: STOCK_EXCHANGE_DATA[2]
+        country: COUNTRY_DATA[1],
+        stockExchange: STOCK_EXCHANGE_DATA[1]
     },
     {
         id: 7,
@@ -134,8 +134,8 @@ const STOCK_DATA = [
         assetType: 'STOCK',
         industry: 'Airline and Aviation',
         currentPrice: 0.01,
-        country: COUNTRY_DATA[3],
-        stockExchange: STOCK_EXCHANGE_DATA[3]
+        country: COUNTRY_DATA[2],
+        stockExchange: STOCK_EXCHANGE_DATA[2]
     },
     {
         id: 8,
@@ -144,8 +144,8 @@ const STOCK_DATA = [
         assetType: 'ETF',
         industry: 'Agriculture',
         currentPrice: 0.45,
-        country: COUNTRY_DATA[3],
-        stockExchange: STOCK_EXCHANGE_DATA[3]
+        country: COUNTRY_DATA[2],
+        stockExchange: STOCK_EXCHANGE_DATA[2]
     },
     {
         id: 9,
@@ -154,8 +154,8 @@ const STOCK_DATA = [
         assetType: 'BOND',
         industry: 'Technology',
         currentPrice: 0.001,
-        country: COUNTRY_DATA[3],
-        stockExchange: STOCK_EXCHANGE_DATA[3]
+        country: COUNTRY_DATA[2],
+        stockExchange: STOCK_EXCHANGE_DATA[2]
     }
 ];
 
@@ -163,7 +163,7 @@ const ORDER_DATA = [
     {
         id: 1,
         transactionType: 'BUY',
-        shares: 20,
+        numberOfShares: 20,
         price: 2000,
         date: '2025-05-17',
         stockId: 1
@@ -171,7 +171,7 @@ const ORDER_DATA = [
     {
         id: 2,
         transactionType: 'SELL',
-        shares: 5,
+        numberOfShares: 5,
         price: 232.50,
         date: '2024-03-08',
         stockId: 3
@@ -179,7 +179,7 @@ const ORDER_DATA = [
     {
         id: 3,
         transactionType: 'BUY',
-        shares: 1,
+        numberOfShares: 1,
         price: 250.876,
         date: '2022-08-09',
         stockId: 5
@@ -187,7 +187,7 @@ const ORDER_DATA = [
     {
         id: 4,
         transactionType: 'SELL',
-        shares: 100,
+        numberOfShares: 100,
         price: 45.085,
         date: '2002-12-16',
         stockId: 6
@@ -195,7 +195,7 @@ const ORDER_DATA = [
     {
         id: 5,
         transactionType: 'BUY',
-        shares: 22,
+        numberOfShares: 22,
         price: 67.95,
         date: '2015-10-01',
         stockId: 7
@@ -203,7 +203,7 @@ const ORDER_DATA = [
     {
         id: 6,
         transactionType: 'SELL',
-        shares: 5,
+        numberOfShares: 5,
         price: 64.73,
         date: '2023-07-05',
         stockId: 9
@@ -312,7 +312,7 @@ function OrderList() {
             </Stack>
             <Stack spacing={3}>
                 {orders.map((order) => (
-                    <Card key={order.id} variant="outlined" sx={{ backgroundColor: "f4f4f4" }}>
+                    <Card key={order.id} variant="outlined" sx={{ backgroundColor: "#f4f4f4" }}>
                         <CardContent>
                             <Typography variant="h6" gutterBottom>
                                 Order {order.id} - {
@@ -333,7 +333,7 @@ function OrderList() {
                                 Date: {order.date}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
-                                Price: ${order.price}
+                                Price: ${order.price.toFixed(2)}
                             </Typography>
                         </CardContent>
                         <CardActions sx={{ justifyContent: "flex-end" }}>

@@ -17,6 +17,9 @@ class PortfolioJdbcTemplateRepositoryTest {
     PortfolioJdbcTemplateRepository repo;
 
     @Autowired
+    OrderJdbcTemplateRepository orderRepo;
+
+    @Autowired
     KnownGoodState knownGoodState;
 
     @BeforeEach
@@ -61,6 +64,46 @@ class PortfolioJdbcTemplateRepositoryTest {
 
 
     }
+
+    @Test
+    void shouldAddOrderToPortfolio() {
+        Order order = new Order();
+        order.setTransactionType(TransactionType.BUY);
+        order.setNumberOfShares(BigDecimal.TEN);
+        order.setPrice(new BigDecimal("100.0"));
+        order.setDate(java.sql.Date.valueOf(java.time.LocalDate.now()));
+        order.setStockId(1);
+
+        order = orderRepo.add(order);
+
+        boolean added = repo.addOrderToPortfolio(1, order.getId());
+        assertTrue(added);
+
+        List<Order> orders = repo.findOrdersByPortfolioId(1);
+        Order finalOrder = order;
+        assertTrue(orders.stream().anyMatch(o -> o.getId() == finalOrder.getId()));
+    }
+
+    @Test
+    void shouldRemoveOrderFromPortfolio() {
+        Order order = new Order();
+        order.setTransactionType(TransactionType.BUY);
+        order.setNumberOfShares(BigDecimal.TEN);
+        order.setPrice(new BigDecimal("100.0"));
+        order.setDate(java.sql.Date.valueOf(java.time.LocalDate.now()));
+        order.setStockId(1);
+
+        order = orderRepo.add(order);
+        repo.addOrderToPortfolio(1, order.getId());
+
+        boolean removed = repo.removeOrderFromPortfolio(1, order.getId());
+        assertTrue(removed);
+
+        List<Order> orders = repo.findOrdersByPortfolioId(1);
+        Order finalOrder = order;
+        assertFalse(orders.stream().anyMatch(o -> o.getId() == finalOrder.getId()));
+    }
+
 
     @Test
     void shouldAddPortfolio() {

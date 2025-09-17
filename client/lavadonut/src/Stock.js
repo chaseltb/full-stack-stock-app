@@ -29,6 +29,13 @@ function Stock({stock, onBack}) {
     // const handleAddOrder = () => {
     //     console.log("add order");
     // }
+  
+    // Calculate total shares from orders
+      const totalShares = orders.reduce((acc, order) => {
+          if (order.transactionType === "BUY") return acc + order.numberOfShares;
+          if (order.transactionType === "SELL") return acc - order.numberOfShares;
+          return acc;
+      }, 0);
 
     return (
         <Container maxWidth="lg">
@@ -45,12 +52,13 @@ function Stock({stock, onBack}) {
                 </Alert>}
 
                 {/* info about the stock */}
+                {/* Stock information */}
                 <Box sx={{ mb: 4 }}>
                     <Typography variant="h2" sx={{ mb: 2, mt: 2, mr: 2 }}>
-                        {/* // stock name */}
+                        {stock.name} ({stock.ticker})
                     </Typography>
                     <Typography variant="h4">
-                        {/* // total shares */}
+                        Total Shares: {totalShares}
                     </Typography>
                 </Box>
 

@@ -133,30 +133,6 @@ function AuthPage() {
                     setError("Request failed");
                 }
             }
-            // if (isLogin) {
-            //     // login
-            //     if (data.jwt_token) {
-            //         if (keepLogin) {
-            //             localStorage.setItem("token", data.jwt_token);
-            //         } else {
-            //             sessionStorage.setItem("token", data.jwt_token);
-            //         }
-            //     }
-            //     alert("Login successful!");
-            //     navigate(safeFrom, { replace: true }); // Return user to original path
-            // } else {
-            //     // register
-            //     if (data.jwt_token) {
-            //         if (keepLogin) {
-            //             localStorage.setItem("token", data.jwt_token);
-            //         } else {
-            //             sessionStorage.setItem("token", data.jwt_token);
-            //         }
-            //         alert("Registration successful! Please log in.");
-            //         setIsLogin(true);
-            //     }
-            // }
-
         } catch (error) {
             setError(error);
         }

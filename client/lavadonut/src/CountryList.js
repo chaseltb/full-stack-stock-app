@@ -41,7 +41,7 @@ const COUNTRY_DATA = [
         id: 3,
         name: 'People\'s Republic of China',
         code: 'CN',
-        currency: CURRENCY_DATA[3]
+        currency: CURRENCY_DATA[2]
     }
 ];
 

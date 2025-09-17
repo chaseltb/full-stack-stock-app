@@ -6,7 +6,7 @@ function RequireAuth({ children }) {
 
     // Redirect to register if token is not valid
     if (!token) {
-        return <Navigate to="/auth" state={{ from: location }} replace />;
+        return <Navigate to="/" state={{ from: location }} replace />;
     }
 
     return children;

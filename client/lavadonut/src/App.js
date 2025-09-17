@@ -1,8 +1,6 @@
-import AuthPage from "./AuthPage";
-import HomeScreen from "./HomeScreen";
-import { Routes, BrowserRouter as Router, Route, Navigate } from "react-router-dom";
 import React from "react";
-
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import AuthPage from "./AuthPage";
 import NotFound from "./NotFound";
 import CountryList from "./CountryList";
 import RequireAuth from "./RequireAuth";
@@ -13,6 +11,7 @@ import Stock from "./Stock";
 import Portfolios from "./Portfolios";
 import OrderHistory from "./OrderHistory";
 import NavBar from "./NavBar";
+import HomeScreen from "./HomeScreen";
 
 function App() {
   return (
