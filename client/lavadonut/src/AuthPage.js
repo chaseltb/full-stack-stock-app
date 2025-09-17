@@ -9,6 +9,27 @@ import {
     MenuItem
 } from "@mui/material";
 
+const CURRENCY_DATA = [
+    {
+        id: 1,
+        name: 'United States Dollar',
+        code: 'USD',
+        valueToUsd: 1.0
+    },
+    {
+        id: 2,
+        name: 'Euro',
+        code: 'EUR',
+        valueToUsd: 1.17
+    },
+    {
+        id: 3,
+        name: 'Chinese Yuan',
+        code: 'CNY',
+        valueToUsd: 0.14
+    }
+];
+
 function AuthPage() {
     // state variables
     const [isLogin, setIsLogin] = useState(false);
@@ -22,8 +43,8 @@ function AuthPage() {
     // for register only
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [currency, setCurrency] = useState("");
-    const [currencies, setCurrencies] = useState([]);
+    const [currencyId, setCurrencyId] = useState("");
+    const [currencies, setCurrencies] = useState(CURRENCY_DATA);
 
     const navigate = useNavigate();
     const url = "http://localhost:8080/api/";
@@ -36,7 +57,7 @@ function AuthPage() {
         if (!isLogin) {
             fetch("http://localhost:8080/api/currency")
             .then(response => {
-                if (response.status === 200) {
+                if (!response.ok) {
                     return response.json();
                 } else {
                     return Promise.reject(`Unexpected Status Code: ${response.status}`);
@@ -48,7 +69,7 @@ function AuthPage() {
                 } else if (data.currencies) {
                     setCurrencies(data.currencies);
                 } else {
-                    setCurrencies([]);
+                    setCurrencies(CURRENCY_DATA);
                 }
             })
             .catch(console.log);
@@ -70,8 +91,10 @@ function AuthPage() {
             const requestBody = isLogin ? { username: username, password: password }
                 : {
                     username: username, password: password, firstName: firstName, lastName: lastName,
-                    currencyId: currency
+                    currencyId: Number(currencyId)
                 };
+                console.log("Request Body:", requestBody);
+
 
             const response = await fetch(`${url}${apiEndpoint}`, {
                 method: "POST",
@@ -80,29 +103,59 @@ function AuthPage() {
             });
 
             const data = await response.json();
-            if (isLogin) {
-                // login
-                if (data.token) {
-                    if (keepLogin) {
-                        localStorage.setItem("token", data.token);
+            if (response.ok) {
+                if (isLogin) {
+                    // login successful
+                    if (data.jwt_token) {
+                        if (keepLogin) {
+                            localStorage.setItem("token", data.jwt_token);
+                        } else {
+                            sessionStorage.setItem("token", data.jwt_token);
+                        }
+                        alert("Login successful!");
+                        navigate('/');
                     } else {
-                        sessionStorage.setItem("token", data.token);
+                        setError("Login failed: token not received.");
                     }
+                } else {
+                    // registration successful, no token returned from backend
+                    alert("Registration successful! Please log in.");
+                    setIsLogin(true);
+                    // optionally reset registration fields here
                 }
-                alert("Login successful!");
-                navigate(safeFrom, { replace: true }); // Return user to original path
             } else {
-                // register
-                if (data.token) {
-                    if (keepLogin) {
-                        localStorage.setItem("token", data.token);
-                    } else {
-                        sessionStorage.setItem("token", data.token);
-                    }
-                    alert("Registration successful! You are now logged in.");
-                    navigate("/");
+                // Backend returns errors as array of strings
+                if (Array.isArray(data)) {
+                    setError(data.join(", "));
+                } else if (data.message) {
+                    setError(data.message);
+                } else {
+                    setError("Request failed");
                 }
             }
+            // if (isLogin) {
+            //     // login
+            //     if (data.jwt_token) {
+            //         if (keepLogin) {
+            //             localStorage.setItem("token", data.jwt_token);
+            //         } else {
+            //             sessionStorage.setItem("token", data.jwt_token);
+            //         }
+            //     }
+            //     alert("Login successful!");
+            //     navigate(safeFrom, { replace: true }); // Return user to original path
+            // } else {
+            //     // register
+            //     if (data.jwt_token) {
+            //         if (keepLogin) {
+            //             localStorage.setItem("token", data.jwt_token);
+            //         } else {
+            //             sessionStorage.setItem("token", data.jwt_token);
+            //         }
+            //         alert("Registration successful! Please log in.");
+            //         setIsLogin(true);
+            //     }
+            // }
 
         } catch (error) {
             setError(error);
@@ -125,7 +178,7 @@ function AuthPage() {
                 setLastName(event.target.value);
                 break;
             case "currency":
-                setCurrency(event.target.value);
+                setCurrencyId(Number(event.target.value));
                 break;
             default:
                 break;
@@ -169,7 +222,7 @@ function AuthPage() {
                                     <Select
                                         labelId="currency-label"
                                         name="currency"
-                                        value={currency}
+                                        value={currencyId}
                                         label="Currency"
                                         onChange={handleChange}
                                     >

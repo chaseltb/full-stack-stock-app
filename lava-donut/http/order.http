@@ -8,7 +8,10 @@ Content-Type: application/json
 
 {
     "username": "user@example.com",
-    "password": "Password123."
+    "password": "Password123.",
+    "firstName": "Test",
+    "lastName": "Tester",
+    "currencyId": 1
 }
 
 ### login (get jwt token)
