@@ -1,6 +1,7 @@
 package learn.lavadonut.security;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // add antMatchers here to configure access to specific API endpoints
                 .antMatchers("/api/auth/authenticate").permitAll()
                 .antMatchers("/api/auth/register").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/currency").permitAll()
                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN") // For OpenAPI/SwaggerUI
                 // require authentication for any request...
                 .anyRequest().authenticated()

@@ -75,8 +75,8 @@ function HomeScreen() {
                     <Typography variant="h2">
                         Stock App
                     </Typography>
-                    <Button variant="contained" sx={{ borderRadius: 5 }}>
-                        Add Stock
+                    <Button component={Link} to="/stock" variant="contained" sx={{ borderRadius: 5 }}>
+                        View Stocks
                     </Button>
                 </Box>
             </Paper>

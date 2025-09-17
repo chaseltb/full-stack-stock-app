@@ -1,22 +1,29 @@
 import React from "react";
-import {Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import AuthPage from "./AuthPage";
 import NotFound from "./NotFound";
 import CountryList from "./CountryList";
 import RequireAuth from "./RequireAuth";
 import CountryForm from "./CountryForm";
-import HomeScreen from "./HomeScreen";
-import Portfolios from "./Portfolios";
-import Stock from "./Stock";
-import OrderList from "./OrderList";
 import OrderForm from "./OrderForm";
+import OrderList from "./OrderList";
+import Stock from "./Stock";
+import Portfolios from "./Portfolios";
+import OrderHistory from "./OrderHistory";
+import NavBar from "./NavBar";
+import HomeScreen from "./HomeScreen";
 
 function App() {
   return (
     <Router>
+      {/* NavBar route */}
+      <NavBar />
       <Routes>
         {/* Auth route */}
-        <Route path="/" element={<AuthPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+
+        {/* Home route */}
+        <Route path="/" element={<HomeScreen />}/>
 
         {/* Protected routes */}
         <Route path="/countries" element={<RequireAuth> <CountryList /> </RequireAuth>}/>
@@ -25,9 +32,9 @@ function App() {
         <Route path="/orders" element={<RequireAuth> <OrderList /> </RequireAuth>}/>
         <Route path="/order/add" element={<RequireAuth> <OrderForm /> </RequireAuth>} />
         <Route path="/order/edit/:id" element={<RequireAuth> <OrderForm /> </RequireAuth>}/>
-        <Route path="/home" element={<RequireAuth> <HomeScreen /> </RequireAuth>}/>
         <Route path="/stock" element={<RequireAuth> <Stock /> </RequireAuth>}/>
         <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
+        <Route path="/order/history" element={<RequireAuth> <OrderHistory /> </RequireAuth>}/>
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
