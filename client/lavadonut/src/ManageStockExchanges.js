@@ -22,7 +22,7 @@ function ManageStockExchanges() {
     const [code, setCode] = useState("");
     const [timeZone, setTimeZone] = useState("");
 
-    const url = "http://localhost:8080/api/stock-exchange";
+    const url = "http://localhost:8080/api/stock-exchange/";
 
     const mockExchanges = [
         { id: 1, name: "New York Stock Exchange", code: "NYSE", timeZone: "EST" },
@@ -34,12 +34,24 @@ function ManageStockExchanges() {
         loadExchanges();
     }, []);
 
-    const loadExchanges = () => {
+    const loadExchanges = async () => {
         setError("");
 
         try {
-            setExchanges(mockExchanges);
-        } catch {
+            const response = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            });
+
+            if (!response.ok) {
+                return Promise.reject(`Unexpected Status Code ${response.status}`);
+            }
+
+            const data = await response.json();
+            setExchanges(data);
+        } catch (error) {
             setError(error.message || "Exchanges failed to load");
         }
     }
@@ -61,39 +73,76 @@ function ManageStockExchanges() {
         setCreateDialog(true);
     }
 
-    const handleDelete = (exchangeId) => {
+    const handleDelete = async (exchangeId) => {
         if (window.confirm("Are you sure that you would like to delete this exchange?")) {
             try {
                 // delete api call
-                setExchanges(exchanges.filter((x) => x.id !== exchangeId));
+                const response = await fetch(`${url}/${exchangeId}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                });
+
+                if (!response.ok) {
+                    return Promise.reject(`Unexpected Status Code ${response.status}`);
+                }
             } catch (error) {
-                setError(error);
+                setError(error.message || "Failed to delete exchange");
             }
         }
     }
 
-    const handleSubmit = () => {
-        const newExchange = {
-            id: editing && selectedExchange ? selectedExchange.id : exchanges.length + 1,
-            name: exchangeName,
-            code: code,
-            timeZone: timeZone,
-        };
-        
+    const handleSubmit = async () => {        
         setCreateDialog(false);
 
         try {
-            if (editing) {
-                // edit
-                setExchanges(exchanges.map((e) =>
-                    e.id === newExchange.id ? newExchange : e
-                ));
-            } else {
+            if (!editing) {
                 // add
-                setExchanges([...exchanges, newExchange]);
+                const newExchange = {
+                    name: exchangeName,
+                    code,
+                    timeZone,
+                };
+
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify(newExchange)
+                });
+
+                if (!response.ok) {
+                    return Promise.reject(`Unexpected Status Code ${response.status}`);
+                }
+            } else if (editing && selectedExchange) {
+                // edit
+                const updatedExchange = {
+                id: selectedExchange.id,
+                name: exchangeName,
+                code,
+                timeZone,
+            };
+
+                const response = await fetch(`${url}/${selectedExchange.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify(updatedExchange)
+                });
+
+                if (!response.ok) {
+                    return Promise.reject(`Unexpected Status Code ${response.status}`);
+                }
+            } else {
+                setError("Edit or add failed. Inputs could be incorrect");
             }
         } catch (error) {
-            setError(error);
+            setError(error.message || "Edit or add failed");
         }
 
         setCreateDialog(false);

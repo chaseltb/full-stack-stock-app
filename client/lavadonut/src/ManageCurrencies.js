@@ -19,7 +19,7 @@ function ManageCurrencies() {
     const [currencyCode, setCurrencyCode] = useState("");
     const [valueToUsd, setValueToUsd] = useState("");
 
-    const url = "http://localhost:8080/api/currency";
+    const url = "http://localhost:8080/api/currency/";
 
     useEffect(() => {
         loadCurrencies();
@@ -88,14 +88,14 @@ function ManageCurrencies() {
 
     const handleSubmit = async () => {
         try {
-            const requestBody = {
-                id: editing ? editing.id : 0,
-                code: currencyCode.trim().toUpperCase(),
-                name: currencyName.trim(),
-                valueToUsd: parseFloat(valueToUsd),
-            };
             if (editing) {
                 // edit
+                const requestBody = {
+                    id: editing.id,
+                    name: currencyName.trim(),
+                    code: currencyCode.trim().toUpperCase(),
+                    valueToUsd: parseFloat(valueToUsd),
+                };
                 const response = await fetch(`${url}/${editing.id}`, {
                     method: "PUT",
                     headers: {
@@ -111,6 +111,12 @@ function ManageCurrencies() {
                 }
             } else {
                 // add
+                const requestBody = {
+                    name: currencyName.trim(),
+                    code: currencyCode.trim().toUpperCase(),
+                    valueToUsd: parseFloat(valueToUsd),
+                };
+                console.log(JSON.stringify(requestBody));
                 const response = await fetch(url, {
                     method: "POST",
                     headers: {

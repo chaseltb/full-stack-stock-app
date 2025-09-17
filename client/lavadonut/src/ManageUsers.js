@@ -27,7 +27,7 @@ function ManageUsers() {
     // inner join user table and app_user and app_user_role?? maybe
     const [role, setRole] = useState("USER");
 
-    const url = "http://localhost:8080/api/user";
+    const url = "http://localhost:8080/api/user/";
 
     // MOCK DATA!!
     const mockUsers = [
@@ -204,7 +204,7 @@ function ManageUsers() {
                     currencyId,
                     role
                 };
-
+                console.log(JSON.stringify(newUser));
                 const response = await fetch(url, {
                     method: "POST",
                     headers: {
