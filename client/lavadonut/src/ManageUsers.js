@@ -143,7 +143,6 @@ function ManageUsers() {
     }
 
     const handleSubmit = async () => {
-        setUsers([...users, newUser]);
         setCreateDialog(false);
 
         try {
