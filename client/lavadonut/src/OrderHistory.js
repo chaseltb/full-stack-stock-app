@@ -21,6 +21,7 @@ function OrderHistory() {
   const [portfolio, setPortfolio] = useState(); // one portfolio
   const [userOrders, setOrders] = useState([]);
   const [userStocks, setStocks] = useState([]);
+  const [error, setError] = useState("");
 
   const { id } = useParams();
 
@@ -42,7 +43,7 @@ function OrderHistory() {
         }
       })
       .then((data) => setPortfolio(data))
-      .catch(console.log);
+      .catch((error) => {setError(error.message || "Portfolio failed to load!");});
   }, [url]);
 
   /*
