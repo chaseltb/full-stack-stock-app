@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import { Container, Box, Typography, Paper, Alert, Button, IconButton } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 function Stock({stock, onBack}) {
     const [orders, setOrders] = useState([]);
@@ -25,9 +26,9 @@ function Stock({stock, onBack}) {
         }
     };
 
-    const handleAddOrder = () => {
-        console.log("add order");
-    }
+    // const handleAddOrder = () => {
+    //     console.log("add order");
+    // }
 
     return (
         <Container maxWidth="lg">
@@ -58,7 +59,7 @@ function Stock({stock, onBack}) {
                     <Typography variant="h2">
                         Orders
                     </Typography>
-                    <Button variant="contained" onClick={handleAddOrder} sx={{ borderRadius: 4 }}>
+                    <Button variant="contained" component={Link} to="/order/add" sx={{ borderRadius: 4 }}>
                         Add Order
                     </Button>
                 </Box>
@@ -67,10 +68,10 @@ function Stock({stock, onBack}) {
                 {orders.length === 0 ? (
                     <Box sx={{ textAlign: "center" }}>
                         <Typography variant="h4" sx={{ mb: 2 }}>
-                            Order history empty
+                            Order History Empty
                         </Typography>
-                        <Button variant="contained" onClick={handleAddOrder} sx={{ p: 2, borderRadius: 4 }}>
-                            Add an order
+                        <Button variant="contained" component={Link} to="/order/add" sx={{ p: 2, borderRadius: 4 }}>
+                            Add an Order
                         </Button>
                     </Box>
                 ) : (

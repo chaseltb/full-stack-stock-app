@@ -17,7 +17,7 @@ import NavBar from "./NavBar";
 function App() {
   return (
     <Router>
-      {/* NabBar route */}
+      {/* NavBar route */}
       <NavBar />
       <Routes>
         {/* Auth route */}
