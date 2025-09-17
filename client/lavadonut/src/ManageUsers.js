@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import React from "react";
-import { Container, Box, Typography, Paper, Button, TextField, Alert,
+import {
+    Container, Box, Typography, Paper, Button, TextField, Alert,
     Dialog, DialogContent, DialogActions, Chip, MenuItem, Fab,
-    IconButton, DialogTitle} from "@mui/material";
-import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon} from "@mui/icons-material";
+    IconButton, DialogTitle
+} from "@mui/material";
+import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, Visibility as ViewIcon } from "@mui/icons-material";
 
 function ManageUsers() {
     const [users, setUsers] = useState([]);
@@ -29,42 +31,42 @@ function ManageUsers() {
 
     // MOCK DATA!!
     const mockUsers = [
-        { 
-            id: 1, 
-            username: "john.doe@email.com", 
-            firstName: "John", 
-            lastName: "Doe", 
-            currencyId: 1, 
+        {
+            id: 1,
+            username: "john.doe@email.com",
+            firstName: "John",
+            lastName: "Doe",
+            currencyId: 1,
             currencyName: "USD",
             role: "USER",
             createdDate: "2024-01-15"
         },
-        { 
-            id: 2, 
-            username: "jane.smith@email.com", 
-            firstName: "Jane", 
-            lastName: "Smith", 
-            currencyId: 2, 
+        {
+            id: 2,
+            username: "jane.smith@email.com",
+            firstName: "Jane",
+            lastName: "Smith",
+            currencyId: 2,
             currencyName: "EUR",
             role: "ADMIN",
             createdDate: "2024-02-20"
         },
-        { 
-            id: 3, 
-            username: "mike.wilson@email.com", 
-            firstName: "Mike", 
-            lastName: "Wilson", 
-            currencyId: 1, 
+        {
+            id: 3,
+            username: "mike.wilson@email.com",
+            firstName: "Mike",
+            lastName: "Wilson",
+            currencyId: 1,
             currencyName: "USD",
             role: "USER",
             createdDate: "2024-03-10"
         },
-        { 
-            id: 4, 
-            username: "sarah.jones@email.com", 
-            firstName: "Sarah", 
-            lastName: "Jones", 
-            currencyId: 3, 
+        {
+            id: 4,
+            username: "sarah.jones@email.com",
+            firstName: "Sarah",
+            lastName: "Jones",
+            currencyId: 3,
             currencyName: "GBP",
             role: "USER",
             createdDate: "2024-03-25"
@@ -82,11 +84,12 @@ function ManageUsers() {
         loadUsers();
     }, []);
 
-    const loadUsers = async () => {
+    const loadUsers = () => {
         setError("");
 
         try {
             // get users api call
+            setUsers(mockUsers);
         } catch (error) {
             setError(error);
         }
@@ -104,6 +107,7 @@ function ManageUsers() {
         setUsername("");
         setPassword("");
         setFirstName("");
+        setLastName("");
         setCurrencyId("");
         setRole("USER");
         setCreateDialog(true);
@@ -124,60 +128,89 @@ function ManageUsers() {
     }
 
     const handleSubmit = async () => {
+        const newUser = {
+            id: users.length + 1,
+            username,
+            password,
+            firstName,
+            lastName,
+            currencyId,
+            currencyName: currencies.find(c => c.id === Number(currencyId))?.code || "",
+            role
+        };
+        setUsers([...users, newUser]);
+        setCreateDialog(false);
+
         try {
             if (editing) {
                 // edit
+
             } else {
                 // add
             }
-
         } catch (error) {
             setError(error);
         }
     }
 
     return (
-        <Container>
-            <Paper>
-                <Typography>
+        <Container maxWidth="lg">
+            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
+                <Typography sx={{ mb: 4 }}>
                     Manage Users
                 </Typography>
 
-                 {error && <Alert severity="error" sx={{ mb: 4 }}>
+                {error && <Alert severity="error" sx={{ mb: 4 }}>
                     {error}
                 </Alert>}
 
                 {/* users list  */}
-                {users.map((user) => {
-                    <Paper key={user.id} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 4 }}>
-                        <Box>
-                            <Box>
-                                <Typography>
-                                    {user.firstName} {user.lastName}
+                {users.map((user) => (
+                    <Paper key={user.id} elevation={2} sx={{ mb: 2, p: 1, borderRadius: 4 }}>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <Box sx={{ ml: 2 }}>
+                                <Typography sx={{ mb: 1 }}>
+                                    ID: {user.id} - {user.firstName} {user.lastName}
                                 </Typography>
                                 <Typography variant="body1" color="textSecondary">
-                                    {user.username}
+                                    Username: {user.username}
                                 </Typography>
-                                <Box sx={{ p: 2}}>
-                                    <Chip lable={user.role} size="small">
+                                <Box sx={{ mb: 1, mt: 2, display: "flex", gap: 2 }}>
+                                    <Chip label={user.role} size="small">
                                     </Chip>
-                                    <Chip lable={user.currencyName} size="small">
+                                    <Chip label={user.currencyName} size="small">
                                     </Chip>
                                 </Box>
                             </Box>
+                            <Box>
+                                <Button variant="outlined" startIcon={<ViewIcon />} onClick={() => handleViewUser(user)} sx={{ mr: 2, color: "light-blue", borderRadius: 4 }}>
+                                    View User
+                                </Button>
+                                <Button variant="outlined" color="secondary" startIcon={<EditIcon />} onClick={() => handleEdit(user)} sx={{ mr: 2, borderRadius: 4 }}>
+                                    Edit
+                                </Button>
+                                <Button variant="outlined" color="error" startIcon={<DeleteIcon />} onClick={() => handleDelete(user.id)} sx={{ borderRadius: 4 }}>
+                                    Delete
+                                </Button>
+                            </Box>
                         </Box>
-                        <Button variant="outlined" onClick={() => handleViewUser(user)} sx={{ p: 2, borderRadius: 2 }}>
-                            View User
-                        </Button>
+
                     </Paper>
-                })}
+                ))}
 
                 {users.length === 0 && (
                     <Box sx={{ textAlign: "center" }}>
                         <Typography variant="h5">
                             No users were found
                         </Typography>
-                        {/* maybe an add button? */}
+                        <IconButton
+                            label="Add a currency"
+                            color="primary"
+                            onClick={() => handleAdd()}
+                            sx={{ p: 2, borderRadius: 2 }}
+                        >
+                            <AddIcon />
+                        </IconButton>
                     </Box>
                 )}
             </Paper>
@@ -189,7 +222,7 @@ function ManageUsers() {
                 </DialogTitle>
                 <DialogContent>
                     {selectedUser && (
-                        <Box>
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 5 }}>
                             <Typography>
                                 User id: {selectedUser.id}
                             </Typography>
@@ -199,12 +232,12 @@ function ManageUsers() {
                             <Typography>
                                 Full name: {selectedUser.firstName} {selectedUser.lastName}
                             </Typography>
-                            
-                            <Chip lable={selectedUser.role} size="small">
-                            </Chip>
-                            <Chip lable={selectedUser.currencyName} size="small">
-                            </Chip>
-
+                            <Box sx={{ display: "flex", gap: 2 }}>
+                                <Chip label={selectedUser.role} size="small">
+                                </Chip>
+                                <Chip label={selectedUser.currencyName} size="small">
+                                </Chip>
+                            </Box>
                         </Box>
                     )}
                 </DialogContent>
@@ -217,63 +250,65 @@ function ManageUsers() {
                     Create New User
                 </DialogTitle>
                 <DialogContent>
-                    <TextField
-                        lable="Username"
-                        type="email"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        fullWidth
-                        margin="dense"
-                        placeholder="name@stockapp.com" 
-                    />
-                    <TextField
-                        lable="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        fullWidth
-                        margin="dense" 
-                    />
-                    <Box sx={{ display: "flex", gap: 2 }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 5 }}>
                         <TextField
-                            lable="First Name"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
+                            lable="Username"
+                            type="email"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            fullWidth
+                            margin="dense"
+                            placeholder="name@stockapp.com"
+                        />
+                        <TextField
+                            lable="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             fullWidth
                             margin="dense"
                         />
+                        <Box sx={{ display: "flex", gap: 2 }}>
+                            <TextField
+                                lable="First Name"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                fullWidth
+                                margin="dense"
+                            />
+                            <TextField
+                                lable="Last Name"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                fullWidth
+                                margin="dense"
+                            />
+                        </Box>
                         <TextField
-                            lable="Last Name"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
+                            lable="Currency"
+                            select
+                            value={currencyId}
+                            onChange={(e) => setCurrencyId(e.target.value)}
                             fullWidth
                             margin="dense"
-                        />
+                        >
+                            {currencies.map((currency) => (
+                                <MenuItem key={currency.id} value={currency.id}>
+                                    {currency.name} ({currency.code})
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            lable="Role"
+                            select
+                            value={role}
+                            onChange={(e) => setRole(e.target.value)}
+                            fullWidth
+                            margin="dense"
+                        >
+                            <MenuItem value="USER">USER</MenuItem>
+                            <MenuItem value="ADMIN">ADMIN</MenuItem>
+                        </TextField>
                     </Box>
-                    <TextField
-                        lable="Currency"
-                        select
-                        value={currencyId}
-                        onChange={(e) => setCurrencyId(e.target.value)}
-                        fullWidth
-                        margin="dense"
-                    >
-                        {currencies.map((currency) => (
-                            <MenuItem key={currency.id} value={currency.id}>
-                                {currency.name} ({currency.code})
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <TextField
-                        lable="Role"
-                        select
-                        value={role}
-                        onChange={(e) => setCurrencyId(e.target.value)}
-                        fullWidth
-                        margin="dense"
-                    >
-                        <MenuItem value="USER">USER</MenuItem>
-                        <MenuItem value="ADMIN">ADMIN</MenuItem>
-                    </TextField>
                 </DialogContent>
                 <DialogActions sx={{ p: 2 }}>
                     <Button onClick={() => setCreateDialog(false)} sx={{ borderRadius: 4 }}>
@@ -286,9 +321,9 @@ function ManageUsers() {
             </Dialog>
 
             {/* floating action button for add  */}
-            <Fab 
+            <Fab
                 color="primary"
-                sx={{ position: 'fixed', bottom: 16, right: 16 }}
+                sx={{ position: 'fixed', bottom: 36, right: 36 }}
                 onClick={handleAdd}
             >
                 <AddIcon />
