@@ -25,7 +25,7 @@ function OrderHistory() {
 
   const { id } = useParams();
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token")
   const url = `http://localhost:8080/api/portfolio/${id}`;
 
   useEffect(() => {
@@ -44,7 +44,7 @@ function OrderHistory() {
       })
       .then((data) => setPortfolio(data))
       .catch((error) => {setError(error.message || "Portfolio failed to load!");});
-  }, [url]);
+  }, [token, url]);
 
   /*
   const userOrders = portfolio.orders;
@@ -52,9 +52,6 @@ function OrderHistory() {
   const userStocks = portfolio.stocks;
   userStocks.sort();
   */
-
-  setOrders(portfolio.orders.sort((a, b) => a.stockId - b.stockId));
-  setStocks(portfolio.stocks.sort((a, b) => a.id - b.id));
 
   ChartJS.register(
     CategoryScale,
@@ -91,6 +88,11 @@ function OrderHistory() {
     ],
   };
 
+  function sortStocksOrders(){
+    setOrders(portfolio.orders.sort((a, b) => a.stockId - b.stockId));
+    setStocks(portfolio.stocks.sort((a, b) => a.id - b.id));
+  }
+
   function getStockName(orderStockId) {
     userStocks.forEach((stock) => {
       if (stock.id === orderStockId) {
@@ -110,6 +112,7 @@ function OrderHistory() {
   // format page in to display stock and order info
   return (
     <>
+      {sortStocksOrders()}
       <Container maxWidth="lg">
         <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
           {error && (
