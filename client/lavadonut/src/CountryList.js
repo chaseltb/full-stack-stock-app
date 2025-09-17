@@ -3,9 +3,52 @@ import { Link } from "react-router-dom";
 import { Box, Typography, IconButton, Card, CardContent, CardActions, Stack, Button } from "@mui/material";
 import { Add, Edit, Delete } from "@mui/icons-material";
 
+const CURRENCY_DATA = [
+    {
+        id: 1,
+        name: 'United States Dollar',
+        code: 'USD',
+        valueToUsd: 1.0
+    },
+    {
+        id: 2,
+        name: 'Euro',
+        code: 'EUR',
+        valueToUsd: 1.17
+    },
+    {
+        id: 3,
+        name: 'Chinese Yuan',
+        code: 'CNY',
+        valueToUsd: 0.14
+    }
+];
+
+const COUNTRY_DATA = [
+    {
+        id: 1,
+        name: 'United States of America',
+        code: 'US',
+        currency: CURRENCY_DATA[0]
+    },
+    {
+        id: 2,
+        name: 'Federal Republic of Germany',
+        code: 'DE',
+        currency: CURRENCY_DATA[1]
+    },
+    {
+        id: 3,
+        name: 'People\'s Republic of China',
+        code: 'CN',
+        currency: CURRENCY_DATA[2]
+    }
+];
+
 function CountryList() {
     // State variables
-    const [countries, setCountries] = useState([]);
+    // const [countries, setCountries] = useState([]);
+    const [countries, setCountries] = useState(COUNTRY_DATA);
     const url = 'http://localhost:8080/api/country';
 
     // Use Effect
