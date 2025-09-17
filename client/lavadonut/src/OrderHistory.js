@@ -83,9 +83,15 @@ function OrderHistory() {
     ],
   };
 
-  function iterateStockName(orderStockId){
+  function getStockName(orderStockId){
     userStocks.forEach(stock => {if(stock.id === orderStockId){
       return stock.name;
+    }})
+  }
+
+  function getStockPrice(orderStockId){
+        userStocks.forEach(stock => {if(stock.id === orderStockId){
+      return stock.currentPrice;
     }})
   }
 
@@ -97,7 +103,22 @@ function OrderHistory() {
           {userOrders.map((order) => (
               <Box>
                 <Typography variant="h2" align="center">
-                  ${iterateStockName(order.stockId)}
+                  ${getStockName(order.stockId)}
+                </Typography>
+                <Typography variant="body1">
+                  Date: ${order.date}
+                </Typography>
+                <Typography variant="body1">
+                  Transaction Type: ${order.transactionType}
+                </Typography>
+                <Typography variant="body1">
+                  Shares: ${order.shares}
+                </Typography>
+                <Typography variant="body1">
+                  Total Price: ${order.price}
+                </Typography>
+                <Typography variant="body1">
+                  Stock Price: ${getStockPrice(order.stockId)}
                 </Typography>
               </Box>
           ))}
