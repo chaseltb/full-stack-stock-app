@@ -44,6 +44,7 @@ function Portfolios() {
           },
         }
       );
+      setPortfolios(portfolioResponse); 
     } catch (error) {
       setError(error.message || "Portfolios failed to load");
     }
