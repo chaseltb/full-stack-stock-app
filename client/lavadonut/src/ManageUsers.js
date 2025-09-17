@@ -159,7 +159,7 @@ function ManageUsers() {
                     currencyName: currencies.find(c => c.id === Number(currencyId))?.code || "",
                     role
                 };
-                setUsers(users.map((u) => u.id === selectedUser.id ? updatedUser.id))
+                setUsers(users.map((u) => u.id === selectedUser.id ? updatedUser : u));
             } else if (!editing) {
                 // add
                 const newUser = {
