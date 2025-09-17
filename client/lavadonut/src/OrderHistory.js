@@ -7,7 +7,9 @@ import {
   Title,
   Tooltip,
   Legend,
+  scales,
 } from "chart.js";
+import { Container, Paper} from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -44,8 +46,8 @@ function OrderHistory() {
   userStocks.sort();
   */
 
-  setOrders(portfolio.orders.sort((a , b) => a.stockId - b.stockId));
-  setStocks(portfolio.stocks.sort((a , b) => a.id - b.id));
+  setOrders(portfolio.orders.sort((a, b) => a.stockId - b.stockId));
+  setStocks(portfolio.stocks.sort((a, b) => a.id - b.id));
 
   ChartJS.register(
     CategoryScale,
@@ -70,27 +72,26 @@ function OrderHistory() {
   };
 
   const orderHistory = {
-    labels: userStocks.map(stock => stock.name), // check if order and stock are same before
+    labels: userStocks.map((stock) => stock.name), // check if order and stock are same before
     datasets: [
       {
         label: "Cost",
-        data: userOrders.map(order => order.price), //need to dynamically introduce data
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 0.2)",
-        ],
+        data: userOrders.map((order) => order.price), //need to dynamically introduce data
+        backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+        borderColor: ["rgba(255, 99, 132, 0.2)"],
         borderWidth: 1,
       },
     ],
   };
 
-
   // format page in to display stock and order info
   return (
     <>
-      <Bar options={options} data={orderHistory} />
+      <Container maxWidth = "lg">
+        <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
+          <Bar options={options} data={orderHistory} />
+        </Paper>
+      </Container>
     </>
   );
 }
