@@ -103,6 +103,8 @@ function ManageUsers() {
 
     const handleAdd = () => {
         console.log("add clicked");
+        setEditing(false);
+        setSelectedUser(null);
 
         setUsername("");
         setPassword("");
@@ -141,29 +143,52 @@ function ManageUsers() {
     }
 
     const handleSubmit = async () => {
-        const newUser = {
-            id: users.length + 1,
-            username,
-            password,
-            firstName,
-            lastName,
-            currencyId,
-            currencyName: currencies.find(c => c.id === Number(currencyId))?.code || "",
-            role
-        };
         setUsers([...users, newUser]);
         setCreateDialog(false);
 
         try {
-            if (editing) {
+            if (editing && selectedUser) {
                 // edit
-
-            } else {
+                const updatedUser = {
+                    ...selectedUser,
+                    username,
+                    password,
+                    firstName,
+                    lastName,
+                    currencyId,
+                    currencyName: currencies.find(c => c.id === Number(currencyId))?.code || "",
+                    role
+                };
+                setUsers(users.map((u) => u.id === selectedUser.id ? updatedUser.id))
+            } else if (!editing) {
                 // add
+                const newUser = {
+                    id: users.length + 1,
+                    username,
+                    password,
+                    firstName,
+                    lastName,
+                    currencyId,
+                    currencyName: currencies.find(c => c.id === Number(currencyId))?.code || "",
+                    role
+                };
+                setUsers([...users, newUser]);
+            } else {
+                setError("User was not set for editing");
             }
         } catch (error) {
-            setError(error);
+            setError(error.message || "Failed to create or edit user");
         }
+
+        setCreateDialog(false);
+        setEditing(false);
+        setSelectedUser(null);
+        setUsername("");
+        setPassword("");
+        setFirstName("");
+        setLastName("");
+        setCurrencyId("");
+        setRole("USER");
     }
 
     return (
@@ -260,7 +285,7 @@ function ManageUsers() {
             {/* create dialog if open  */}
             <Dialog open={createDialog} onClose={() => setCreateDialog(false)} maxWidth="sm">
                 <DialogTitle>
-                    Create New User
+                   {editing ? "Edit User" : "Create New User"}
                 </DialogTitle>
                 <DialogContent>
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -328,7 +353,7 @@ function ManageUsers() {
                         Cancel
                     </Button>
                     <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: 4 }}>
-                        Create User
+                        {editing ? "Update User" : "Create User"}
                     </Button>
                 </DialogActions>
             </Dialog>
