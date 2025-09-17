@@ -12,10 +12,13 @@ import OrderList from "./OrderList";
 import Stock from "./Stock";
 import Portfolios from "./Portfolios";
 import OrderHistory from "./OrderHistory";
+import NavBar from "./NavBar";
 
 function App() {
   return (
     <Router>
+      {/* NabBar route */}
+      <NavBar />
       <Routes>
         {/* Auth route */}
         <Route path="/auth" element={<AuthPage />} />
