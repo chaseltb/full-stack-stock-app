@@ -8,10 +8,13 @@ import CountryForm from "./CountryForm";
 import OrderForm from "./OrderForm";
 import OrderList from "./OrderList";
 import Stock from "./Stock";
+import ManageUsers from "./ManageUsers";
+import ManageCurrencies from "./ManageCurrencies";
 import Portfolios from "./Portfolios";
 import OrderHistory from "./OrderHistory";
 import NavBar from "./NavBar";
 import HomeScreen from "./HomeScreen";
+import ManageStockExchanges from "./ManageStockExchanges";
 
 function App() {
   return (
@@ -36,6 +39,9 @@ function App() {
         <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
         <Route path="/portfolios/order-history/:id" element={<RequireAuth> <OrderHistory/> </RequireAuth>}/>
 
+        <Route path="/users" element={<ManageUsers />}/>
+        <Route path="/currencies" element={<ManageCurrencies />}/>
+        <Route path="/exchanges" element={<ManageStockExchanges />}/>
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
