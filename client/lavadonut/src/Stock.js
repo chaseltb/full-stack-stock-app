@@ -4,7 +4,7 @@ import { Container, Box, Typography, Paper, Alert, Button, IconButton } from "@m
 import { ArrowBack } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-function Stock({stock, onBack}) {
+function Stock({ stock, onBack }) {
     const [orders, setOrders] = useState([]);
     const [error, setError] = useState("");
 
@@ -26,16 +26,29 @@ function Stock({stock, onBack}) {
         }
     };
 
-    // const handleAddOrder = () => {
-    //     console.log("add order");
-    // }
-  
     // Calculate total shares from orders
-      const totalShares = orders.reduce((acc, order) => {
-          if (order.transactionType === "BUY") return acc + order.numberOfShares;
-          if (order.transactionType === "SELL") return acc - order.numberOfShares;
-          return acc;
-      }, 0);
+    const totalShares = orders.reduce((acc, order) => {
+        if (order.transactionType === "BUY") return acc + order.numberOfShares;
+        if (order.transactionType === "SELL") return acc - order.numberOfShares;
+        return acc;
+    }, 0);
+
+    if (!stock) {
+        return (
+            <Container maxWidth="lg" sx={{ textAlign: "center", py: 4 }}>
+                <Paper elevation={4} sx={{ padding: 4, borderRadius: 10, maxWidth: 600, margin: "auto" }}>
+                    <Box sx={{ mb: 4 }}>
+                        <Typography variant="h3" sx={{ mb: 2, color: "text.primary" }}>
+                            Oops! It looks like there's no stock data available.
+                        </Typography>
+                        <Typography variant="h6" sx={{ mb: 4, color: "text.secondary" }}>
+                            You can check back later.
+                        </Typography>
+                    </Box>
+                </Paper>
+            </Container>
+        );
+    }
 
     return (
         <Container maxWidth="lg">
@@ -52,17 +65,16 @@ function Stock({stock, onBack}) {
                 </Alert>}
 
                 {/* info about the stock */}
-                {/* Stock information */}
                 <Box sx={{ mb: 4 }}>
                     <Typography variant="h2" sx={{ mb: 2, mt: 2, mr: 2 }}>
-                        {stock.name} ({stock.ticker})
+                        {stock.name ? stock.name : 'Stock Name Not Available'} ({stock.ticker})
                     </Typography>
                     <Typography variant="h4">
                         Total Shares: {totalShares}
                     </Typography>
                 </Box>
 
-                {/* header for orders section  */}
+                {/* header for orders section */}
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2, mb: 4 }}>
                     <Typography variant="h2">
                         Orders
@@ -72,7 +84,7 @@ function Stock({stock, onBack}) {
                     </Button>
                 </Box>
 
-                {/* orders list  */}
+                {/* orders list */}
                 {orders.length === 0 ? (
                     <Box sx={{ textAlign: "center" }}>
                         <Typography variant="h4" sx={{ mb: 2 }}>
@@ -105,10 +117,8 @@ function Stock({stock, onBack}) {
                     ))
                 )}
             </Paper>
-
         </Container>
     );
-
 }
 
 export default Stock;
