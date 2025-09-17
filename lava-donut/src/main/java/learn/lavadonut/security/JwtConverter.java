@@ -18,12 +18,12 @@ public class JwtConverter {
     private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     // 2. "Configurable" constants
-    private final String ISSUER = "field-agent";
+    private final String ISSUER = "Lava-Donut";
     private final int EXPIRATION_MINUTES = 15;
     private final int EXPIRATION_MILLIS = EXPIRATION_MINUTES * 60 * 1000;
 
     // 3. Generate JWT token from user
-    public String getTokenFromUser(User user) {
+    public String getTokenFromUser(User user, int appUserId, int userId) {
         // Convert authorities to a comma-separated string
         String authorities = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -34,6 +34,8 @@ public class JwtConverter {
                 .setIssuer(ISSUER)
                 .setSubject(user.getUsername())
                 .claim("authorities", authorities)
+                .claim("appUserId", appUserId)
+                .claim("userId", userId)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MILLIS))
                 .signWith(key)
                 .compact();

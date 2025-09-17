@@ -7,7 +7,7 @@ import {
   Alert,
   Button,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import React from "react";
 
 // Insert Orderhistory, pass portfolio id to Order history
@@ -15,15 +15,9 @@ import React from "react";
 function Portfolios() {
   const [portfolios, setPortfolios] = useState([]);
   const [error, setError] = useState("");
-
-  const user = {
-    id: 1,
-    username: "sally@jones.com",
-    password: "P@ssw0rd!",
-    firstName: "sally",
-    lastName: "jones"
-  }; 
-  const url = "http://localhost:8080/api/";
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const url = "http://localhost:8080/api/portfolio";
 
   useEffect(() => {
     loadPortfolios();
@@ -35,7 +29,7 @@ function Portfolios() {
     try {
       // fetch portfolios url
       const portfolioResponse = await fetch(
-        `http://localhost:8080/api/portfolio/${user.id}`, // needs to be provided userId
+        `${url}/${userId}`, // needs to be provided userId
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,6 +37,7 @@ function Portfolios() {
           },
         }
       );
+      setPortfolios(portfolioResponse); 
     } catch (error) {
       setError(error.message || "Portfolios failed to load");
     }
@@ -101,13 +96,13 @@ function Portfolios() {
                 </Typography>
               </Box>
 
-              <Link
-                component="button"
+              <Button
                 variant="outlined"
+                component={Link}
                 to={`/portfolios/order-history/${portfolio.id}`}
               >
                 Order History
-              </Link>
+              </Button>
             </Paper>
           ))}
         </Box>
