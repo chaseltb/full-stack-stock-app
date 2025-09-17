@@ -24,6 +24,12 @@ function ManageStockExchanges() {
 
     const url = "http://localhost:8080/api/stock-exchange";
 
+    const mockExchanges = [
+        { id: 1, name: "New York Stock Exchange", code: "NYSE", timeZone: "EST" },
+        { id: 2, name: "NASDAQ", code: "NASDAQ", timeZone: "EST" },
+        { id: 3, name: "London Stock Exchange", code: "LSE", timeZone: "GMT" }
+    ];
+
     useEffect(() => {
         loadExchanges();
     }, []);
@@ -32,26 +38,70 @@ function ManageStockExchanges() {
         setError("");
 
         try {
-
+            setExchanges(mockExchanges);
         } catch {
             setError(error.message || "Exchanges failed to load");
         }
     }
 
     const handleAdd = () => {
-
+        setName("");
+        setCode("");
+        setTimeZone("");
+        setEditing(false);
+        setCreateDialog(true);
     }
 
-    const handleEdit = () => {
-
+    const handleEdit = (exchange) => {
+        setSelectedExchange(exchange);
+        setName(exchange.name);
+        setCode(exchange.code);
+        setTimeZone(exchange.timeZone);
+        setEditing(true);
+        setCreateDialog(true);
     }
 
-    const handleDelete = () => {
-
+    const handleDelete = (exchangeId) => {
+        if (window.confirm("Are you sure that you would like to delete this exchange?")) {
+            try {
+                // delete api call
+                setExchanges(exchanges.filter((x) => x.id !== exchangeId));
+            } catch (error) {
+                setError(error);
+            }
+        }
     }
 
     const handleSubmit = () => {
+        const newExchange = {
+            id: editing && selectedExchange ? selectedExchange.id : exchanges.length + 1,
+            name: exchangeName,
+            code: code,
+            timeZone: timeZone,
+        };
+        
+        setCreateDialog(false);
 
+        try {
+            if (editing) {
+                // edit
+                setExchanges(exchanges.map((e) =>
+                    e.id === newExchange.id ? newExchange : e
+                ));
+            } else {
+                // add
+                setExchanges([...exchanges, newExchange]);
+            }
+        } catch (error) {
+            setError(error);
+        }
+
+        setCreateDialog(false);
+        setEditing(false);
+        setSelectedExchange(null);
+        setExchangeName("");
+        setCode("");
+        setTimeZone("");
     }
 
     const handleViewExchange = (exchange) => {

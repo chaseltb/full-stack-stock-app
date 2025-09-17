@@ -14,6 +14,7 @@ import Portfolios from "./Portfolios";
 import OrderHistory from "./OrderHistory";
 import NavBar from "./NavBar";
 import HomeScreen from "./HomeScreen";
+import ManageStockExchanges from "./ManageStockExchanges";
 
 function App() {
   return (
@@ -40,7 +41,7 @@ function App() {
 
         <Route path="/users" element={<ManageUsers />}/>
         <Route path="/currencies" element={<ManageCurrencies />}/>
-
+        <Route path="/exchanges" element={<ManageStockExchanges />}/>
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
