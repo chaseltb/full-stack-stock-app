@@ -8,6 +8,8 @@ import CountryForm from "./CountryForm";
 import HomeScreen from "./HomeScreen";
 import Portfolios from "./Portfolios";
 import Stock from "./Stock";
+import ManageUsers from "./ManageUsers";
+import ManageCurrencies from "./ManageCurrencies";
 
 function App() {
   return (
@@ -23,6 +25,9 @@ function App() {
         <Route path="/home" element={<RequireAuth> <HomeScreen /> </RequireAuth>}/>
         <Route path="/stock" element={<RequireAuth> <Stock /> </RequireAuth>}/>
         <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
+
+        <Route path="/users" element={<ManageUsers />}/>
+        <Route path="/currencies" element={<ManageCurrencies />}/>
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
