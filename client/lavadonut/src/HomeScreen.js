@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 
 import { Container, Alert, Box, Paper, Typography, Button, TextField } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function HomeScreen() {
     const [stocks, setStocks] = useState([]);
@@ -68,14 +69,14 @@ function HomeScreen() {
     }
 
     return (
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" sx={{ mt: 4 }}>
             <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10}}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4}}>
                     <Typography variant="h2">
                         Stock App
                     </Typography>
-                    <Button variant="contained" sx={{ borderRadius: 5 }}>
-                        Add Stock
+                    <Button component={Link} to="/stock" variant="contained" sx={{ borderRadius: 5 }}>
+                        View Stocks
                     </Button>
                 </Box>
             </Paper>
@@ -84,7 +85,7 @@ function HomeScreen() {
                 {error}
             </Alert>}
 
-            <Box sx={{ display: "flex", gap: 2, overflowX: "auto", pb: 2 }}>
+            <Box sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
                 {/* stocks mapped to individual paper elements (look like cards) */}
                 {stocks.map((stock) => (
                     <Paper key={stock.id} elevation={2} sx={{ p: 2, borderRadius: 6 }}>
@@ -107,7 +108,7 @@ function HomeScreen() {
                                 Unrealized Gain or Loss: ${stock.unrealizedGainOrLoss.toFixed(2)}
                             </Typography>
                         </Box>
-                        <Button variant="contained" sx={{ borderRadius: 6 }}>
+                        <Button component={Link} to="/orders" variant="contained" sx={{ borderRadius: 6 }}>
                             View Orders
                         </Button>
                     </Paper>

@@ -1,5 +1,6 @@
 package learn.lavadonut.domain;
 
+import learn.lavadonut.data.OrderRepository;
 import learn.lavadonut.data.PortfolioRepository;
 import learn.lavadonut.data.StockRepository;
 import learn.lavadonut.models.*;
@@ -27,6 +28,9 @@ class PortfolioServiceTest {
 
     @MockBean
     StockRepository stockRepo;
+
+    @MockBean
+    OrderRepository orderRepo;
 
     @Test
     public void shouldFindAllStocksInPortfolio() {
@@ -131,6 +135,19 @@ class PortfolioServiceTest {
 
     }
 
+    @Test
+    void shouldAddPortfolioOrder() {
+        Order order = getTestOrders().get(2);
+        order.setId(0);
+        Order expected = getTestOrders().get(2);
+        when(orderRepo.findById(3)).thenReturn(order);
+        when(orderRepo.add(order)).thenReturn(expected);
+        when(repo.findPortfolioById(1)).thenReturn(getTestPortfolio());
+        when(repo.addOrderToPortfolio(1, 3)).thenReturn(true);
+        Result<Portfolio> result = service.addOrderToPortfolio(1, order);
+        assertTrue(result.isSuccess());
+    }
+
     private List<Order> getTestOrders() {
         List<Order> orders = new ArrayList<>();
         Order order1 = new Order();
@@ -176,23 +193,7 @@ class PortfolioServiceTest {
         return p;
     }
 
-//    @Test
-//    public void shouldSellStockFromPortfolio() {
-//
-//    }
-//    @Test
-//    public void shouldDeleteWatchStockFromPortfolio() {
-//        service.deleteWatchStockFromPortfolio(1,1);
-//    }
-//    @Test
-//    public void shouldAddStockToPortfolio() {
-//        Stock stock = new Stock();
-//        stock.setAssetType(AssetType.STOCK);
-//        stock.setIndustry("Software");
-//        stock.setTicker("TEST");
-//
-//        Portfolio result = service.addWatchStockToPortfolio(1, stock);
-//    }
+
 
 
 

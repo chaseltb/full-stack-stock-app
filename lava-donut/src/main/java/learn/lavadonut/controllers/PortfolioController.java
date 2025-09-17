@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import learn.lavadonut.domain.PortfolioService;
 import learn.lavadonut.domain.Result;
+import learn.lavadonut.models.Order;
 import learn.lavadonut.models.Portfolio;
 import learn.lavadonut.models.Stock;
 import org.springframework.http.HttpStatus;
@@ -104,14 +105,20 @@ public class PortfolioController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    //TODO decide if we want this functionality
-//    public ResponseEntity<Void> sellStockFromPortfolio(@PathVariable int userId, @PathVariable int stockId) {
-//
-//    }
-//    public ResponseEntity<Portfolio> addStockToPortfolio(@PathVariable int userId, @RequestBody Stock stock) {
-//
-//    }
-//    public ResponseEntity<Portfolio> deleteStockFromPortfolio(@PathVariable int userId, @PathVariable int stockId) {
-//
-//    }
+    @Operation(summary = "Add an order")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Order created"),
+            @ApiResponse(responseCode = "400", description = "Invalid order"),
+            @ApiResponse(responseCode = "404", description = "Portfolio not found")
+    })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PostMapping("/{portfolioId}/order")
+    public ResponseEntity<Object> addOrderFromPortfolio(@PathVariable int portfolioId,@RequestBody Order order) {
+        Result<Portfolio> result = service.addOrderToPortfolio(portfolioId, order);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.CREATED); // 201
+        }
+        return ErrorResponse.build(result);
+    }
+
 }

@@ -1,5 +1,6 @@
 package learn.lavadonut.domain;
 
+import learn.lavadonut.data.OrderRepository;
 import learn.lavadonut.data.PortfolioRepository;
 import learn.lavadonut.data.StockRepository;
 import learn.lavadonut.models.*;
@@ -7,21 +8,31 @@ import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.sound.sampled.Port;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
 public class PortfolioService {
 
+    private final OrderService orderService;
     private final PortfolioRepository portfolioRepo;
     private final StockRepository stockRepo;
+    private final OrderRepository orderRepo;
 
-    public PortfolioService(PortfolioRepository portfolioRepo, StockRepository stockRepo) {
+    public PortfolioService(OrderService orderService, PortfolioRepository portfolioRepo, StockRepository stockRepo, OrderRepository orderRepo) {
+        this.orderService = orderService;
         this.portfolioRepo = portfolioRepo;
         this.stockRepo = stockRepo;
+        this.orderRepo = orderRepo;
     }
 
+    public Portfolio findPortfolioById(int portfolioId) {
+        return portfolioRepo.findPortfolioById(portfolioId);
+    }
     public List<Portfolio> findPortfoliosByUserId(int userId) {
         return portfolioRepo.findPortfoliosByUserId(userId);
     }
@@ -69,6 +80,31 @@ public class PortfolioService {
         }
 
         result.setPayload(newPortfolio);
+        return result;
+    }
+
+    public Result<Portfolio> addOrderToPortfolio(int portfolioId, Order newOrder) {
+        Result<Portfolio> result = new Result<>();
+        Result<Order> orderResult = orderService.add(newOrder);
+        if (!orderResult.isSuccess()) {
+            result.addMessage("Could not create order: " + orderResult.getMessages(), ResultType.INVALID);
+            return result;
+        }
+        Portfolio portfolio = portfolioRepo.findPortfolioById(portfolioId);
+        if (portfolio == null) {
+            result.addMessage(
+                    String.format("Portfolio must be valid"),
+                    ResultType.NOT_FOUND);
+            return result;
+        }
+
+        boolean success = portfolioRepo.addOrderToPortfolio(portfolioId, orderResult.getPayload().getId());
+        if (!success) {
+            result.addMessage("Failed to link order to portfolio", ResultType.INVALID);
+            return result;
+        }
+        Portfolio p = portfolioRepo.findPortfolioById(portfolioId);
+        result.setPayload(p);
         return result;
     }
 
@@ -153,14 +189,77 @@ public class PortfolioService {
         return result;
     }
 
-    public Result<Portfolio> updateCostBasisOnDividend(int userId, BigDecimal dividend) {
+    public Result<Portfolio> updateCostBasisOnDividend(int portfolioId, int stockId, BigDecimal dividend) {
         Result<Portfolio> result = new Result<>();
-        List<Portfolio> portfolios = portfolioRepo.findPortfoliosByUserId(userId);
-        if (portfolios == null) {
-            result.addMessage("No portfolios for user found", ResultType.NOT_FOUND);
+        Portfolio portfolio = portfolioRepo.findPortfolioById(portfolioId);
+        if (portfolio == null) {
+            result.addMessage("No portfolio was found", ResultType.NOT_FOUND);
         }
-        //TODO Decide how we want to calculate cost basis, either through all orders or all stocks
 
+        List<Order> orders = portfolio.getOrders();
+        if (orders == null) {
+            result.addMessage("No orders found in portfolio", ResultType.NOT_FOUND);
+        }
+        BigDecimal stockShares = orders.stream().filter(o -> o.getTransactionType() == TransactionType.BUY)
+                .map(Order::getNumberOfShares)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (stockShares.compareTo(BigDecimal.ZERO) == 0) {
+            result.addMessage("No shares of this stock in portfolio", ResultType.NOT_FOUND);
+            return result;
+        }
+        BigDecimal totalDividend = stockShares.multiply(dividend);
+
+        Order dividendOrder = new Order();
+        dividendOrder.setPrice(totalDividend);
+        dividendOrder.setStockId(stockId);
+        dividendOrder.setDate(Date.valueOf(LocalDate.now()));
+        dividendOrder.setTransactionType(TransactionType.DIVIDEND);
+        dividendOrder.setNumberOfShares(stockShares);
+        orderRepo.add(dividendOrder);
+        orders.add(dividendOrder);
+        portfolio.setOrders(orders);
+        result.setPayload(portfolio);
+
+        return result;
+    }
+
+    public Result<BigDecimal> calculateCostBasis(List<Order> orders) {
+        Result<BigDecimal> result = new Result<>();
+        result.setPayload(BigDecimal.ZERO);
+        if (orders == null || orders.isEmpty()) {
+            result.addMessage("No orders found", ResultType.NOT_FOUND);
+            return result;
+        }
+
+        BigDecimal totalValue = BigDecimal.ZERO;
+        BigDecimal totalShares = BigDecimal.ZERO;
+
+        for (Order order : orders) {
+            BigDecimal shares = order.getNumberOfShares();
+            BigDecimal cost = shares.multiply(order.getPrice());
+
+            if (order.getTransactionType() == TransactionType.BUY) {
+                totalValue = totalValue.add(cost);
+                totalShares = totalShares.add(shares);
+
+            } else if (order.getTransactionType() == TransactionType.SELL) {
+                if (totalShares.compareTo(BigDecimal.ZERO) > 0) {
+                    BigDecimal avgCostPerShare = totalValue.divide(totalShares, 2, RoundingMode.HALF_UP);
+                    BigDecimal costReduction = avgCostPerShare.multiply(shares);
+
+                    totalShares = totalShares.subtract(shares);
+                    totalValue = totalValue.subtract(costReduction);
+                }
+            } else if (order.getTransactionType() == TransactionType.DIVIDEND) {
+                totalValue = totalValue.subtract(order.getPrice());
+            }
+        }
+
+        if (totalShares.compareTo(BigDecimal.ZERO) > 0) {
+             result.setPayload(totalValue.divide(totalShares, 2, RoundingMode.HALF_UP));
+        } else {
+            result.addMessage("No shares found", ResultType.NOT_FOUND);
+        }
         return result;
     }
 
@@ -238,15 +337,5 @@ public class PortfolioService {
         return result;
     }
 
-    //TODO decide if these should be here or not, watch stock would require DB change
-//    public Portfolio addWatchStockToPortfolio(int userId, Stock stock) {
-//
-//    }
-//
-//    public boolean deleteWatchStockFromPortfolio(int userId, int stockId){
-//
-//    }
-//    public boolean sellStockFromPortfolio(int userId, int stockId) {
-//
-//    }
+
 }

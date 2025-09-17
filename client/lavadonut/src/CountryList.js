@@ -1,9 +1,54 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Box, Typography, IconButton, Card, CardContent, CardActions, Stack, Button } from "@mui/material";
+import { Add, Edit, Delete } from "@mui/icons-material";
+
+const CURRENCY_DATA = [
+    {
+        id: 1,
+        name: 'United States Dollar',
+        code: 'USD',
+        valueToUsd: 1.0
+    },
+    {
+        id: 2,
+        name: 'Euro',
+        code: 'EUR',
+        valueToUsd: 1.17
+    },
+    {
+        id: 3,
+        name: 'Chinese Yuan',
+        code: 'CNY',
+        valueToUsd: 0.14
+    }
+];
+
+const COUNTRY_DATA = [
+    {
+        id: 1,
+        name: 'United States of America',
+        code: 'US',
+        currency: CURRENCY_DATA[0]
+    },
+    {
+        id: 2,
+        name: 'Federal Republic of Germany',
+        code: 'DE',
+        currency: CURRENCY_DATA[1]
+    },
+    {
+        id: 3,
+        name: 'People\'s Republic of China',
+        code: 'CN',
+        currency: CURRENCY_DATA[2]
+    }
+];
 
 function CountryList() {
     // State variables
-    const [countries, setCountries] = useState([]);
+    // const [countries, setCountries] = useState([]);
+    const [countries, setCountries] = useState(COUNTRY_DATA);
     const url = 'http://localhost:8080/api/country';
 
     // Use Effect
@@ -11,7 +56,8 @@ function CountryList() {
         const token = localStorage.getItem('token');
         fetch(url, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
         })
         .then(response => {
@@ -25,7 +71,7 @@ function CountryList() {
         .catch(console.log);
     }, []);
 
-    // Handle deleting an agent
+    // Handle deleting a country
     const handleDeleteCountry = (id) => {
         const token = localStorage.getItem('token');
         const country = countries.find(c => c.id === id);
@@ -51,14 +97,33 @@ function CountryList() {
 
     return (
         <>
-            <section>
-                <h2>List of Countries</h2>
+            <Box sx={{ padding: 4 }}>
+                {/* <h2>List of Countries</h2>
                 <Link
                     to={'/country/add'}
                 >
                     Add a Country
-                </Link>
-                <table>
+                </Link> */}
+                <Stack 
+                    direction="row" 
+                    justifyContent="space-between" 
+                    alignItems="center"
+                    mb={4}
+                >
+                    <Typography variant="h2" fontWeight="bold">
+                        List of Countries ({countries.length})
+                    </Typography>
+                    <Button 
+                        variant="contained" 
+                        color="primary"
+                        component={Link}
+                        to={'/country/add'}
+                        startIcon={<Add />}
+                    >
+                        Add a Country
+                    </Button>
+                </Stack>
+                {/* <table>
                     <thead>
                         <tr>
                             <th>Country Code</th>
@@ -92,8 +157,40 @@ function CountryList() {
                             </tr>
                         ))}
                     </tbody>
-                </table>
-            </section>
+                </table> */}
+                <Stack spacing={3}>
+                    {countries.map((country) => (
+                        <Card key={country.id} variant="outlined" sx={{ backgroundColor: "#f4f4f4" }}>
+                            <CardContent>
+                                <Typography variant="h6" gutterBottom>
+                                    {country.code} - {country.name}
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                    Currency: {country.currency.code} - {country.currency.name}
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                    Value to USD: {country.currency.valueToUsd}
+                                </Typography>
+                            </CardContent>
+                            <CardActions sx={{ justifyContent: "flex-end" }}>
+                                <IconButton
+                                    color="primary"
+                                    component={Link}
+                                    to={`/country/edit/${country.id}`}
+                                >
+                                    <Edit />
+                                </IconButton>
+                                <IconButton
+                                    color="error"
+                                    onClick={() => handleDeleteCountry(country.id)}
+                                >
+                                    <Delete />
+                                </IconButton>
+                            </CardActions>
+                        </Card>
+                    ))}
+                </Stack>
+            </Box>
         </>
     );
 }
