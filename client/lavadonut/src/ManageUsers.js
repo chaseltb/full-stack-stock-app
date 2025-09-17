@@ -27,7 +27,7 @@ function ManageUsers() {
     // inner join user table and app_user and app_user_role?? maybe
     const [role, setRole] = useState("USER");
 
-    const url = "http://localhost:8080/api/";
+    const url = "http://localhost:8080/api/users";
 
     // MOCK DATA!!
     const mockUsers = [
@@ -113,14 +113,27 @@ function ManageUsers() {
         setCreateDialog(true);
     }
 
-    const handleEdit = () => {
+    const handleEdit = (user) => {
         console.log("edit clicked");
+        setEditing(true);
+        setSelectedUser(user);
+
+        // user data in dialog window
+        setUsername(user.username);
+        setPassword("********");
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setCurrencyId(user.currencyId);
+        setRole(user.role);
+
+        setCreateDialog(true);
     }
 
-    const handleDelete = async (currencyId) => {
+    const handleDelete = async (userId) => {
         if (window.confirm("Are you sure that you would like to delete this user?")) {
             try {
                 // delete api call
+                setUsers(users.filter((u) => u.id !== userId));
             } catch (error) {
                 setError(error);
             }
