@@ -24,7 +24,7 @@ function Portfolios() {
     firstName: "sally",
     lastName: "jones"
   }; 
-  const url = "http://localhost:8080/api/";
+  const url = "http://localhost:8080/api/portfolio";
 
   useEffect(() => {
     loadPortfolios();
@@ -36,7 +36,7 @@ function Portfolios() {
     try {
       // fetch portfolios url
       const portfolioResponse = await fetch(
-        `http://localhost:8080/api/portfolio/${userId}`, // needs to be provided userId
+        `${url}/${userId}`, // needs to be provided userId
         {
           headers: {
             Authorization: `Bearer ${token}`,

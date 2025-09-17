@@ -9,7 +9,7 @@ import {
   Legend,
   scales,
 } from "chart.js";
-import { Container, Paper, Box, Typography } from "@mui/material";
+import { Container, Paper, Box, Typography, Alert} from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -21,6 +21,7 @@ function OrderHistory() {
   const [portfolio, setPortfolio] = useState(); // one portfolio
   const [userOrders, setOrders] = useState([]);
   const [userStocks, setStocks] = useState([]);
+  const [error, setError] = useState("");
 
   const { id } = useParams();
 
@@ -42,7 +43,7 @@ function OrderHistory() {
         }
       })
       .then((data) => setPortfolio(data))
-      .catch(console.log);
+      .catch((error) => {setError(error.message || "Portfolio failed to load!");});
   }, [url]);
 
   /*
@@ -111,6 +112,11 @@ function OrderHistory() {
     <>
       <Container maxWidth="lg">
         <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
+          {error && (
+            <Alert severity="error" sx={{ mb: 4 }}>
+                {error}
+              </Alert>
+          )}
           {userOrders.map((order) => (
             <Box>
               <Typography variant="h2" align="center">
