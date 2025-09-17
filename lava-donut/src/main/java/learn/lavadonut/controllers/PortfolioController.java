@@ -14,8 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sound.sampled.Port;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000"})
@@ -74,17 +76,65 @@ public class PortfolioController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @Operation(summary = "Get the total number of shares for stocks in a portfolio")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "A map of stocks-total shares"),
+            @ApiResponse(responseCode = "404", description = "Portfolio/orders not found")
+    })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/{portfolioId}/shares")
+    public ResponseEntity<Map<Stock, BigDecimal>> getStockShares(@PathVariable int portfolioId, @RequestParam String date) {
+        Result<Map<Stock, BigDecimal>> result = service.getStockToTotalShares(portfolioId);
+        if (result.isSuccess()) {
+            return ResponseEntity.ok(result.getPayload());
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Operation(summary = "Get the total number of shares for stocks in a portfolio")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "A map of stocks-total shares"),
+            @ApiResponse(responseCode = "404", description = "Portfolio/orders not found")
+    })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/{portfolioId}/cost_basis")
+    public ResponseEntity<Map<Stock, BigDecimal>> getCostBasisAllStocks(@PathVariable int portfolioId, @RequestParam String date) {
+        Result<Map<Stock, BigDecimal>> result = service.getCostBasisAllStocks(portfolioId);
+        if (result.isSuccess()) {
+            return ResponseEntity.ok(result.getPayload());
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Operation(summary = "Get the cost basis for a stock in a portfolio")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "The average cost basis for a stock owned in portfolio"),
+            @ApiResponse(responseCode = "404", description = "Portfolio/orders for stock not found")
+    })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/{portfolioId}/cost_basis_{stockId}")
+    public ResponseEntity<BigDecimal> getCostBasisSingleStock(@PathVariable int portfolioId, @PathVariable int stockId) {
+        Result<BigDecimal> result = service.getCostBasisForStock(portfolioId, stockId);
+        if (result.isSuccess()) {
+            return ResponseEntity.ok(result.getPayload());
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @Operation(summary = "Update the cost basis for a users portfolio for dividends")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Cost Basis updated"),
             @ApiResponse(responseCode = "404", description = "Portfolio not found")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @PutMapping("/{userId}/cost_basis")
-    public ResponseEntity<Void> updateCostBasisOnDividend(@PathVariable int userId, @RequestBody BigDecimal dividend) {
+    @PutMapping("/{portfolioId}/cost_basis/{stockId}")
+    public ResponseEntity<Portfolio> updateCostBasisOnDividend(@PathVariable int portfolioId, @PathVariable int stockId, @RequestBody BigDecimal dividend) {
 
-        //TODO BigDecimal costBasis = service.updateCostBasisOnDividend(userId, dividend).getPayload();
-        return null;
+        Result<Portfolio> result = service.updateCostBasisOnDividend(portfolioId, stockId, dividend);
+        if (result.isSuccess()) {
+            return ResponseEntity.ok(result.getPayload());
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Operation(summary = "Update the account type for a portfolio")

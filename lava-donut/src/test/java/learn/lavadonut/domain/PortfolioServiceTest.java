@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -146,6 +147,49 @@ class PortfolioServiceTest {
         when(repo.addOrderToPortfolio(1, 3)).thenReturn(true);
         Result<Portfolio> result = service.addOrderToPortfolio(1, order);
         assertTrue(result.isSuccess());
+    }
+
+    @Test
+    void shouldGetTotalSharesForEachStock() {
+        List<Stock> stocks = getTestStocks();
+        when(repo.findOrdersByPortfolioId(1)).thenReturn(getTestOrders());
+        when(repo.findAllStocksInPortfolio(1)).thenReturn(stocks);
+        Result<Map<Stock, BigDecimal>> result = service.getStockToTotalShares(1);
+        assertTrue(result.isSuccess());
+        assertFalse(result.getPayload().isEmpty());
+        assertEquals(BigDecimal.valueOf(100), result.getPayload().get(stocks.get(0)));
+    }
+
+    @Test
+    void shouldGetStockToCostBasis() {
+        Portfolio p = getTestPortfolio();
+        p.setStocks(getTestStocks());
+        p.setOrders(getTestOrders());
+        when(repo.findPortfolioById(1)).thenReturn(p);
+        Result<Map<Stock, BigDecimal>> result = service.getCostBasisAllStocks(1);
+        assertTrue(result.isSuccess());
+        //bought 100 for 10, sold 10 for 100, then bought 10 for 80
+        //should have 90 shares of 10, 10 of 80 = 900+800=1700/ (90+10) = 17 cost basis
+        Map<Stock, BigDecimal> map = result.getPayload();
+        assertNotNull(map);
+        assertEquals(new BigDecimal("17.00"), map.get(p.getStocks().get(0)));
+
+    }
+
+    private List<Stock> getTestStocks() {
+        List<Stock> stocks = new ArrayList<>();
+        Stock s1 = getTestStock();
+        Stock s2 = getTestStock();
+        s2.setId(2);
+        s2.setCurrentPrice(BigDecimal.valueOf(42));
+        Stock s3 = getTestStock();
+        s3.setId(3);
+        s3.setCurrentPrice(BigDecimal.valueOf(1.15));
+        stocks.add(s1);
+        stocks.add(s2);
+        stocks.add(s3);
+
+        return stocks;
     }
 
     private List<Order> getTestOrders() {

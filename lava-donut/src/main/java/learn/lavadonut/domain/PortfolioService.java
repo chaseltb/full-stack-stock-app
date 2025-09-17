@@ -14,6 +14,7 @@ import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PortfolioService {
@@ -163,7 +164,7 @@ public class PortfolioService {
         }
         List<Order> orders = portfolioRepo.findOrdersByPortfolioId(portfolioId);
         if (orders == null || orders.isEmpty()) {
-            result.addMessage(String.format("No Orders found for user %s", portfolioId), ResultType.NOT_FOUND);
+            result.addMessage(String.format("No Orders found for portfolio %s", portfolioId), ResultType.NOT_FOUND);
             return result;
         }
         List<Stock> allStocks = stockRepo.findAll();
@@ -186,6 +187,33 @@ public class PortfolioService {
             }
         }
         result.setPayload(totalValue);
+        return result;
+    }
+
+    public Result<Map<Stock, BigDecimal>> getStockToTotalShares(int portfolioId) {
+
+        Result<Map<Stock,BigDecimal>> result = new Result<>();
+        List<Order> orders = portfolioRepo.findOrdersByPortfolioId(portfolioId);
+        if (orders == null || orders.isEmpty()) {
+            result.addMessage(String.format("No Orders found for portfolio %s", portfolioId), ResultType.NOT_FOUND);
+            return result;
+        }
+
+        List<Stock> stocks = portfolioRepo.findAllStocksInPortfolio(portfolioId);
+        if (stocks == null || stocks.isEmpty()) {
+            result.addMessage(String.format("No Stocks found for portfolio %s", portfolioId), ResultType.NOT_FOUND);
+            return result;
+        }
+        Map<Stock, BigDecimal> stockToShares = stocks.stream()
+                .collect(Collectors.toMap(
+                        s -> s,
+                        s -> orders.stream()
+                                .filter(o -> o.getStockId() == s.getId() && o.getTransactionType() != TransactionType.DIVIDEND)
+                                .map(o -> o.getTransactionType() == TransactionType.BUY ? o.getNumberOfShares() : o.getNumberOfShares().multiply(BigDecimal.valueOf(-1)))
+                                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                ));
+        result.setPayload(stockToShares);
+
         return result;
     }
 
@@ -220,6 +248,64 @@ public class PortfolioService {
         portfolio.setOrders(orders);
         result.setPayload(portfolio);
 
+        return result;
+    }
+
+    public Result<Map<Stock, BigDecimal>> getCostBasisAllStocks(int portfolioId) {
+
+        Result<Map<Stock, BigDecimal>> result = new Result<>();
+        Portfolio portfolio = portfolioRepo.findPortfolioById(portfolioId);
+        if (portfolio == null) {
+            result.addMessage("No portfolio was found", ResultType.NOT_FOUND);
+            return result;
+        }
+
+        if (portfolio.getStocks().isEmpty() || portfolio.getOrders().isEmpty()) {
+            result.addMessage("No orders or stocks found", ResultType.NOT_FOUND);
+            return result;
+        }
+        Map<Stock, BigDecimal> stockToCostBasis = new HashMap<>();
+
+        for (Stock stock : portfolio.getStocks()) {
+            List<Order> stockOrders = new ArrayList<>();
+            for (Order o : portfolio.getOrders()) {
+                if (o.getStockId() == stock.getId()) {
+                    stockOrders.add(o);
+                }
+            }
+
+            Result<BigDecimal> stockCostBasis = calculateCostBasis(stockOrders);
+            if (stockCostBasis.isSuccess()) {
+                stockToCostBasis.put(stock, stockCostBasis.getPayload());
+            }
+        }
+
+        result.setPayload(stockToCostBasis);
+
+
+        return result;
+    }
+
+    public Result<BigDecimal> getCostBasisForStock(int portfolioId, int stockId) {
+        List<Order> orders = portfolioRepo.findOrdersByPortfolioId(portfolioId);
+
+        Result<BigDecimal> result = new Result<>();
+        if (orders == null || orders.isEmpty()) {
+            result.addMessage("No orders found", ResultType.NOT_FOUND);
+            return result;
+        }
+        List<Order> stockOrders = new ArrayList<>();
+        for (Order o : orders) {
+            if (o.getStockId() == stockId) {
+                stockOrders.add(o);
+            }
+        }
+        if (stockOrders.isEmpty()) {
+            result.addMessage("No orders found for stock Id " + stockId, ResultType.NOT_FOUND);
+            return result;
+        }
+
+        result = calculateCostBasis(stockOrders);
         return result;
     }
 
