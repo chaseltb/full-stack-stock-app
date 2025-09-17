@@ -196,7 +196,7 @@ function ManageUsers() {
                                 </Box>
                             </Box>
                             <Box>
-                                <Button variant="outlined" startIcon={<ViewIcon />} onClick={() => handleViewUser(user)} sx={{ mr: 2, color: "light-blue", borderRadius: 4 }}>
+                                <Button variant="outlined" startIcon={<ViewIcon />} onClick={() => handleViewUser(user)} sx={{ mr: 2, color: "blue", borderRadius: 4 }}>
                                     View User
                                 </Button>
                                 <Button variant="outlined" color="secondary" startIcon={<EditIcon />} onClick={() => handleEdit(user)} sx={{ mr: 2, borderRadius: 4 }}>
@@ -217,7 +217,7 @@ function ManageUsers() {
                             No users were found
                         </Typography>
                         <IconButton
-                            label="Add a currency"
+                            label="Add a user"
                             color="primary"
                             onClick={() => handleAdd()}
                             sx={{ p: 2, borderRadius: 2 }}
