@@ -47,7 +47,7 @@ function Portfolios() {
                 <Box sx={{ display: "grid", gap: 3}}>
                     {portfolios.map((portfolio) => (
                         <Paper key={portfolio.id} elevation={2} sx={{ p: 2, borderRadius: 10}}>
-                            <Box sx={{ p: 2, mb: 2}}>
+                            <Box sx={{ p: 2, mb: 2, width: 1/3}}>
                                 <Typography variant="body1">
                                     {portfolio.name}
                                 </Typography>
@@ -72,7 +72,7 @@ function Portfolios() {
                             <Link
                                 component="button"
                                 variant="outlined"
-                                to={`/portfolios/order-history/:name/${portfolio.id}`}
+                                to={`/portfolios/order-history/${portfolio.id}`}
                             >
                                 Order History
                             </Link>

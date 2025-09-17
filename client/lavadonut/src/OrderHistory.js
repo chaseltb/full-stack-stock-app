@@ -9,7 +9,7 @@ import {
   Legend,
   scales,
 } from "chart.js";
-import { Container, Paper} from "@mui/material";
+import { Container, Paper, Box, Typography} from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -22,7 +22,6 @@ function OrderHistory() {
   const [userStocks, setStocks] = useState([]);
 
   const { id } = useParams();
-  const { name } = useParams();
 
   const url = `http://localhost:8080/api/portfolio/${id}`;
 
@@ -66,7 +65,7 @@ function OrderHistory() {
       },
       title: {
         display: true,
-        text: `${name} Order History`,
+        text: `Your Order History`,
       },
     },
   };
@@ -84,11 +83,24 @@ function OrderHistory() {
     ],
   };
 
+  function iterateStockName(orderStockId){
+    userStocks.forEach(stock => {if(stock.id === orderStockId){
+      return stock.name;
+    }})
+  }
+
   // format page in to display stock and order info
   return (
     <>
       <Container maxWidth = "lg">
         <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
+          {userOrders.map((order) => (
+              <Box>
+                <Typography variant="h2" align="center">
+                  ${iterateStockName(order.stockId)}
+                </Typography>
+              </Box>
+          ))}
           <Bar options={options} data={orderHistory} />
         </Paper>
       </Container>
