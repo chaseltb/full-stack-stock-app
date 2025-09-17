@@ -250,9 +250,9 @@ function ManageUsers() {
                     Create New User
                 </DialogTitle>
                 <DialogContent>
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                         <TextField
-                            lable="Username"
+                            label="Username"
                             type="email"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
@@ -261,22 +261,22 @@ function ManageUsers() {
                             placeholder="name@stockapp.com"
                         />
                         <TextField
-                            lable="Password"
+                            label="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             fullWidth
                             margin="dense"
                         />
-                        <Box sx={{ display: "flex", gap: 2 }}>
+                        <Box sx={{ display: "flex", gap: 1 }}>
                             <TextField
-                                lable="First Name"
+                                label="First Name"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 fullWidth
                                 margin="dense"
                             />
                             <TextField
-                                lable="Last Name"
+                                label="Last Name"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                                 fullWidth
@@ -284,7 +284,7 @@ function ManageUsers() {
                             />
                         </Box>
                         <TextField
-                            lable="Currency"
+                            label="Currency"
                             select
                             value={currencyId}
                             onChange={(e) => setCurrencyId(e.target.value)}
@@ -298,7 +298,7 @@ function ManageUsers() {
                             ))}
                         </TextField>
                         <TextField
-                            lable="Role"
+                            label="Role"
                             select
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
