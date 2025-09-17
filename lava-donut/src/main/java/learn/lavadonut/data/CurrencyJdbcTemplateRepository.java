@@ -86,7 +86,7 @@ public class CurrencyJdbcTemplateRepository implements CurrencyRepository{
                 Integer.class, currencyId)
                 +
                 jdbcTemplate.queryForObject(
-                        "select count(*) from countries where currecy_id = ?;",
+                        "select count(*) from countries where currency_id = ?;",
                         Integer.class, currencyId);
 
         return totalUse;

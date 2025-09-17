@@ -33,7 +33,7 @@ function OrderHistory() {
       })
       .then((data) => setPortfolio(data))
       .catch(console.log);
-  });
+  }, [url]);
 
   const userOrders = portfolio.orders;
   const userStocks = portfolio.stocks;
