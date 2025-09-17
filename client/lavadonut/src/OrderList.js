@@ -212,17 +212,17 @@ const ORDER_DATA = [
 
 function OrderList() {
     // State variables
-    // const [orders, setOrders] = useState([]);
-    // const [stocks, setStocks] = useState([]);
-    const [orders, setOrders] = useState(ORDER_DATA);
-    const [stocks, setStocks] = useState(STOCK_DATA);
+    const [orders, setOrders] = useState([]);
+    const [stocks, setStocks] = useState([]);
+    // const [orders, setOrders] = useState(ORDER_DATA);
+    // const [stocks, setStocks] = useState(STOCK_DATA);
     const [loading, setLoading] = useState(true);
     const url = 'http://localhost:8080/api/order';
 
     // Use Effect
     useEffect(() => {
         async function fetchData() {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
             try {
                 const ordersResponse = await fetch("http://localhost:8080/api/order", {
                     headers: {
