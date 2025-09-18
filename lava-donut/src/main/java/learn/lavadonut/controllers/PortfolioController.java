@@ -46,6 +46,7 @@ public class PortfolioController {
         return ResponseEntity.ok(portfolios);
     }
 
+
     //add swagger mapping to findPortfolioById
     @Operation(summary = "Find portfolio by portfolio ID")
     @ApiResponses({
@@ -53,6 +54,7 @@ public class PortfolioController {
             @ApiResponse(responseCode = "404", description = "Portfolio not found")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+
     @GetMapping("/port/{portfolioId}")
     public ResponseEntity<Portfolio> findPortfolioById(@PathVariable int portfolioId) {
         Portfolio portfolio = service.findPortfolioById(portfolioId);
