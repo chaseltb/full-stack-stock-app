@@ -47,6 +47,20 @@ public class PortfolioController {
     }
 
     //add swagger mapping to findPortfolioById
+    @Operation(summary = "Find portfolio by portfolio ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Portfolio found"),
+            @ApiResponse(responseCode = "404", description = "Portfolio not found")
+    })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/port/{portfolioId}")
+    public ResponseEntity<Portfolio> findPortfolioById(@PathVariable int portfolioId) {
+        Portfolio portfolio = service.findPortfolioById(portfolioId);
+        if(portfolio == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(portfolio);
+    }
 
     @Operation(summary = "Find all stocks in a users portfolio")
     @ApiResponses({
