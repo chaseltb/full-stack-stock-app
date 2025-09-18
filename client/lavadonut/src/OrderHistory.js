@@ -13,16 +13,15 @@ import { Container, Paper, Box, Typography, Alert } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { InfoRounded } from "@mui/icons-material";
 
 // USE EFFECT TO FETCH PORTFOLIO FROM URL
 //REFERENCE CONTEXT TO GET USER OBJ OR ID
 
 function OrderHistory() {
   const [portfolio, setPortfolio] = useState(); // one portfolio
-  const [userOrders, setOrders] = useState([]);
-  const [userStocks, setStocks] = useState([]);
-  const [displayInfo, setDisplayInfo] = useState([]);
+  const [userOrders, setOrders] = useState([]); // used for graph
+  const [userStocks, setStocks] = useState([]); // used for graph
+  const [displayInfo, setDisplayInfo] = useState([]); // consolidates orders and stock info to display
   const [error, setError] = useState("");
 
   const { id } = useParams();
@@ -54,13 +53,6 @@ function OrderHistory() {
       });
   }, [token, url, id]);
 
-  /*
-  const userOrders = portfolio.orders;
-  userOrders.sort();
-  const userStocks = portfolio.stocks;
-  userStocks.sort();
-  */
-
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -84,11 +76,11 @@ function OrderHistory() {
   };
 
   const orderHistory = {
-    labels: userStocks.map((stock) => stock.name), // check if order and stock are same before
+    labels: userStocks.map((stock) => stock.name),
     datasets: [
       {
         label: "Cost",
-        data: userOrders.map((order) => order.price), //need to dynamically introduce data
+        data: userOrders.map((order) => order.price),
         backgroundColor: ["rgba(255, 99, 132, 0.2)"],
         borderColor: ["rgba(255, 99, 132, 0.2)"],
         borderWidth: 1,
@@ -99,24 +91,6 @@ function OrderHistory() {
   function sortStocksOrders(data) {
     setOrders(data.orders.sort((a, b) => a.stockId - b.stockId));
     setStocks(data.stocks.sort((a, b) => a.id - b.id));
-    /*
-    let totalInfo = []
-    for(let i = 0; i < data.orders.length; i++){
-      let currentOrder = data.orders.at(i);
-      let currentStock = data.stocks.at(i);
-      totalInfo.push(
-        {
-          orderTransactionType : currentOrder.transactionType,
-          orderSharesAmount : currentOrder.numberOfShares,
-          orderPrice : currentOrder.price,
-          stockName : currentStock.name,
-          stock : currentStock.currentPrice
-        }
-      )
-    }
-    console.log("HERE")
-    console.log(totalInfo);
-    */
     return;
   }
 
@@ -139,41 +113,16 @@ function OrderHistory() {
         }
       )
     }
-    
-    console.log("Here!!!");
-    console.log(totalInfo);
+
     setDisplayInfo(totalInfo);
 
     return;
   }
 
-  function getStockName(orderStockId) {
-    console.log("I am being called");
-    userStocks.forEach((stock) => {
-      console.log("Iterating through for each")
-      if (stock.id === orderStockId) {
-        console.log(stock)
-        return stock.id;
-      }
-    });
-  }
-
-  function getStockPrice(orderStockId) {
-    userStocks.forEach((stock) => {
-      if (stock.id === orderStockId) {
-        return stock.currentPrice;
-      }
-    });
-  }
-
-  // format page in to display stock and order info
   return (
     <>
       {portfolio ? (
         <>
-        {console.log(portfolio)}
-        {console.log(userStocks)}
-        {console.log(Array.isArray(portfolio))}
           <Container maxWidth="lg">
             <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
               {error && (
