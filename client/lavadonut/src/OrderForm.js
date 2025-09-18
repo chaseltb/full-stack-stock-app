@@ -172,7 +172,7 @@ function OrderForm() {
     const [stocks, setStocks] = useState([]);
     const [errors, setErrors] = useState([]);
     const url = 'http://localhost:8080/api/order';
-
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     // Hook for programmatic navigation
     const navigate = useNavigate();
 

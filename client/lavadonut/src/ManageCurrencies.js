@@ -18,7 +18,7 @@ function ManageCurrencies() {
     const [currencyName, setCurrencyName] = useState("");
     const [currencyCode, setCurrencyCode] = useState("");
     const [valueToUsd, setValueToUsd] = useState("");
-
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     const url = "http://localhost:8080/api/currency/";
 
     useEffect(() => {
@@ -33,7 +33,7 @@ function ManageCurrencies() {
             const response = await fetch(url, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    Authorization: `Bearer ${token}`,
                 },
             });
             if (!response.ok) {
@@ -72,7 +72,7 @@ function ManageCurrencies() {
                 const response = await fetch(`${url}/${currencyId}`, {
                     method: "DELETE",
                     headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                 });
                 if (response.ok) {
@@ -100,7 +100,7 @@ function ManageCurrencies() {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify(requestBody),
                 });
@@ -121,7 +121,7 @@ function ManageCurrencies() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify(requestBody),
                 });

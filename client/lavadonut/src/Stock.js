@@ -11,7 +11,7 @@ function Stocks() {
     const [loading, setLoading] = useState(true);  // Loading state
     const [loadingOrders, setLoadingOrders] = useState(false);  // Loading state for orders
     const url = "http://localhost:8080/api/";  // Backend URL
-
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     // Fetch the list of stocks when the component mounts
     useEffect(() => {
         const fetchStocksData = async () => {

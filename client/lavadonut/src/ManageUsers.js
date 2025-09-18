@@ -26,7 +26,7 @@ function ManageUsers() {
 
     // inner join user table and app_user and app_user_role?? maybe
     const [role, setRole] = useState("USER");
-
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     const url = "http://localhost:8080/api/user/";
 
     // MOCK DATA!!
@@ -92,7 +92,7 @@ function ManageUsers() {
             const response = await fetch(url, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
@@ -150,7 +150,7 @@ function ManageUsers() {
                 const response = await fetch(`${url}/${userId}`, {
                     method: "DELETE",
                     headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                 });
                 
@@ -185,7 +185,7 @@ function ManageUsers() {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify(updatedUser)
                 });
@@ -209,7 +209,7 @@ function ManageUsers() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify(newUser)
                 });

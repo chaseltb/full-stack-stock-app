@@ -21,6 +21,7 @@ function ManageStockExchanges() {
     const [exchangeName, setName] = useState("");
     const [code, setCode] = useState("");
     const [timeZone, setTimeZone] = useState("");
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
     const url = "http://localhost:8080/api/stock-exchange/";
 
@@ -41,7 +42,7 @@ function ManageStockExchanges() {
             const response = await fetch(url, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
@@ -80,7 +81,7 @@ function ManageStockExchanges() {
                 const response = await fetch(`${url}/${exchangeId}`, {
                     method: "DELETE",
                     headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                 });
 
@@ -109,7 +110,7 @@ function ManageStockExchanges() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify(newExchange)
                 });
@@ -130,7 +131,7 @@ function ManageStockExchanges() {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify(updatedExchange)
                 });

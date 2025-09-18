@@ -218,7 +218,7 @@ function OrderList() {
     // const [stocks, setStocks] = useState(STOCK_DATA);
     const [loading, setLoading] = useState(true);
     const url = 'http://localhost:8080/api/order';
-
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     // Use Effect
     useEffect(() => {
         async function fetchData() {

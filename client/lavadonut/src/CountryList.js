@@ -50,7 +50,7 @@ function CountryList() {
     // const [countries, setCountries] = useState([]);
     const [countries, setCountries] = useState(COUNTRY_DATA);
     const url = 'http://localhost:8080/api/country';
-
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     // Use Effect
     useEffect(() => {
         const token = localStorage.getItem('token');
