@@ -46,7 +46,8 @@ function OrderHistory() {
       })
       .then((data) => {
         setPortfolio(data);
-        sortStocksOrders(data)
+        sortStocksOrders(data);
+        processDisplayInfo(data);
       }).catch((error) => {
         setError(error.message || "Portfolio failed to load!");
       });
@@ -118,11 +119,14 @@ function OrderHistory() {
     return;
   }
 
-  function processDisplayInfo() {
+  function processDisplayInfo(data) {
+    let orderedOrders = data.orders.sort((a, b) => a.stockId - b.stockId);
+    let orderedStocks = data.stocks.sort((a, b) => a.id - b.id);
+
     let totalInfo = []
-    for(let i = 0; i < userOrders.length; i++){
-      let currentOrder = userOrders.at(i);
-      let currentStock = userStocks.at(i);
+    for(let i = 0; i < orderedOrders.length; i++){
+      let currentOrder = orderedOrders.at(i);
+      let currentStock = orderedStocks.at(i);
       totalInfo.push(
         {
           orderTransactionType : currentOrder.transactionType,
@@ -166,7 +170,6 @@ function OrderHistory() {
         {console.log(portfolio)}
         {console.log(userStocks)}
         {console.log(Array.isArray(portfolio))}
-        {processDisplayInfo()}
           <Container maxWidth="lg">
             <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
               {error && (
@@ -175,7 +178,7 @@ function OrderHistory() {
                 </Alert>
               )}
               {userOrders.map((order) => (
-                <Box>
+                <Box sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
                   <Typography variant="h2" align="center">
                     {getStockName(order.stockId)}
                   </Typography>
