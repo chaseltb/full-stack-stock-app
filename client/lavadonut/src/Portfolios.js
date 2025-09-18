@@ -6,8 +6,15 @@ import {
   Paper,
   Alert,
   Button,
+  MenuItem,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent
+
 } from "@mui/material";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import React from "react";
 
 // Insert Orderhistory, pass portfolio id to Order history
@@ -15,9 +22,18 @@ import React from "react";
 function Portfolios() {
   const [portfolios, setPortfolios] = useState([]);
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
+  const [newPortfolio, setNewPortfolio] = useState({ name: "", type: "RETIREMENT" });
+  const [openDialog, setOpenDialog] = useState(false);
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   const userId = localStorage.getItem("userId");
   const url = "http://localhost:8080/api/portfolio";
+
+  const accountTypes = [
+    { value: "RETIREMENT", label: "Retirement" },
+    { value: "INVESTMENT", label: "Investment" },
+    { value: "ROTH_IRA", label: "Roth IRA" },
+  ];
 
   useEffect(() => {
     loadPortfolios();
@@ -25,7 +41,6 @@ function Portfolios() {
 
   const loadPortfolios = async () => {
     setError("");
-    const token = localStorage.getItem("token");
     try {
       // fetch portfolios url
       const portfolioResponse = await fetch(
@@ -37,9 +52,64 @@ function Portfolios() {
           },
         }
       );
-      setPortfolios(portfolioResponse); 
+      if (!portfolioResponse.ok) {
+        const errorData = await portfolioResponse.json();
+        setError(errorData.message || "Failed to load portfolios");
+        return;
+      }
+      const data = await portfolioResponse.json();
+      console.log(data);
+      if (Array.isArray(data)) {
+        setPortfolios(data);
+      } else if (Array.isArray(data.portfolios)) {
+        setPortfolios(data.portfolios);
+      } else {
+        setPortfolios([]);
+        console.warn("Unexpected portfolios response:", data);
+      }
     } catch (error) {
       setError(error.message || "Portfolios failed to load");
+    }
+  };
+
+  const handleCreatePortfolio = async () => {
+    setErrors([]);
+    try {
+      const payload = {
+        userId: parseInt(userId, 10),
+        accountType: newPortfolio.type, // enum constant
+        name: newPortfolio.name,
+      };
+      const response = await fetch(`${url}/${userId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.log(errorData);
+        if (Array.isArray(errorData)) {
+          setErrors(errorData);
+        } else if (errorData != null && errorData.message != null) {
+          setErrors([errorData.message]);
+        } else {
+          setErrors(["Failed to create portfolio"]);
+        }
+        return;
+      }
+
+      const created = await response.json();
+      setPortfolios((prev) => [...prev, created]);
+      setNewPortfolio({ name: "", type: "RETIREMENT" });
+      setOpenDialog(false);
+
+    } catch (error) {
+      console.log(`catch error: ${error}`);
+      setError(error.message || "Failed to create portfolio");
     }
   };
 
@@ -57,15 +127,19 @@ function Portfolios() {
           }}
         >
           <Typography variant="h2">Portfolios</Typography>
-          <Button variant="contained" sx={{ borderRadius: 5 }}>
+          <Button variant="contained" sx={{ borderRadius: 5 }} onClick={() => setOpenDialog(true)}>
             Add Portfolio
           </Button>
         </Box>
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 4 }}>
-            {error}
-          </Alert>
+        {errors.length > 0 && (
+          <Box sx={{ mb: 2 }}>
+            {errors.map((msg, idx) => (
+              <Alert severity="error" key={idx} sx={{ mb: 1 }}>
+                {msg}
+              </Alert>
+            ))}
+          </Box>
         )}
 
         {/* list of portfolios */}
@@ -96,13 +170,13 @@ function Portfolios() {
                 </Typography>
               </Box>
 
-              <Button
+              <Link
+                component="button"
                 variant="outlined"
-                component={Link}
                 to={`/portfolios/order-history/${portfolio.id}`}
               >
                 Order History
-              </Button>
+              </Link>
             </Paper>
           ))}
         </Box>
@@ -118,6 +192,48 @@ function Portfolios() {
           </Box>
         )}
       </Paper>
+      {/* create portoflio dialog box*/}
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>Create Portfolio</DialogTitle>
+        <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
+
+          {errors.length > 0 && (
+            <Box sx={{ mb: 1 }}>
+              {errors.map((msg, idx) => (
+                <Typography key={idx} variant="body2" color="error">
+                  {msg}
+                </Typography>
+              ))}
+            </Box>
+          )}
+
+          <TextField
+            label="Portfolio Name"
+            value={newPortfolio.name}
+            onChange={(e) => setNewPortfolio({ ...newPortfolio, name: e.target.value })}
+            fullWidth
+          />
+          <TextField
+            select
+            label="Account Type"
+            value={newPortfolio.type}
+            onChange={(e) => setNewPortfolio({ ...newPortfolio, type: e.target.value })}
+            fullWidth
+          >
+            {accountTypes.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleCreatePortfolio}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
