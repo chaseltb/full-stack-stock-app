@@ -221,13 +221,13 @@ function Portfolios() {
                 </Typography>
               </Box>
 
-              <Link
-                component="button"
+              <Button
+                component={Link}
                 variant="outlined"
                 to={`/portfolios/order-history/${portfolio.id}`}
               >
                 Order History
-              </Link>
+              </Button>
             </Paper>
           ))}
         </Box>
