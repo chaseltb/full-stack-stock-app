@@ -9,7 +9,7 @@ import {
   Legend,
   scales,
 } from "chart.js";
-import { Container, Paper, Box, Typography, Alert} from "@mui/material";
+import { Container, Paper, Box, Typography, Alert } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -25,8 +25,9 @@ function OrderHistory() {
 
   const { id } = useParams();
 
-  const token = localStorage.getItem("token") || sessionStorage.getItem("token")
-  const url = `http://localhost:8080/api/portfolio`;
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
+  const url = `http://localhost:8080/api/portfolio/port`;
 
   useEffect(() => {
     fetch(`${url}/${id}`, {
@@ -42,8 +43,12 @@ function OrderHistory() {
           return Promise.reject(`Unexpected Status Code: ${response.status}`);
         }
       })
-      .then((data) => setPortfolio(data))
-      .catch((error) => {setError(error.message || "Portfolio failed to load!");});
+      .then((data) => {
+        setPortfolio(data);
+        sortStocksOrders(data)
+      }).catch((error) => {
+        setError(error.message || "Portfolio failed to load!");
+      });
   }, [token, url, id]);
 
   /*
@@ -88,9 +93,10 @@ function OrderHistory() {
     ],
   };
 
-  function sortStocksOrders(){
-    setOrders(portfolio.orders.sort((a, b) => a.stockId - b.stockId));
-    setStocks(portfolio.stocks.sort((a, b) => a.id - b.id));
+  function sortStocksOrders(data) {
+    setOrders(data.orders.sort((a, b) => a.stockId - b.stockId));
+    setStocks(data.stocks.sort((a, b) => a.id - b.id));
+    return;
   }
 
   function getStockName(orderStockId) {
@@ -114,38 +120,41 @@ function OrderHistory() {
     <>
       {portfolio ? (
         <>
-      {sortStocksOrders()}
-      <Container maxWidth="lg">
-        <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
-          {error && (
-            <Alert severity="error" sx={{ mb: 4 }}>
-                {error}
-              </Alert>
-          )}
-          {userOrders.map((order) => (
-            <Box>
-              <Typography variant="h2" align="center">
-                ${getStockName(order.stockId)}
-              </Typography>
-              <Typography variant="body1">Date: ${order.date}</Typography>
-              <Typography variant="body1">
-                Transaction Type: ${order.transactionType}
-              </Typography>
-              <Typography variant="body1">Shares: ${order.shares}</Typography>
-              <Typography variant="body1">
-                Total Price: ${order.price}
-              </Typography>
-              <Typography variant="body1">
-                Stock Price: ${getStockPrice(order.stockId)}
-              </Typography>
-            </Box>
-          ))}
-          <Bar options={options} data={orderHistory} />
-        </Paper>
-      </Container>
-      </>
+        {console.log(portfolio)}
+        {console.log(Array.isArray(portfolio))}
+          <Container maxWidth="lg">
+            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
+              {error && (
+                <Alert severity="error" sx={{ mb: 4 }}>
+                  {error}
+                </Alert>
+              )}
+              {userOrders.map((order) => (
+                <Box>
+                  <Typography variant="h2" align="center">
+                    ${getStockName(order.stockId)}
+                  </Typography>
+                  <Typography variant="body1">Date: ${order.date}</Typography>
+                  <Typography variant="body1">
+                    Transaction Type: {order.transactionType}
+                  </Typography>
+                  <Typography variant="body1">
+                    Shares: {order.shares}
+                  </Typography>
+                  <Typography variant="body1">
+                    Total Price: ${order.price}
+                  </Typography>
+                  <Typography variant="body1">
+                    Stock Price: $ {getStockPrice(order.stockId)}
+                  </Typography>
+                </Box>
+              ))}
+              <Bar options={options} data={orderHistory} />
+            </Paper>
+          </Container>
+        </>
       ) : (
-      <div> Loading... </div>
+        <div> Loading... </div>
       )}
     </>
   );
