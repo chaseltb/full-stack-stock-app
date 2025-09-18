@@ -33,9 +33,6 @@ function NavBar() {
                         <Button color="inherit" component={Link} to="/portfolios">
                             Portfolios
                         </Button>
-                        <Button color="inherit" component={Link} to="/portfolios/order-history/1">
-                            Order History
-                        </Button>
                         {!token ? (
                             <Button color="inherit" component={Link} to="/auth">
                                 Login / Register
