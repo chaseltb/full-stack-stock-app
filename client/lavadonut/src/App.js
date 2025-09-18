@@ -39,9 +39,9 @@ function App() {
         <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
         <Route path="/portfolios/order-history/:id" element={<RequireAuth> <OrderHistory/> </RequireAuth>}/>
 
-        <Route path="/users" element={<ManageUsers />}/>
-        <Route path="/currencies" element={<ManageCurrencies />}/>
-        <Route path="/exchanges" element={<ManageStockExchanges />}/>
+        <Route path="/users" element={<RequireAuth> <ManageUsers /> </RequireAuth>}/>
+        <Route path="/currencies" element={<RequireAuth> <ManageCurrencies /> </RequireAuth>}/>
+        <Route path="/exchanges" element={<RequireAuth> <ManageStockExchanges /> </RequireAuth>}/>
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>

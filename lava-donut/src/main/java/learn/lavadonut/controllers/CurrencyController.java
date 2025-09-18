@@ -34,7 +34,7 @@ public class CurrencyController {
             @ApiResponse(responseCode = "404", description = "Currency not found")
     })
 
-    @GetMapping("/{id}")
+    @GetMapping("/{currencyId}")
     public ResponseEntity<Object> findById(@PathVariable int currencyId) {
         Currency currency = service.findById(currencyId);
         if (currency == null) {
@@ -66,7 +66,7 @@ public class CurrencyController {
             @ApiResponse(responseCode = "409", description = "ID conflict")
     })
     @PutMapping("/{currencyId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> update(@PathVariable int currencyId, @RequestBody Currency currency) {
         if (currencyId != currency.getId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -87,7 +87,7 @@ public class CurrencyController {
             @ApiResponse(responseCode = "404", description = "Currency not found")
     })
     @DeleteMapping("/{currencyId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable int currencyId) {
         Result<Currency> result = service.delete(currencyId);
         if(result.isSuccess()){

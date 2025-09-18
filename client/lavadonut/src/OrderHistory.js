@@ -9,6 +9,7 @@ import {
   Legend,
   scales,
 } from "chart.js";
+
 import { Container, Paper, Box, Typography, Alert } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";

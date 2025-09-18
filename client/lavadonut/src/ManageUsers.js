@@ -27,7 +27,7 @@ function ManageUsers() {
     // inner join user table and app_user and app_user_role?? maybe
     const [role, setRole] = useState("USER");
 
-    const url = "http://localhost:8080/api/users";
+    const url = "http://localhost:8080/api/user/";
 
     // MOCK DATA!!
     const mockUsers = [
@@ -84,14 +84,26 @@ function ManageUsers() {
         loadUsers();
     }, []);
 
-    const loadUsers = () => {
+    const loadUsers = async () => {
         setError("");
 
         try {
             // get users api call
-            setUsers(mockUsers);
+            const response = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            });
+
+            if (!response.ok) {
+                return Promise.reject(`Unexpected Status Code ${response.status}`);
+            }
+
+            const data = await response.json();
+            setUsers(data);
         } catch (error) {
-            setError(error.message);
+            setError(error || "Failed to load users");
         }
     };
 
@@ -135,9 +147,20 @@ function ManageUsers() {
         if (window.confirm("Are you sure that you would like to delete this user?")) {
             try {
                 // delete api call
-                setUsers(users.filter((u) => u.id !== userId));
+                const response = await fetch(`${url}/${userId}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                });
+                
+                if (!response.ok) {
+                    return Promise.reject(`Unexpected Status Code ${response.status}`);
+                }
+
+                await loadUsers();
             } catch (error) {
-                setError(error);
+                setError(error.message || "Failed to delete user");
             }
         }
     }
@@ -149,32 +172,56 @@ function ManageUsers() {
             if (editing && selectedUser) {
                 // edit
                 const updatedUser = {
-                    ...selectedUser,
+                    userId: selectedUser.id,
                     username,
                     password,
                     firstName,
                     lastName,
                     currencyId,
-                    currencyName: currencies.find(c => c.id === Number(currencyId))?.code || "",
                     role
                 };
-                setUsers(users.map((u) => u.id === selectedUser.id ? updatedUser : u));
+
+                const response = await fetch(`${url}/${selectedUser.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify(updatedUser)
+                });
+
+                if (!response.ok) {
+                    return Promise.reject(`Unexpected Status Code ${response.status}`);
+                }
             } else if (!editing) {
                 // add
                 const newUser = {
-                    id: users.length + 1,
+                    userId: 0,
                     username,
                     password,
                     firstName,
                     lastName,
                     currencyId,
-                    currencyName: currencies.find(c => c.id === Number(currencyId))?.code || "",
                     role
                 };
-                setUsers([...users, newUser]);
+                console.log(JSON.stringify(newUser));
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify(newUser)
+                });
+
+                if (!response.ok) {
+                    return Promise.reject(`Unexpected Status Code ${response.status}`);
+                }
             } else {
                 setError("User was not set for editing");
             }
+
+            await loadUsers();
         } catch (error) {
             setError(error.message || "Failed to create or edit user");
         }

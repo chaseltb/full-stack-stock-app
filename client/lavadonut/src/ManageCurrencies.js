@@ -9,16 +9,17 @@ import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from "@mui/ico
 
 function ManageCurrencies() {
     const [currencies, setCurrencies] = useState([]);
+
     const [error, setError] = useState("");
-
     const [editing, setEditing] = useState(null);
-
     const [viewDialog, setViewDialog] = useState(false);
+
+    // currency specific
     const [currencyName, setCurrencyName] = useState("");
     const [currencyCode, setCurrencyCode] = useState("");
     const [valueToUsd, setValueToUsd] = useState("");
 
-    const url = "http://localhost:8080/api/currency";
+    const url = "http://localhost:8080/api/currency/";
 
     useEffect(() => {
         loadCurrencies();
@@ -83,18 +84,18 @@ function ManageCurrencies() {
                 setError(error.message || "Delete currencies failed");
             }
         }
-    }
+    };
 
     const handleSubmit = async () => {
         try {
-            const requestBody = {
-                id: editing ? editing.id : 0,
-                code: currencyCode,
-                name: currencyName,
-                valueToUsd: parseFloat(valueToUsd),
-            };
             if (editing) {
                 // edit
+                const requestBody = {
+                    id: editing.id,
+                    name: currencyName.trim(),
+                    code: currencyCode.trim().toUpperCase(),
+                    valueToUsd: parseFloat(valueToUsd),
+                };
                 const response = await fetch(`${url}/${editing.id}`, {
                     method: "PUT",
                     headers: {
@@ -104,12 +105,18 @@ function ManageCurrencies() {
                     body: JSON.stringify(requestBody),
                 });
                 if (response.ok) {
-                    loadCurrencies();
+                    await loadCurrencies();
                 } else {
                     return Promise.reject(`Unexpected Status Code ${response.status}`);
                 }
             } else {
                 // add
+                const requestBody = {
+                    name: currencyName.trim(),
+                    code: currencyCode.trim().toUpperCase(),
+                    valueToUsd: parseFloat(valueToUsd),
+                };
+                console.log(JSON.stringify(requestBody));
                 const response = await fetch(url, {
                     method: "POST",
                     headers: {
@@ -119,7 +126,7 @@ function ManageCurrencies() {
                     body: JSON.stringify(requestBody),
                 });
                 if (response.ok) {
-                    loadCurrencies();
+                    await loadCurrencies();
                 } else {
                     return Promise.reject(`Unexpected Status Code ${response.status}`);
                 }
@@ -211,14 +218,14 @@ function ManageCurrencies() {
                         <TextField
                             label="Currency Name"
                             value={currencyName}
-                            onChange={(e) => setCurrencyName(e.target.value.toUpperCase())}
+                            onChange={(e) => setCurrencyName(e.target.value)}
                             margin="dense"
                         />
                         <TextField
                             label="Value to USD"
                             type="number"
                             value={valueToUsd}
-                            onChange={(e) => setValueToUsd(e.target.value.toUpperCase())}
+                            onChange={(e) => setValueToUsd(e.target.value)}
                             margin="dense"
                         />
                     </Box>
