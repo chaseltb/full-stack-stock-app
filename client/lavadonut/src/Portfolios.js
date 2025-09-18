@@ -23,6 +23,7 @@ function Portfolios() {
   const [portfolios, setPortfolios] = useState([]);
   const [error, setError] = useState("");
   const [errors, setErrors] = useState([]);
+  const [portfolioDetails, setPortfolioDetails] = useState({});
   const [newPortfolio, setNewPortfolio] = useState({ name: "", type: "RETIREMENT" });
   const [openDialog, setOpenDialog] = useState(false);
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -38,6 +39,12 @@ function Portfolios() {
   useEffect(() => {
     loadPortfolios();
   }, []);
+
+  useEffect(() => {
+  if (portfolios.length > 0) {
+    portfolios.forEach((p) => loadPortfolioDetails(p.id));
+  }
+}, [portfolios]);
 
   const loadPortfolios = async () => {
     setError("");
@@ -69,6 +76,54 @@ function Portfolios() {
       }
     } catch (error) {
       setError(error.message || "Portfolios failed to load");
+    }
+  };
+
+  const loadPortfolioDetails = async (portfolioId) => {
+    try {
+      const date = new Date().toISOString().split("T")[0];
+      const [valueResponse, sharesResponse] = await Promise.all([
+        fetch(`${url}/${portfolioId}/value?date=${date}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch(`${url}/${portfolioId}/shares?date=${date}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+
+      let value = null;
+      let totalShares = null;
+
+      if (valueResponse.ok) {
+        value = await valueResponse.json();
+      } else {
+        console.warn(`Failed to fetch value for portfolio ${portfolioId}`);
+      }
+
+      if (sharesResponse.ok) {
+        const sharesData = await sharesResponse.json();
+
+        if (!Array.isArray(sharesData) && typeof sharesData === "object") {
+          totalShares = Object.values(sharesData)
+            .map((n) => Number(n))
+            .reduce((acc, val) => acc + val, 0);
+        } else if (Array.isArray(sharesData)) {
+          totalShares = sharesData
+            .map((entry) => Number(entry.shares))
+            .reduce((acc, val) => acc + val, 0);
+        }
+      } else {
+        console.warn(`Failed to fetch shares for portfolio ${portfolioId}`);
+      }
+
+      setPortfolioDetails((prev) => ({
+        ...prev,
+        [portfolioId]: { value, totalShares },
+      }));
+
+      console.log(`${portfolioId}: ${value} + ${totalShares}`);
+    } catch (err) {
+      console.error(`Error fetching details for portfolio ${portfolioId}:`, err);
     }
   };
 
@@ -106,7 +161,7 @@ function Portfolios() {
       setPortfolios((prev) => [...prev, created]);
       setNewPortfolio({ name: "", type: "RETIREMENT" });
       setOpenDialog(false);
-
+      loadPortfolioDetails(created.id);
     } catch (error) {
       console.log(`catch error: ${error}`);
       setError(error.message || "Failed to create portfolio");
@@ -152,21 +207,17 @@ function Portfolios() {
             >
               <Box sx={{ p: 2, mb: 2, width: 1 / 3 }}>
                 <Typography variant="body1">{portfolio.name}</Typography>
-                <Typography variant="body1">{portfolio.type}</Typography>
+                <Typography variant="body1">
+                  {accountTypes.find((t) => t.value === portfolio.accountType)?.label || portfolio.accountType}
+                </Typography>
               </Box>
 
               <Box sx={{ mb: 4 }}>
-                <Typography variant="body1">Total Shares:</Typography>
-                <Typography variant="body1">Total Value:</Typography>
-                <Typography
-                  variant="body1"
-                  color={
-                    portfolio.unrealizedGainOrLoss >= 0
-                      ? "success.main"
-                      : "error.main"
-                  }
-                >
-                  Unrealized Gain/Loss:
+                <Typography variant="body1">
+                  Total Shares: {portfolioDetails[portfolio.id]?.totalShares ?? "—"}
+                </Typography>
+                <Typography variant="body1">
+                  Total Value: {portfolioDetails[portfolio.id]?.value ?? "—"}
                 </Typography>
               </Box>
 
@@ -192,7 +243,7 @@ function Portfolios() {
           </Box>
         )}
       </Paper>
-      {/* create portoflio dialog box*/}
+      {/* create portoflio dialog*/}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Create Portfolio</DialogTitle>
         <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
