@@ -171,4 +171,19 @@ public class PortfolioController {
         return ErrorResponse.build(result);
     }
 
+    @Operation(summary = "Add a portfolio")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Portfolio created"),
+            @ApiResponse(responseCode = "400", description = "Invalid portfolio")
+    })
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PostMapping("/{userId}")
+    public ResponseEntity<Object> createPortfolio(@PathVariable int userId,
+                                                        @RequestBody Portfolio portfolio) {
+        Result<Portfolio> result = service.createPortfolio(portfolio);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return ErrorResponse.build(result);
+    }
 }

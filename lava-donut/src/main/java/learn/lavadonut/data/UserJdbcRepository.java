@@ -38,6 +38,16 @@ public class UserJdbcRepository implements UserRepository {
     }
 
     @Override
+    public User findByAppUserId(int appUserId) {
+        final String sql = "select user_id, currency_id, first_name, " +
+                "last_name, app_user_id from `user` where app_user_id = ?;";
+        return jdbcTemplate.query(sql, new UserMapper(), appUserId)
+                .stream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
     public User add(User user) {
         final String sql = "insert into `user` (currency_id, first_name, " +
                 "last_name, app_user_id) values (?, ?, ?, ?);";

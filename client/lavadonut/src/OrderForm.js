@@ -10,6 +10,162 @@ const ORDER_DEFAULT = {
     price: 0.0
 }
 
+const STOCK_EXCHANGE_DATA = [
+    {
+        id: 1,
+        name: 'New York Stock Exchange',
+        code: 'NYSE',
+        timezone: -5
+    },
+    {
+        id: 2,
+        name: 'Frankfurt Stock Exchange',
+        code: 'XETR',
+        timezone: 1
+    },
+    {
+        id: 3,
+        name: 'Shanghai Stock Exchange',
+        code: 'SSE',
+        timezone: 8
+    }
+];
+
+const CURRENCY_DATA = [
+    {
+        id: 1,
+        name: 'United States Dollar',
+        code: 'USD',
+        valueToUsd: 1.0
+    },
+    {
+        id: 2,
+        name: 'Euro',
+        code: 'EUR',
+        valueToUsd: 1.17
+    },
+    {
+        id: 3,
+        name: 'Chinese Yuan',
+        code: 'CNY',
+        valueToUsd: 0.14
+    }
+];
+
+const COUNTRY_DATA = [
+    {
+        id: 1,
+        name: 'United States of America',
+        code: 'US',
+        currency: CURRENCY_DATA[0]
+    },
+    {
+        id: 2,
+        name: 'Federal Republic of Germany',
+        code: 'DE',
+        currency: CURRENCY_DATA[1]
+    },
+    {
+        id: 3,
+        name: 'People\'s Republic of China',
+        code: 'CN',
+        currency: CURRENCY_DATA[2]
+    }
+];
+
+const STOCK_DATA = [
+    {
+        id: 1,
+        name: 'AMERICAN AIRLINES GROUP INC',
+        ticker: 'TEST-TICKER1',
+        assetType: 'STOCK',
+        industry: 'Airline and Aviation',
+        currentPrice: 12.915,
+        country: COUNTRY_DATA[0],
+        stockExchange: STOCK_EXCHANGE_DATA[0]
+    },
+    {
+        id: 2,
+        name: 'AMERICAN TEST STOCK 1',
+        ticker: 'TEST-TICKER2',
+        assetType: 'ETF',
+        industry: 'Agriculture',
+        currentPrice: 5.0,
+        country: COUNTRY_DATA[0],
+        stockExchange: STOCK_EXCHANGE_DATA[0]
+    },
+    {
+        id: 3,
+        name: 'AMERICAN TEST STOCK 2',
+        ticker: 'TEST-TICKER3',
+        assetType: 'BOND',
+        industry: 'Technology',
+        currentPrice: 6.8,
+        country: COUNTRY_DATA[0],
+        stockExchange: STOCK_EXCHANGE_DATA[0]
+    },
+    {
+        id: 4,
+        name: 'GERMAN TEST STOCK 1',
+        ticker: 'TEST-TICKER4',
+        assetType: 'STOCK',
+        industry: 'Airline and Aviation',
+        currentPrice: 9.6,
+        country: COUNTRY_DATA[1],
+        stockExchange: STOCK_EXCHANGE_DATA[1]
+    },
+    {
+        id: 5,
+        name: 'GERMAN TEST STOCK 2',
+        ticker: 'TEST-TICKER5',
+        assetType: 'ETF',
+        industry: 'Agriculture',
+        currentPrice: 78.5,
+        country: COUNTRY_DATA[1],
+        stockExchange: STOCK_EXCHANGE_DATA[1]
+    },
+    {
+        id: 6,
+        name: 'GERMAN TEST STOCK 3',
+        ticker: 'TEST-TICKER6',
+        assetType: 'STOCK',
+        industry: 'Technology',
+        currentPrice: 95.4,
+        country: COUNTRY_DATA[1],
+        stockExchange: STOCK_EXCHANGE_DATA[1]
+    },
+    {
+        id: 7,
+        name: 'CHINESE TEST STOCK 1',
+        ticker: 'TEST-TICKER7',
+        assetType: 'STOCK',
+        industry: 'Airline and Aviation',
+        currentPrice: 0.01,
+        country: COUNTRY_DATA[2],
+        stockExchange: STOCK_EXCHANGE_DATA[2]
+    },
+    {
+        id: 8,
+        name: 'CHINESE TEST STOCK 2',
+        ticker: 'TEST-TICKER8',
+        assetType: 'ETF',
+        industry: 'Agriculture',
+        currentPrice: 0.45,
+        country: COUNTRY_DATA[2],
+        stockExchange: STOCK_EXCHANGE_DATA[2]
+    },
+    {
+        id: 9,
+        name: 'CHINESE TEST STOCK 3',
+        ticker: 'TEST-TICKER9',
+        assetType: 'BOND',
+        industry: 'Technology',
+        currentPrice: 0.001,
+        country: COUNTRY_DATA[2],
+        stockExchange: STOCK_EXCHANGE_DATA[2]
+    }
+];
+
 function OrderForm() {
     // State management
     const [order, setOrder] = useState(ORDER_DEFAULT);
@@ -25,7 +181,7 @@ function OrderForm() {
 
     // useEffect
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
         // Fetch order
         if (id) {
@@ -84,7 +240,7 @@ function OrderForm() {
 
     // CRUD Functions
     const addOrder = () => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         const init = {
             method: 'POST',
             headers: {
@@ -96,25 +252,23 @@ function OrderForm() {
 
         fetch(url, init)
         .then(response => {
-            if (response.status === 201 || response.status === 400) {
-                return response.json();
-            } else {
+            if (!response.ok) {
                 return Promise.reject(`Unexpected Status Code: ${response.status}`);
             }
+            return response.text();  // backend may or may not return body
         })
-        .then(data => {
-            if (data.id) {
-                navigate('/orders');
-            } else {
-                setErrors(data);
+        .then((text) => {
+            if (text) {
+                JSON.parse(text); // optional: still parse if JSON exists
             }
+            navigate('/orders', { replace: true }); // always go to /orders
         })
         .catch(console.log);
     }
 
     const updateOrder = () => {
         order.id = id;
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         const init = {
             method: 'PUT',
             headers: {
@@ -126,23 +280,20 @@ function OrderForm() {
 
         fetch(`${url}/${id}`, init)
         .then(response => {
-            if (response.status === 204) {
-                return null;
-            } else if (response.status === 400) {
-                return response.json();
-            } else {
-                return Promise.reject(`Unexpected Status Code ${response.status}`);
+            if (!response.ok) {
+                return Promise.reject(`Unexpected Status Code: ${response.status}`);
             }
+            return response.text();
         })
-        .then(data => {
-            if (data.id) {
-                navigate('/orders');
-            } else {
-                setErrors(data);
+        .then((text) => {
+            if (text) {
+                JSON.parse(text);
             }
+            navigate('/orders', { replace: true }); // always go to /orders
         })
         .catch(console.log);
     }
+
 
     return (
         <>
