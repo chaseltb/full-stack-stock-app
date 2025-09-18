@@ -108,15 +108,17 @@ function AuthPage() {
                 if (isLogin) {
                     // login successful
                     if (data.jwt_token) {
-                        if (keepLogin) {
-                            localStorage.setItem("token", data.jwt_token);
-                        } else {
-                            sessionStorage.setItem("token", data.jwt_token);
-                        }
-
                         const decoded = jwtDecode(data.jwt_token);
                         const userId = decoded.userId;
-                        localStorage.setItem("userId", userId);
+                        if (keepLogin) {
+                            localStorage.setItem("token", data.jwt_token);
+                            localStorage.setItem("userId", userId);
+                        } else {
+                            sessionStorage.setItem("token", data.jwt_token);
+                            sessionStorage.setItem("userId", userId);
+                        }
+
+
 
                         alert("Login successful!");
                         navigate('/');
