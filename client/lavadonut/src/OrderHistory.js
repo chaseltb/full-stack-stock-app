@@ -100,9 +100,12 @@ function OrderHistory() {
   }
 
   function getStockName(orderStockId) {
+    console.log("I am being called");
     userStocks.forEach((stock) => {
+      console.log("Iterating through for each")
       if (stock.id === orderStockId) {
-        return stock.name;
+        console.log(stock.id)
+        return stock.id;
       }
     });
   }
@@ -121,6 +124,7 @@ function OrderHistory() {
       {portfolio ? (
         <>
         {console.log(portfolio)}
+        {console.log(userStocks)}
         {console.log(Array.isArray(portfolio))}
           <Container maxWidth="lg">
             <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
@@ -132,20 +136,20 @@ function OrderHistory() {
               {userOrders.map((order) => (
                 <Box>
                   <Typography variant="h2" align="center">
-                    ${getStockName(order.stockId)}
+                    {getStockName(order.stockId)}
                   </Typography>
                   <Typography variant="body1">Date: ${order.date}</Typography>
                   <Typography variant="body1">
                     Transaction Type: {order.transactionType}
                   </Typography>
                   <Typography variant="body1">
-                    Shares: {order.shares}
+                    Shares: {order.numberOfShares}
                   </Typography>
                   <Typography variant="body1">
                     Total Price: ${order.price}
                   </Typography>
                   <Typography variant="body1">
-                    Stock Price: $ {getStockPrice(order.stockId)}
+                    Stock Price: ${getStockPrice(order.stockId)}
                   </Typography>
                 </Box>
               ))}
