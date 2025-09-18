@@ -27,7 +27,7 @@ function Portfolios() {
   const [newPortfolio, setNewPortfolio] = useState({ name: "", type: "RETIREMENT" });
   const [openDialog, setOpenDialog] = useState(false);
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("userId") || sessionStorage.getItem("token");
   const url = "http://localhost:8080/api/portfolio";
 
   const accountTypes = [
