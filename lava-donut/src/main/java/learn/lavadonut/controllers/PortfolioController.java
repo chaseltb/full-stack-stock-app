@@ -46,6 +46,8 @@ public class PortfolioController {
         return ResponseEntity.ok(portfolios);
     }
 
+    //add swagger mapping to findPortfolioById
+
     @Operation(summary = "Find all stocks in a users portfolio")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Portfolio Stocks"),

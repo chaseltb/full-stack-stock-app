@@ -26,13 +26,13 @@ function OrderHistory() {
   const { id } = useParams();
 
   const token = localStorage.getItem("token") || sessionStorage.getItem("token")
-  const url = `http://localhost:8080/api/portfolio/${id}`;
+  const url = `http://localhost:8080/api/portfolio`;
 
   useEffect(() => {
-    fetch(url, {
+    fetch(`${url}/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -44,7 +44,7 @@ function OrderHistory() {
       })
       .then((data) => setPortfolio(data))
       .catch((error) => {setError(error.message || "Portfolio failed to load!");});
-  }, [token, url]);
+  }, [token, url, id]);
 
   /*
   const userOrders = portfolio.orders;
@@ -112,6 +112,8 @@ function OrderHistory() {
   // format page in to display stock and order info
   return (
     <>
+      {portfolio ? (
+        <>
       {sortStocksOrders()}
       <Container maxWidth="lg">
         <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
@@ -141,6 +143,10 @@ function OrderHistory() {
           <Bar options={options} data={orderHistory} />
         </Paper>
       </Container>
+      </>
+      ) : (
+      <div> Loading... </div>
+      )}
     </>
   );
 }
