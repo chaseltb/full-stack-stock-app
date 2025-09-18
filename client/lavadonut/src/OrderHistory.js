@@ -13,6 +13,7 @@ import { Container, Paper, Box, Typography, Alert } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { InfoRounded } from "@mui/icons-material";
 
 // USE EFFECT TO FETCH PORTFOLIO FROM URL
 //REFERENCE CONTEXT TO GET USER OBJ OR ID
@@ -132,12 +133,15 @@ function OrderHistory() {
           orderTransactionType : currentOrder.transactionType,
           orderSharesAmount : currentOrder.numberOfShares,
           orderPrice : currentOrder.price,
+          orderDate : currentOrder.date,
           stockName : currentStock.name,
-          stock : currentStock.currentPrice
+          stockPrice : currentStock.currentPrice
         }
       )
     }
-
+    
+    console.log("Here!!!");
+    console.log(totalInfo);
     setDisplayInfo(totalInfo);
 
     return;
@@ -177,23 +181,23 @@ function OrderHistory() {
                   {error}
                 </Alert>
               )}
-              {userOrders.map((order) => (
+              {displayInfo.map((info) => (
                 <Box sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
-                  <Typography variant="h2" align="center">
-                    {getStockName(order.stockId)}
+                  <Typography variant="h4" align="center">
+                    {info.stockName}
                   </Typography>
-                  <Typography variant="body1">Date: ${order.date}</Typography>
+                  <Typography variant="body1">Date: {info.orderDate}</Typography>
                   <Typography variant="body1">
-                    Transaction Type: {order.transactionType}
-                  </Typography>
-                  <Typography variant="body1">
-                    Shares: {order.numberOfShares}
+                    Transaction Type: {info.orderTransactionType}
                   </Typography>
                   <Typography variant="body1">
-                    Total Price: ${order.price}
+                    Shares: {info.orderSharesAmount}
                   </Typography>
                   <Typography variant="body1">
-                    Stock Price: ${(getStockPrice(order.stockId))}
+                    Total Price: ${info.orderPrice}
+                  </Typography>
+                  <Typography variant="body1">
+                    Stock Price: ${info.stockPrice}
                   </Typography>
                 </Box>
               ))}
