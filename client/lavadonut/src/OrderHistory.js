@@ -21,6 +21,7 @@ function OrderHistory() {
   const [portfolio, setPortfolio] = useState(); // one portfolio
   const [userOrders, setOrders] = useState([]);
   const [userStocks, setStocks] = useState([]);
+  const [displayInfo, setDisplayInfo] = useState([]);
   const [error, setError] = useState("");
 
   const { id } = useParams();
@@ -96,6 +97,45 @@ function OrderHistory() {
   function sortStocksOrders(data) {
     setOrders(data.orders.sort((a, b) => a.stockId - b.stockId));
     setStocks(data.stocks.sort((a, b) => a.id - b.id));
+    /*
+    let totalInfo = []
+    for(let i = 0; i < data.orders.length; i++){
+      let currentOrder = data.orders.at(i);
+      let currentStock = data.stocks.at(i);
+      totalInfo.push(
+        {
+          orderTransactionType : currentOrder.transactionType,
+          orderSharesAmount : currentOrder.numberOfShares,
+          orderPrice : currentOrder.price,
+          stockName : currentStock.name,
+          stock : currentStock.currentPrice
+        }
+      )
+    }
+    console.log("HERE")
+    console.log(totalInfo);
+    */
+    return;
+  }
+
+  function processDisplayInfo() {
+    let totalInfo = []
+    for(let i = 0; i < userOrders.length; i++){
+      let currentOrder = userOrders.at(i);
+      let currentStock = userStocks.at(i);
+      totalInfo.push(
+        {
+          orderTransactionType : currentOrder.transactionType,
+          orderSharesAmount : currentOrder.numberOfShares,
+          orderPrice : currentOrder.price,
+          stockName : currentStock.name,
+          stock : currentStock.currentPrice
+        }
+      )
+    }
+
+    setDisplayInfo(totalInfo);
+
     return;
   }
 
@@ -104,7 +144,7 @@ function OrderHistory() {
     userStocks.forEach((stock) => {
       console.log("Iterating through for each")
       if (stock.id === orderStockId) {
-        console.log(stock.id)
+        console.log(stock)
         return stock.id;
       }
     });
@@ -126,6 +166,7 @@ function OrderHistory() {
         {console.log(portfolio)}
         {console.log(userStocks)}
         {console.log(Array.isArray(portfolio))}
+        {processDisplayInfo()}
           <Container maxWidth="lg">
             <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
               {error && (
@@ -149,7 +190,7 @@ function OrderHistory() {
                     Total Price: ${order.price}
                   </Typography>
                   <Typography variant="body1">
-                    Stock Price: ${getStockPrice(order.stockId)}
+                    Stock Price: ${(getStockPrice(order.stockId))}
                   </Typography>
                 </Box>
               ))}
