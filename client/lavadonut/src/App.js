@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { ThemeProvider } from '@mui/material/styles';
 import AuthPage from "./AuthPage";
 import NotFound from "./NotFound";
 import CountryList from "./CountryList";
@@ -18,34 +19,36 @@ import ManageStockExchanges from "./ManageStockExchanges";
 
 function App() {
   return (
-    <Router>
-      {/* NavBar route */}
-      <NavBar />
-      <Routes>
-        {/* Auth route */}
-        <Route path="/auth" element={<AuthPage />} />
+    <ThemeProvider>
+      <Router>
+        {/* NavBar route */}
+        <NavBar />
+        <Routes>
+          {/* Auth route */}
+          <Route path="/auth" element={<AuthPage />} />
 
-        {/* Home route */}
-        <Route path="/" element={<HomeScreen />}/>
+          {/* Home route */}
+          <Route path="/" element={<HomeScreen />}/>
 
-        {/* Protected routes */}
-        <Route path="/countries" element={<RequireAuth> <CountryList /> </RequireAuth>}/>
-        <Route path="/country/add" element={<RequireAuth> <CountryForm /> </RequireAuth>} />
-        <Route path="/country/edit/:id" element={<RequireAuth> <CountryForm /> </RequireAuth>}/>
-        <Route path="/orders" element={<RequireAuth> <OrderList /> </RequireAuth>}/>
-        <Route path="/order/add" element={<RequireAuth> <OrderForm /> </RequireAuth>} />
-        <Route path="/order/edit/:id" element={<RequireAuth> <OrderForm /> </RequireAuth>}/>
-        <Route path="/stock" element={<RequireAuth> <Stock /> </RequireAuth>}/>
-        <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
-        <Route path="/portfolios/order-history/:id" element={<RequireAuth> <OrderHistory/> </RequireAuth>}/>
+          {/* Protected routes */}
+          <Route path="/countries" element={<RequireAuth> <CountryList /> </RequireAuth>}/>
+          <Route path="/country/add" element={<RequireAuth> <CountryForm /> </RequireAuth>} />
+          <Route path="/country/edit/:id" element={<RequireAuth> <CountryForm /> </RequireAuth>}/>
+          <Route path="/orders" element={<RequireAuth> <OrderList /> </RequireAuth>}/>
+          <Route path="/order/add" element={<RequireAuth> <OrderForm /> </RequireAuth>} />
+          <Route path="/order/edit/:id" element={<RequireAuth> <OrderForm /> </RequireAuth>}/>
+          <Route path="/stock" element={<RequireAuth> <Stock /> </RequireAuth>}/>
+          <Route path="/portfolios" element={<RequireAuth> <Portfolios /> </RequireAuth>}/>
+          <Route path="/portfolios/order-history/:id" element={<RequireAuth> <OrderHistory/> </RequireAuth>}/>
 
-        <Route path="/users" element={<RequireAuth> <ManageUsers /> </RequireAuth>}/>
-        <Route path="/currencies" element={<RequireAuth> <ManageCurrencies /> </RequireAuth>}/>
-        <Route path="/exchanges" element={<RequireAuth> <ManageStockExchanges /> </RequireAuth>}/>
-        {/* Catch-all */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Router>
+          <Route path="/users" element={<RequireAuth> <ManageUsers /> </RequireAuth>}/>
+          <Route path="/currencies" element={<RequireAuth> <ManageCurrencies /> </RequireAuth>}/>
+          <Route path="/exchanges" element={<RequireAuth> <ManageStockExchanges /> </RequireAuth>}/>
+          {/* Catch-all */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 
