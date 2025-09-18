@@ -19,7 +19,7 @@ function ManageCurrencies() {
     const [currencyCode, setCurrencyCode] = useState("");
     const [valueToUsd, setValueToUsd] = useState("");
 
-    const url = "http://localhost:8080/api/currency/";
+    const url = "http://localhost:8080/api/currency";
 
     useEffect(() => {
         loadCurrencies();
