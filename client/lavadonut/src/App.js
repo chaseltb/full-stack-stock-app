@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, createTheme} from '@mui/material/styles';
+import { lime, purple } from '@mui/material/colors';
 import AuthPage from "./AuthPage";
 import NotFound from "./NotFound";
 import CountryList from "./CountryList";
@@ -18,8 +19,18 @@ import HomeScreen from "./HomeScreen";
 import ManageStockExchanges from "./ManageStockExchanges";
 
 function App() {
+
+
+
+  const theme = createTheme({
+    palette: {
+      primary: purple,
+      secondary: lime,
+    },
+  });
+
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={theme}>
       <Router>
         {/* NavBar route */}
         <NavBar />
