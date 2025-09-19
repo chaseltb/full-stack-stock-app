@@ -110,8 +110,8 @@ function Stocks() {
 
     return (
         <Container maxWidth="lg">
-            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
-                <Typography variant="h3" sx={{ mb: 2, color: "text.primary" }}>
+            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10, bgcolor:'primary.light', color:'primary.contrastText' }}>
+                <Typography variant="h3" sx={{ mb: 2}}>
                     Stocks List
                 </Typography>
 
@@ -125,7 +125,7 @@ function Stocks() {
                     </Box>
                 ) : (
                     stocks.map((stock) => (
-                        <Paper key={stock.id} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 6 }}>
+                        <Paper key={stock.id} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 6, bgcolor: 'primary.dark', color: 'primary.contrastText'}}>
                             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                 <Box>
                                     <Typography variant="h4" sx={{ mb: 1 }}>
@@ -139,7 +139,7 @@ function Stocks() {
                                 {/* Button to toggle orders visibility */}
                                 <Button
                                     variant="contained"
-                                    sx={{ borderRadius: 5 }}
+                                    sx={{ borderRadius: 5, bgcolor: 'secondary.main', color: 'secondary.contrastText'}}
                                     onClick={() => {
                                         loadOrders(stock.id);  // Load orders if not already loaded
                                         toggleOrdersVisibility(stock.id);  // Toggle visibility of orders

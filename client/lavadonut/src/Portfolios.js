@@ -172,7 +172,7 @@ function Portfolios() {
 
   return (
     <Container maxWidth="lg">
-      <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
+      <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10, bgcolor: 'primary.light', color: 'primary.contrastText'}}>
         <Box
           sx={{
             display: "flex",
@@ -182,7 +182,7 @@ function Portfolios() {
           }}
         >
           <Typography variant="h2">Portfolios</Typography>
-          <Button variant="contained" sx={{ borderRadius: 5 }} onClick={() => setOpenDialog(true)}>
+          <Button variant="contained"  size='large' sx={{ borderRadius: 5, bgcolor: 'secondary.main', color: 'secondary.contrastText' }} onClick={() => setOpenDialog(true)}>
             Add Portfolio
           </Button>
         </Box>
@@ -203,7 +203,7 @@ function Portfolios() {
             <Paper
               key={portfolio.id}
               elevation={2}
-              sx={{ p: 2, borderRadius: 10 }}
+              sx={{ p: 2, borderRadius: 10 , bgcolor: 'primary.dark', color: 'primary.contrastText'}}
             >
               <Box sx={{ p: 2, mb: 2, width: 1 / 3 }}>
                 <Typography variant="body1">{portfolio.name}</Typography>
@@ -224,6 +224,7 @@ function Portfolios() {
               <Button
                 component={Link}
                 variant="outlined"
+                sx={{bgcolor: "secondary.main", color: 'secondary.contrastText'}}
                 to={`/portfolios/order-history/${portfolio.id}`}
               >
                 Order History
@@ -237,7 +238,7 @@ function Portfolios() {
             <Typography variant="h4" sx={{ mb: 2 }}>
               You haven't added any portfolios
             </Typography>
-            <Button variant="contained" sx={{ borderRadius: 4 }}>
+            <Button variant="contained" sx={{ borderRadius: 4, bgcolor: 'secondary.main', color: 'secondary.contrastText'}}>
               Create a portfolio
             </Button>
           </Box>

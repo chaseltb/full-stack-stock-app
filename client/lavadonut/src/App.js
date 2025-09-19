@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ThemeProvider, createTheme} from '@mui/material/styles';
-import { lime, purple } from '@mui/material/colors';
 import AuthPage from "./AuthPage";
 import NotFound from "./NotFound";
 import CountryList from "./CountryList";
@@ -20,12 +19,25 @@ import ManageStockExchanges from "./ManageStockExchanges";
 
 function App() {
 
-
-
   const theme = createTheme({
+    typography: {
+      fontFamily: [
+          'IBM Plex Serif',
+          'Roboto',     
+          'sans-serif',  
+      ].join(','),
+    },
     palette: {
-      primary: purple,
-      secondary: lime,
+      primary: {
+        light: '#423A56',
+        main: '#2C263A',
+        dark: '#211D2B',
+        contrastText: '#e9e9e9ff'
+      },
+      secondary: {
+        main: '#9D4F2F',
+        contrastText: '#e9e9e9ff'
+      }
     },
   });
 

@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
   scales,
+  Ticks,
 } from "chart.js";
 
 import { Container, Paper, Box, Typography, Alert } from "@mui/material";
@@ -68,12 +69,28 @@ function OrderHistory() {
     plugins: {
       legend: {
         position: "top",
+        labels: {
+          color: '#e9e9e9ff'
+        }
       },
       title: {
         display: true,
         text: `Your Order History`,
+        color: '#e9e9e9ff'
       },
     },
+    scales: {
+      x: {
+        ticks: {
+          color:'#e9e9e9ff'
+        }
+      },
+      y: {
+        ticks:{
+          color:'#e9e9e9ff'
+        }
+      }
+    }
   };
 
   const orderHistory = {
@@ -82,8 +99,8 @@ function OrderHistory() {
       {
         label: "Cost",
         data: userOrders.map((order) => order.price),
-        backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-        borderColor: ["rgba(255, 99, 132, 0.2)"],
+        backgroundColor: ['#9D4F2F'],
+        borderColor: ['#9D4F2F'],
         borderWidth: 1,
       },
     ],
@@ -124,16 +141,16 @@ function OrderHistory() {
     <>
       {portfolio ? (
         <>
-          <Container maxWidth="lg">
-            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
+          <Container maxWidth="lg" sx={{ mt: 4}}>
+            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10, bgcolor: 'primary.light'}}>
               {error && (
                 <Alert severity="error" sx={{ mb: 4 }}>
                   {error}
                 </Alert>
               )}
               {displayInfo.map((info) => (
-                <Box sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
-                  <Typography variant="h4" align="center">
+                <Paper sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3, bgcolor: 'primary.dark', color: 'primary.contrastText'}}>
+                  <Typography variant="h4" align="center" sx ={{ ml: 2, color: 'primary.contrastText'}}>
                     {info.stockName}
                   </Typography>
                   <Typography variant="body1">Date: {info.orderDate}</Typography>
@@ -149,7 +166,7 @@ function OrderHistory() {
                   <Typography variant="body1">
                     Stock Price: ${info.stockPrice}
                   </Typography>
-                </Box>
+                </Paper>
               ))}
               <Bar options={options} data={orderHistory} />
             </Paper>
