@@ -124,15 +124,15 @@ function OrderHistory() {
     <>
       {portfolio ? (
         <>
-          <Container maxWidth="lg">
-            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10 }}>
+          <Container maxWidth="lg" sx={{ mt: 4}}>
+            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10, bgcolor: 'primary.light'}}>
               {error && (
                 <Alert severity="error" sx={{ mb: 4 }}>
                   {error}
                 </Alert>
               )}
               {displayInfo.map((info) => (
-                <Box sx={{ display: "grid", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
+                <Box sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
                   <Typography variant="h4" align="center">
                     {info.stockName}
                   </Typography>

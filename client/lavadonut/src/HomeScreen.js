@@ -72,70 +72,70 @@ function HomeScreen() {
     }
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 4 }}>
-            <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10}}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4}}>
-                    <Typography variant="h2">
-                        Stock App
-                    </Typography>
-                    <Button component={Link} to="/stock" variant="contained" sx={{ borderRadius: 5 }}>
-                        View Stocks
-                    </Button>
-                </Box>
-            </Paper>
-
-            {error && <Alert severity="error" sx={{ mb: 4 }}>
-                {error}
-            </Alert>}
-
-            <Box sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
-                {/* stocks mapped to individual paper elements (look like cards) */}
-                {stocks.map((stock) => (
-                    <Paper key={stock.id} elevation={2} sx={{ p: 2, borderRadius: 6 }}>
-                        <Box>
-                            <Typography variant="h4">
-                                {stock.name}
-                            </Typography>
-                            <Typography variant="body1" color="textSecondary">
-                                {stock.symbol}
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <Typography variant="body1">
-                                Total shares: {stock.shares}
-                            </Typography>
-                            <Typography variant="body1">
-                                Average Price: ${stock.avgPrice.toFixed(2)}
-                            </Typography>
-                            <Typography variant="body1" color={stock.unrealizedGainOrLoss >= 0 ? "success" : "error"}>
-                                Unrealized Gain or Loss: ${stock.unrealizedGainOrLoss.toFixed(2)}
-                            </Typography>
-                        </Box>
-                        <Button component={Link} to="/orders" variant="contained" sx={{ borderRadius: 6 }}>
-                            View Orders
+        <>``
+            <Container maxWidth="lg" sx={{ mt: 4}}>
+                <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10}}>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4}}>
+                        <Typography variant="h2">
+                            Stock App
+                        </Typography>
+                        <Button component={Link} to="/stock" variant="contained" sx={{ borderRadius: 5 }}>
+                            View Stocks
                         </Button>
+                    </Box>
+                </Paper>
+
+                {error && <Alert severity="error" sx={{ mb: 4 }}>
+                    {error}
+                </Alert>}
+
+                <Box sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
+                    {/* stocks mapped to individual paper elements (look like cards) */}
+                    {stocks.map((stock) => (
+                        <Paper key={stock.id} elevation={2} sx={{ p: 2, borderRadius: 6 }}>
+                            <Box>
+                                <Typography variant="h4">
+                                    {stock.name}
+                                </Typography>
+                                <Typography variant="body1" color="textSecondary">
+                                    {stock.symbol}
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="body1">
+                                    Total shares: {stock.shares}
+                                </Typography>
+                                <Typography variant="body1">
+                                    Average Price: ${stock.avgPrice.toFixed(2)}
+                                </Typography>
+                                <Typography variant="body1" color={stock.unrealizedGainOrLoss >= 0 ? "success" : "error"}>
+                                    Unrealized Gain or Loss: ${stock.unrealizedGainOrLoss.toFixed(2)}
+                                </Typography>
+                            </Box>
+                            <Button component={Link} to="/orders" variant="contained" sx={{ borderRadius: 6 }}>
+                                View Orders
+                            </Button>
+                        </Paper>
+                    ))}
+                </Box>
+
+                {/* Watchlist shows a vertically scrolling list of stocks */}
+                <Typography variant="h4" sx={{ mt: 5, mb: 5, p: 2}}>
+                    Watchlist
+                </Typography>
+
+                {watchlist.map((item, index) => (
+                    <Paper key={index} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 5}}>
+                        <Typography variant="h4">
+                            {item.name} ({item.symbol})
+                        </Typography>
+                        <Typography variant="body">
+                            {item.description}
+                        </Typography>
                     </Paper>
                 ))}
-            </Box>
-
-            {/* Watchlist shows a vertically scrolling list of stocks */}
-            <Typography variant="h4" sx={{ mt: 5, mb: 5, p: 2}}>
-                Watchlist
-            </Typography>
-
-            {watchlist.map((item, index) => (
-                <Paper key={index} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 5}}>
-                    <Typography variant="h4">
-                        {item.name} ({item.symbol})
-                    </Typography>
-                    <Typography variant="body">
-                        {item.description}
-                    </Typography>
-                </Paper>
-            ))}
-        </Container>
-        
-
+            </Container>
+        </>
     );
 }
 
