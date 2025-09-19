@@ -72,7 +72,7 @@ function HomeScreen() {
     }
 
     return (
-        <>``
+        <>
             <Container maxWidth="lg" sx={{ mt: 4}}>
                 <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10, bgcolor: 'primary.dark'}}>
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4}}>
@@ -112,7 +112,7 @@ function HomeScreen() {
                                     Unrealized Gain or Loss: ${stock.unrealizedGainOrLoss.toFixed(2)}
                                 </Typography>
                             </Box>
-                            <Button component={Link} to="/orders" variant="contained" sx={{ borderRadius: 6 }}>
+                            <Button component={Link} to="/orders" variant="contained" sx={{ borderRadius: 6 , bgcolor: 'primary.light'}}>
                                 View Orders
                             </Button>
                         </Paper>
@@ -120,12 +120,12 @@ function HomeScreen() {
                 </Box>
 
                 {/* Watchlist shows a vertically scrolling list of stocks */}
-                <Typography variant="h4" sx={{ mt: 5, mb: 5, p: 2}}>
+                <Typography variant="h4" bgcolor={'primary.dark'} sx={{ mt: 5, mb: 5, p: 2, color: 'primary.contrastText'}}>
                     Watchlist
                 </Typography>
 
                 {watchlist.map((item, index) => (
-                    <Paper key={index} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 5}}>
+                    <Paper key={index} elevation={2} sx={{ mb: 2, p: 2, borderRadius: 5, bgcolor: 'primary.main', color: 'primary.contrastText'}}>
                         <Typography variant="h4">
                             {item.name} ({item.symbol})
                         </Typography>
