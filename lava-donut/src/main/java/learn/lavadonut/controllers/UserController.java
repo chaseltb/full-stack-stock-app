@@ -89,7 +89,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @DeleteMapping("/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable int userId) {
         if (service.deleteById(userId)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
