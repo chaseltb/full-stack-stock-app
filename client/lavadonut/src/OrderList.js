@@ -312,7 +312,7 @@ function OrderList() {
             </Stack>
             <Stack spacing={3}>
                 {orders.map((order) => (
-                    <Card key={order.id} variant="outlined" sx={{ backgroundColor: "#f4f4f4" }}>
+                    <Card key={order.id} variant="outlined" sx={{ backgroundColor: "primary.dark", color: 'primary.contrastText'}}>
                         <CardContent>
                             <Typography variant="h6" gutterBottom>
                                 Order {order.id} - {
@@ -323,22 +323,22 @@ function OrderList() {
                                     })()
                                 } 
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography variant="body2">
                                 Transaction Type: {order.transactionType}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography variant="body2">
                                 Number of Shares: {order.numberOfShares}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography variant="body2">
                                 Date: {order.date}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography variant="body2">
                                 Price: ${order.price.toFixed(2)}
                             </Typography>
                         </CardContent>
                         <CardActions sx={{ justifyContent: "flex-end" }}>
                                 <IconButton
-                                    color="primary"
+                                    color="inherit"
                                     component={Link}
                                     to={`/order/edit/${order.id}`}
                                 >
