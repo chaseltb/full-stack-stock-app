@@ -149,21 +149,21 @@ function OrderHistory() {
                 </Alert>
               )}
               {displayInfo.map((info) => (
-                <Paper sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3, bgcolor: 'primary.dark'}}>
+                <Paper sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3, bgcolor: 'primary.dark', color: 'primary.contrastText'}}>
                   <Typography variant="h4" align="center" sx ={{ ml: 2, color: 'primary.contrastText'}}>
                     {info.stockName}
                   </Typography>
-                  <Typography variant="body1" sx ={{ color: 'primary.contrastText'}}>Date: {info.orderDate}</Typography>
-                  <Typography variant="body1" sx ={{ color: 'primary.contrastText'}}>
+                  <Typography variant="body1">Date: {info.orderDate}</Typography>
+                  <Typography variant="body1">
                     Transaction Type: {info.orderTransactionType}
                   </Typography>
-                  <Typography variant="body1" sx ={{ color: 'primary.contrastText'}}>
+                  <Typography variant="body1">
                     Shares: {info.orderSharesAmount}
                   </Typography>
-                  <Typography variant="body1" sx ={{ color: 'primary.contrastText'}}>
+                  <Typography variant="body1">
                     Total Price: ${info.orderPrice}
                   </Typography>
-                  <Typography variant="body1" sx ={{ color: 'primary.contrastText'}}>
+                  <Typography variant="body1">
                     Stock Price: ${info.stockPrice}
                   </Typography>
                 </Paper>
