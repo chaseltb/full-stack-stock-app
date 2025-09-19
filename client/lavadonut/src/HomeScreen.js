@@ -74,12 +74,12 @@ function HomeScreen() {
     return (
         <>``
             <Container maxWidth="lg" sx={{ mt: 4}}>
-                <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10}}>
+                <Paper elevation={4} sx={{ mt: 4, p: 4, borderRadius: 10, bgcolor: 'primary.dark'}}>
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4}}>
-                        <Typography variant="h2">
+                        <Typography variant="h2" sx={{color: 'primary.contrastText'}}>
                             Stock App
                         </Typography>
-                        <Button component={Link} to="/stock" variant="contained" sx={{ borderRadius: 5 }}>
+                        <Button component={Link} to="/stock" variant="contained" size = 'large' sx={{ borderRadius: 5, bgcolor: 'secondary.main', color: 'primary.contrastText'}}>
                             View Stocks
                         </Button>
                     </Box>

@@ -21,7 +21,6 @@ function App() {
 
   const theme = createTheme({
     typography: {
-      color: '#e9e9e9ff',
       fontFamily: [
           'IBM Plex Serif',
           'Roboto',     
@@ -37,7 +36,7 @@ function App() {
       },
       secondary: {
         main: '#9D4F2F',
-        contrastText: '#1d1d1dff'
+        contrastText: '#e9e9e9ff'
       }
     },
   });
