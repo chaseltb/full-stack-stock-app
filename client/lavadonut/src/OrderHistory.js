@@ -132,7 +132,7 @@ function OrderHistory() {
                 </Alert>
               )}
               {displayInfo.map((info) => (
-                <Box sx={{ display: "flex", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
+                <Box sx={{ display: "grid", gap: 3, overflowX: "auto", pb: 2, mt: 3 }}>
                   <Typography variant="h4" align="center">
                     {info.stockName}
                   </Typography>
