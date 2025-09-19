@@ -159,7 +159,7 @@ function Stocks() {
                                                     <Typography variant="h4" color={order.transactionType === "BUY" ? "success.main" : "error.main"}>
                                                         {order.transactionType}: {order.date}
                                                     </Typography>
-                                                    <Typography variant="body1">Shares: {order.shares}</Typography>
+                                                    <Typography variant="body1">Shares: {order.numberOfShares}</Typography>
                                                     <Typography variant="body1">Price: ${order.price}</Typography>
                                                 </Box>
                                             </Box>
