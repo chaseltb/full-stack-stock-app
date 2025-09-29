@@ -1,1 +1,1 @@
-[Watch our demo](/stock-app-demo.mp4)
+[Watch our demo](https://youtu.be/UvyGTawa7MQ)
